@@ -8,7 +8,10 @@ import org.springframework.lang.NonNull;
  * IdGeneratorImpl
  * <p>ID 생성 구현 클래스</p>
  */
-final class IdGeneratorImpl implements IdGenerator {
+public final class IdGeneratorImpl implements IdGenerator {
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String generate(@NonNull final String prefix) {
         if (StringUtils.isBlank(prefix)) {
