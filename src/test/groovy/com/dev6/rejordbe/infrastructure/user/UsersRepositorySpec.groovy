@@ -26,10 +26,10 @@ class UsersRepositorySpec extends Specification {
     def "유저를 생성할 수 있다"() {
         given:
         def newUser = Users.builder()
-                .userId("userId")
-                .email("email@email.com")
-                .nickname("nickname")
-                .password("password")
+                .userId(userId)
+                .email(email)
+                .nickname(nickname)
+                .password(password)
                 .build()
 
         when:
@@ -39,7 +39,16 @@ class UsersRepositorySpec extends Specification {
         entityManager.clear()
 
         then:
-        Optional<Users> optionalAnUser = usersRepository.findById("userId")
+        Optional<Users> optionalAnUser = usersRepository.findById(userId)
         optionalAnUser.isPresent()
+        def anUser = optionalAnUser.orElseThrow()
+        anUser.getUserId() == userId
+        anUser.getEmail() == email
+        anUser.getNickname() == nickname
+        anUser.getPassword() == password
+
+        where:
+        userId   | email             | nickname   | password
+        "userId" | "email@email.com" | "nickname" | "password"
     }
 }
