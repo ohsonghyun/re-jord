@@ -127,4 +127,36 @@ class UsersRepositorySpec extends Specification {
         uid   | userId   | nickname   | password   | userType
         "uid" | "userId" | "nickname" | "password" | UserType.BASIC
     }
+
+    def "유저ID로 유저를 찾을 수 있다"() {
+        given:
+        def newUser = Users.builder()
+                .uid(uid)
+                .userId(userId)
+                .nickname(nickname)
+                .password(password)
+                .userType(userType)
+                .build()
+
+        when:
+        usersRepository.save(newUser)
+
+        entityManager.flush()
+        entityManager.clear()
+
+        then:
+        Optional<Users> optionalAnUser = usersRepository.findUserByUserId(userId)
+        optionalAnUser.isPresent()
+        def anUser = optionalAnUser.orElseThrow()
+        anUser.getUid() == uid
+        anUser.getUserId() == userId
+        anUser.getNickname() == nickname
+        anUser.getPassword() == password
+        anUser.getUserType() == userType
+
+        where:
+        uid   | userId   | nickname   | password   | userType
+        "uid" | "userId" | "nickname" | "password" | UserType.BASIC
+    }
+
 }
