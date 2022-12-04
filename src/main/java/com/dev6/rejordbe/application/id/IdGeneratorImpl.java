@@ -15,7 +15,7 @@ public final class IdGeneratorImpl implements IdGenerator {
     @Override
     public String generate(@NonNull final String prefix) {
         if (StringUtils.isBlank(prefix)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("prefix cannot be null");
         }
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(prefix);

@@ -15,13 +15,13 @@ import javax.persistence.Id;
 public class Users {
 
     @Id
-    @Column(name = "user_id")
+    @Column(name = "uid")
+    private String uid;
+
+    @Column(name = "user_id", unique = true)
     private String userId;
 
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "nickname")
+    @Column(name = "nickname", unique = true)
     private String nickname;
 
     @Column(name = "password")
