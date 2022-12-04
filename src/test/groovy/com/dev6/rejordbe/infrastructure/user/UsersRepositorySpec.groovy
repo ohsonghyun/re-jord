@@ -1,6 +1,7 @@
 package com.dev6.rejordbe.infrastructure.user
 
 import com.dev6.rejordbe.TestConfig
+import com.dev6.rejordbe.domain.user.UserType
 import com.dev6.rejordbe.domain.user.Users
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -25,13 +26,14 @@ class UsersRepositorySpec extends Specification {
     @Autowired
     UsersRepository usersRepository
 
-    def "유저를 생성할 수 있다"() {
+    def "#userType 유저를 생성할 수 있다"() {
         given:
         def newUser = Users.builder()
                 .uid(uid)
                 .userId(userId)
                 .nickname(nickname)
                 .password(password)
+                .userType(userType)
                 .build()
 
         when:
@@ -48,10 +50,12 @@ class UsersRepositorySpec extends Specification {
         anUser.getUserId() == userId
         anUser.getNickname() == nickname
         anUser.getPassword() == password
+        anUser.getUserType() == userType
 
         where:
-        uid   | userId   | nickname   | password
-        "uid" | "userId" | "nickname" | "password"
+        uid   | userId   | nickname   | password   | userType
+        "uid" | "userId" | "nickname" | "password" | UserType.BASIC
+        "uid" | "userId" | "nickname" | "password" | UserType.ADMIN
     }
 
     @Unroll
@@ -62,6 +66,7 @@ class UsersRepositorySpec extends Specification {
                 .userId('userId')
                 .nickname('nickname')
                 .password('password')
+                .userType(UserType.BASIC)
                 .build()
 
         def newUser2 = Users.builder()
@@ -69,6 +74,7 @@ class UsersRepositorySpec extends Specification {
                 .userId(userId)
                 .nickname(nickname)
                 .password('password')
+                .userType(UserType.BASIC)
                 .build()
 
         when:
@@ -98,6 +104,7 @@ class UsersRepositorySpec extends Specification {
                 .userId(userId)
                 .nickname(nickname)
                 .password(password)
+                .userType(userType)
                 .build()
 
         when:
@@ -110,12 +117,14 @@ class UsersRepositorySpec extends Specification {
         Optional<Users> optionalAnUser = usersRepository.findUserByNickname(nickname)
         optionalAnUser.isPresent()
         def anUser = optionalAnUser.orElseThrow()
+        anUser.getUid() == uid
         anUser.getUserId() == userId
         anUser.getNickname() == nickname
         anUser.getPassword() == password
+        anUser.getUserType() == userType
 
         where:
-        uid   | userId   | nickname   | password
-        "uid" | "userId" | "nickname" | "password"
+        uid   | userId   | nickname   | password   | userType
+        "uid" | "userId" | "nickname" | "password" | UserType.BASIC
     }
 }
