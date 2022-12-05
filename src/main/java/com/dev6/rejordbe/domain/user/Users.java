@@ -1,7 +1,10 @@
 package com.dev6.rejordbe.domain.user;
 
+import org.springframework.lang.NonNull;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 
 /**
@@ -26,5 +29,9 @@ public class Users {
 
     @Column(name = "password")
     private String password;
+
+    @Enumerated
+    @Column(name = "user_type")
+    private UserType userType;
 
 }
