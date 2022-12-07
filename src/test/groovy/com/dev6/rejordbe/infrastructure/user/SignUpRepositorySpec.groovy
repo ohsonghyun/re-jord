@@ -18,13 +18,13 @@ import javax.persistence.PersistenceException
  */
 @DataJpaTest
 @Import(TestConfig.class)
-class UsersRepositorySpec extends Specification {
+class SignUpRepositorySpec extends Specification {
 
     @PersistenceContext
     EntityManager entityManager;
 
     @Autowired
-    UsersRepository usersRepository
+    SignUpRepository signUpRepository
 
     def "#userType 유저를 생성할 수 있다"() {
         given:
@@ -37,13 +37,13 @@ class UsersRepositorySpec extends Specification {
                 .build()
 
         when:
-        usersRepository.save(newUser)
+        signUpRepository.save(newUser)
 
         entityManager.flush()
         entityManager.clear()
 
         then:
-        Optional<Users> optionalAnUser = usersRepository.findById(uid)
+        Optional<Users> optionalAnUser = signUpRepository.findById(uid)
         optionalAnUser.isPresent()
         def anUser = optionalAnUser.orElseThrow()
         anUser.getUid() == uid
@@ -79,12 +79,12 @@ class UsersRepositorySpec extends Specification {
 
         when:
         // 닉네임이 'nickname' 인 첫 번째 유저 등록 -> 성공
-        usersRepository.save(newUser1)
+        signUpRepository.save(newUser1)
         entityManager.flush()
         entityManager.clear()
 
         // 닉네임이 'nickname' 인 첫 번째 유저 등록 -> 실패
-        usersRepository.save(newUser2)
+        signUpRepository.save(newUser2)
         entityManager.flush()
         entityManager.clear()
 
@@ -108,13 +108,13 @@ class UsersRepositorySpec extends Specification {
                 .build()
 
         when:
-        usersRepository.save(newUser)
+        signUpRepository.save(newUser)
 
         entityManager.flush()
         entityManager.clear()
 
         then:
-        Optional<Users> optionalAnUser = usersRepository.findUserByNickname(nickname)
+        Optional<Users> optionalAnUser = signUpRepository.findUserByNickname(nickname)
         optionalAnUser.isPresent()
         def anUser = optionalAnUser.orElseThrow()
         anUser.getUid() == uid
@@ -139,13 +139,13 @@ class UsersRepositorySpec extends Specification {
                 .build()
 
         when:
-        usersRepository.save(newUser)
+        signUpRepository.save(newUser)
 
         entityManager.flush()
         entityManager.clear()
 
         then:
-        Optional<Users> optionalAnUser = usersRepository.findUserByUserId(userId)
+        Optional<Users> optionalAnUser = signUpRepository.findUserByUserId(userId)
         optionalAnUser.isPresent()
         def anUser = optionalAnUser.orElseThrow()
         anUser.getUid() == uid
