@@ -23,13 +23,19 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Build Jar file"
+          name: "build"
           command: ./gradlew test bootJar
+      - setup_remote_docker:
+          version: 20.10.12
       - run:
-          name: "TBD"
+          name: "image-build"
           command: |
             ls -al ./build/libs 
+            docker build -t flowertaekk/teamdev6:v0.0.1 --platform linux/amd64 .   
             docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}
+            docker push flowertaekk/teamdev6:v0.0.1
+          requires:
+            - build
       - slack/notify:
           event: fail
           template: basic_fail_1
