@@ -36,9 +36,9 @@ public class SignUpServiceImpl implements SignUpService {
                     .errors(errors)
                     .build();
         }
-        signUpRepository.findUserByUserId(newUser.getUserId()).ifPresent(user -> errors.add(new DuplicatedUserIdException()));
-        signUpRepository.findUserByNickname(newUser.getNickname()).ifPresent(user -> errors.add(new DuplicatedNicknameException()));
 
+        signUpRepository.findUserByUserId(newUser.getUserId()).ifPresent(user -> errors.add(new DuplicatedUserIdException("DUPLICATED_USERID")));
+        signUpRepository.findUserByNickname(newUser.getNickname()).ifPresent(user -> errors.add(new DuplicatedNicknameException("DUPLICATED_NICKNAME")));
         if (!errors.isEmpty()) {
             return UserResult.builder()
                     .errors(errors)
