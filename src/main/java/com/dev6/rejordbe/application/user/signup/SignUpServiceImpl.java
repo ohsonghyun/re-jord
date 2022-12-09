@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * SignUpServiceImpl
@@ -71,7 +72,7 @@ public class SignUpServiceImpl implements SignUpService {
     private boolean validateParam(Users anUser, List<RuntimeException> errors) {
         boolean userIdResult = userInfoValidateService.validateUserId(anUser.getUserId(), errors);
         boolean passwordResult = userInfoValidateService.validatePassword(anUser.getPassword(), errors);
-        return userIdResult && passwordResult;
+        return userIdResult && passwordResult && Objects.nonNull(anUser.getUserType());
     }
 
 }
