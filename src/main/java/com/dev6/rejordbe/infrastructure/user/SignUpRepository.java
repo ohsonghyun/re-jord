@@ -7,10 +7,10 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 /**
- * UsersRepository
+ * SignUpRepository
  */
 @Repository
-public interface UsersRepository extends JpaRepository<Users, String> {
+public interface SignUpRepository extends JpaRepository<Users, String> {
     /**
      * 닉네임으로 유저 찾기
      *
