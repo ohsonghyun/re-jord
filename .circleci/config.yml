@@ -11,11 +11,24 @@ orbs:
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
+  test:
+    docker:
+      - image: cimg/openjdk:17.0.5
+    steps:
+      - checkout
+      - run:
+          name: "test"
+          command: ./gradlew test
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+      - slack/notify:
+          event: pass
+          template: success_tagged_deploy_1
   build:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
-      #- image: gradle:7.6.0-jdk17
       - image: cimg/openjdk:17.0.5
 #      - image: openjdk:17-ea-slim-buster
     # Add steps to the job
@@ -24,14 +37,14 @@ jobs:
       - checkout
       - run:
           name: "build"
-          command: ./gradlew test bootJar
+          command: ./gradlew bootJar
       - setup_remote_docker:
           version: 20.10.12
       - run:
           name: "image-build"
           command: |
-            ls -al ./build/libs 
-            docker build -t flowertaekk/teamdev6:v0.0.1 --platform linux/amd64 .   
+            ls -al ./build/libs
+            docker build -t flowertaekk/teamdev6:v0.0.1 --platform linux/amd64 .
             docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}
             docker push flowertaekk/teamdev6:v0.0.1
           requires:
@@ -48,8 +61,16 @@ jobs:
 workflows:
   default-build:
     jobs:
+      - test:
+          context: slack-confidentials
+          filters:
+            branches:
+              only: /^(feature|task).*/
       - build:
           context: slack-confidentials
+          filters:
+            branches:
+              only: /^(release).*/
 #  build-docker-image-only:
 #    jobs:
 #      - docker/publish:
