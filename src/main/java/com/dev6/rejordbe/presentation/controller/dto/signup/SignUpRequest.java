@@ -1,15 +1,16 @@
-package com.dev6.rejordbe.domain.user.dto;
+package com.dev6.rejordbe.presentation.controller.dto.signup;
 
 import com.dev6.rejordbe.domain.user.UserType;
 import com.dev6.rejordbe.domain.user.Users;
 import lombok.Builder;
-import org.springframework.lang.NonNull;
+
+import java.io.Serializable;
 
 /**
  * SignUpUserRequestDto
  */
 @Builder
-public class SignUpUserRequestDto {
+public class SignUpUserRequest implements Serializable {
 
     private String uid;
     private String userId;
@@ -18,7 +19,7 @@ public class SignUpUserRequestDto {
     private UserType userType;
 
 
-    public Users toUsers() {
+    public Users toUser() {
         return Users.builder()
                 .uid(this.uid)
                 .userId(this.userId)
