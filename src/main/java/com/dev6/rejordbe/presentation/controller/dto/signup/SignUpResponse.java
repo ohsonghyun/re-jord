@@ -11,6 +11,7 @@ import java.util.List;
  * SignUpUserRequestDto
  */
 @Builder
+@lombok.Getter
 public class SignUpResponse implements Serializable {
     private String uid;
     private String userId;

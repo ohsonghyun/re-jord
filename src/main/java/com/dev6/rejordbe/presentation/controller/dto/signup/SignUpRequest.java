@@ -10,6 +10,7 @@ import java.io.Serializable;
  * SignUpUserRequestDto
  */
 @Builder
+@lombok.Getter
 public class SignUpRequest implements Serializable {
 
     private String uid;
