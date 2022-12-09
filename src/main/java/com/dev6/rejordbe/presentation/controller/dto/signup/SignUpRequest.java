@@ -10,7 +10,7 @@ import java.io.Serializable;
  * SignUpUserRequestDto
  */
 @Builder
-public class SignUpUserRequest implements Serializable {
+public class SignUpRequest implements Serializable {
 
     private String uid;
     private String userId;
