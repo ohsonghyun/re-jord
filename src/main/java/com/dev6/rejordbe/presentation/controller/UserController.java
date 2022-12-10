@@ -32,7 +32,7 @@ public class UserController {
             authorizations = {@Authorization(value = "TBD")},
             tags = "Users")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "정상"),
+            @ApiResponse(code = 201, message = "정상"),
             @ApiResponse(code = 400, message = "정책 위반 데이터", response = SignUpResponse.class),
             @ApiResponse(code = 409, message = "존재하는 유저ID 또는 닉네임", response = SignUpResponse.class)
     })
