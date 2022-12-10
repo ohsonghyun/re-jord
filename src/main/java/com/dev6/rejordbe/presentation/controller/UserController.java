@@ -25,7 +25,7 @@ public class UserController {
     private final SignUpService signUpService;
 
     @ApiOperation(
-            value = "저장피드 추가",
+            value = "회원가입",
             nickname = "signUp",
             notes = "회원가입API. 에러인 경우에는 errors 필드에만 값 설정 후 리스폰스",
             response = SignUpResponse.class,
