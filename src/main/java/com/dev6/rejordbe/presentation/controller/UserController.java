@@ -1,9 +1,9 @@
 package com.dev6.rejordbe.presentation.controller;
 
 import com.dev6.rejordbe.application.user.signup.SignUpService;
+import com.dev6.rejordbe.domain.user.dto.UserResult;
 import com.dev6.rejordbe.exception.IllegalParameterException;
 import com.dev6.rejordbe.presentation.controller.dto.signup.SignUpRequest;
-import com.dev6.rejordbe.domain.user.dto.UserResult;
 import com.dev6.rejordbe.presentation.controller.dto.signup.SignUpResponse;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
@@ -37,7 +37,6 @@ public class UserController {
             @ApiResponse(code = 409, message = "존재하는 유저ID 또는 닉네임", response = SignUpResponse.class)
     })
     @PostMapping(
-            value = "/signup",
             produces = {"application/json"},
             consumes = {"application/json"}
     )
