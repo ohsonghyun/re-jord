@@ -22,7 +22,7 @@ public class UserController {
 
     private final SignUpService signUpService;
 
-    @PostMapping("/signup")
+    @PostMapping
     public ResponseEntity<SignUpResponse> signUp(@RequestBody final SignUpRequest signUpUserRequest) {
         UserResult savedResult = signUpService.signUp(signUpUserRequest.toUser());
 
