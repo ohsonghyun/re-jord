@@ -45,7 +45,7 @@ class UserControllerSpec extends Specification {
 
         expect:
         mvc.perform(
-                post("/v1/users/signup")
+                post("/v1/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(
                                 objectMapper.writeValueAsString(
@@ -81,7 +81,7 @@ class UserControllerSpec extends Specification {
 
         expect:
         mvc.perform(
-                post("/v1/users/signup")
+                post("/v1/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(
                                 objectMapper.writeValueAsString(
@@ -112,7 +112,7 @@ class UserControllerSpec extends Specification {
 
         expect:
         mvc.perform(
-                post("/v1/users/signup")
+                post("/v1/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(
                                 objectMapper.writeValueAsString(
