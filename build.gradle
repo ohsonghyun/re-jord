@@ -39,6 +39,11 @@ dependencies {
 	// DB
 	implementation 'com.h2database:h2'
 
+	// swagger
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+	compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
+
 	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.spockframework:spock-core:2.3-groovy-3.0'
