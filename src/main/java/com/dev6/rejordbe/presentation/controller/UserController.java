@@ -8,10 +8,7 @@ import com.dev6.rejordbe.presentation.controller.dto.signup.SignUpResponse;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * UserController
@@ -40,6 +37,7 @@ public class UserController {
             produces = {"application/json"},
             consumes = {"application/json"}
     )
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<SignUpResponse> signUp(@ApiParam(value = "회원가입 정보", required = true) @RequestBody final SignUpRequest signUpUserRequest) {
         UserResult savedResult = signUpService.signUp(signUpUserRequest.toUser());
 
