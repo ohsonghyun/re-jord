@@ -7,13 +7,16 @@ import com.dev6.rejordbe.domain.user.dto.UserResult;
 import com.dev6.rejordbe.exception.DuplicatedNicknameException;
 import com.dev6.rejordbe.exception.DuplicatedUserIdException;
 import com.dev6.rejordbe.infrastructure.user.SignUpRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * SignUpServiceImpl
  */
+@Service
 @lombok.RequiredArgsConstructor
 public class SignUpServiceImpl implements SignUpService {
 
@@ -33,9 +36,9 @@ public class SignUpServiceImpl implements SignUpService {
                     .errors(errors)
                     .build();
         }
-        signUpRepository.findUserByUserId(newUser.getUserId()).ifPresent(user -> errors.add(new DuplicatedUserIdException()));
-        signUpRepository.findUserByNickname(newUser.getNickname()).ifPresent(user -> errors.add(new DuplicatedNicknameException()));
 
+        signUpRepository.findUserByUserId(newUser.getUserId()).ifPresent(user -> errors.add(new DuplicatedUserIdException("DUPLICATED_USERID")));
+        signUpRepository.findUserByNickname(newUser.getNickname()).ifPresent(user -> errors.add(new DuplicatedNicknameException("DUPLICATED_NICKNAME")));
         if (!errors.isEmpty()) {
             return UserResult.builder()
                     .errors(errors)
@@ -69,7 +72,7 @@ public class SignUpServiceImpl implements SignUpService {
     private boolean validateParam(Users anUser, List<RuntimeException> errors) {
         boolean userIdResult = userInfoValidateService.validateUserId(anUser.getUserId(), errors);
         boolean passwordResult = userInfoValidateService.validatePassword(anUser.getPassword(), errors);
-        return userIdResult && passwordResult;
+        return userIdResult && passwordResult && Objects.nonNull(anUser.getUserType());
     }
 
 }
