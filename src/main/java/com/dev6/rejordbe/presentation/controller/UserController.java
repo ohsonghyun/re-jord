@@ -1,12 +1,16 @@
 package com.dev6.rejordbe.presentation.controller;
 
 import com.dev6.rejordbe.application.user.signup.SignUpService;
+import com.dev6.rejordbe.application.user.userinfo.UserInfoService;
 import com.dev6.rejordbe.domain.user.dto.UserResult;
 import com.dev6.rejordbe.exception.IllegalParameterException;
 import com.dev6.rejordbe.presentation.controller.dto.signup.SignUpRequest;
 import com.dev6.rejordbe.presentation.controller.dto.signup.SignUpResponse;
+import com.dev6.rejordbe.presentation.controller.dto.userInfo.UpdateUserInfoRequest;
+import com.dev6.rejordbe.presentation.controller.dto.userInfo.UpdateUserInfoResponse;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final SignUpService signUpService;
+    private final UserInfoService userInfoService;
 
     @ApiOperation(
             value = "회원가입",
@@ -34,7 +39,7 @@ public class UserController {
             @ApiResponse(code = 409, message = "존재하는 유저ID 또는 닉네임", response = SignUpResponse.class)
     })
     @PostMapping(
-            produces = {"application/json"},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_PROBLEM_JSON_VALUE},
             consumes = {"application/json"}
     )
     @ResponseStatus(HttpStatus.CREATED)
@@ -69,5 +74,19 @@ public class UserController {
                         .nickname(savedResult.getNickname())
                         .userType(savedResult.getUserType())
                         .build());
+    }
+
+    @PatchMapping(
+//            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_PROBLEM_JSON_VALUE},
+//            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<UpdateUserInfoResponse> updateUserInfo(@ApiParam(value = "수정할 회원 정보", required = true) @RequestBody UpdateUserInfoRequest request) {
+        UserResult updatedUser = userInfoService.updateUserInfo(request.toUser());
+        return ResponseEntity.ok(UpdateUserInfoResponse.builder()
+                .uid(updatedUser.getUid())
+                .userId(updatedUser.getUserId())
+                .nickname(updatedUser.getNickname())
+                .userType(updatedUser.getUserType())
+                .build());
     }
 }
