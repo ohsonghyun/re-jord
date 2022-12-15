@@ -4,6 +4,7 @@ import com.dev6.rejordbe.exception.DuplicatedNicknameException;
 import com.dev6.rejordbe.exception.IllegalParameterException;
 import com.dev6.rejordbe.exception.UserNotFoundException;
 import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * UserControllerAdvice
  */
 @RestControllerAdvice(basePackageClasses = UserController.class)
+@Slf4j
 public class UserControllerAdvice {
 
     @ExceptionHandler(IllegalParameterException.class)
@@ -43,6 +45,7 @@ public class UserControllerAdvice {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> exceptionHandler(Exception exception) {
+        exception.printStackTrace();
         return new ResponseEntity<>(
                 ErrorResponse.builder().message("INTERNAL_SERVER_ERROR").build(),
                 headers(),
