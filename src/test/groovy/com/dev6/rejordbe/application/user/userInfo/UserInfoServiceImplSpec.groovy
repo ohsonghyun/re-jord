@@ -39,7 +39,7 @@ class UserInfoServiceImplSpec extends Specification {
 
 
         when:
-        userInfoService.updateNickname(Users.builder().nickname(newNickname).build())
+        userInfoService.updateUserInfo(Users.builder().nickname(newNickname).build())
 
         then:
         anUser.getNickname() == newNickname
@@ -54,7 +54,7 @@ class UserInfoServiceImplSpec extends Specification {
         userInfoValidateService.validateNickname(_ as String, _ as List<RuntimeException>) >> false
 
         when:
-        userInfoService.updateNickname(Users.builder().nickname("n").build())
+        userInfoService.updateUserInfo(Users.builder().nickname("n").build())
 
         then:
         thrown(IllegalParameterException)
@@ -68,7 +68,7 @@ class UserInfoServiceImplSpec extends Specification {
         userInfoValidateService.validateNickname(_ as String, _ as List<RuntimeException>) >> true
 
         when:
-        userInfoService.updateNickname(Users.builder().nickname("nickname").build())
+        userInfoService.updateUserInfo(Users.builder().nickname("nickname").build())
 
         then:
         thrown(UserNotFoundException)
@@ -81,7 +81,7 @@ class UserInfoServiceImplSpec extends Specification {
         userInfoValidateService.validateNickname(_ as String, _ as List<RuntimeException>) >> true
 
         when:
-        userInfoService.updateNickname(Users.builder().nickname("nickname").build())
+        userInfoService.updateUserInfo(Users.builder().nickname("nickname").build())
 
         then:
         thrown(DuplicatedNicknameException)
