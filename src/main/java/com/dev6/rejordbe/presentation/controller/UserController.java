@@ -1,13 +1,21 @@
 package com.dev6.rejordbe.presentation.controller;
 
 import com.dev6.rejordbe.application.user.signup.SignUpService;
+import com.dev6.rejordbe.application.user.userinfo.UserInfoService;
+import com.dev6.rejordbe.domain.user.Users;
 import com.dev6.rejordbe.domain.user.dto.UserResult;
 import com.dev6.rejordbe.exception.IllegalParameterException;
+import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
 import com.dev6.rejordbe.presentation.controller.dto.signup.SignUpRequest;
 import com.dev6.rejordbe.presentation.controller.dto.signup.SignUpResponse;
+import com.dev6.rejordbe.presentation.controller.dto.userInfo.UpdateUserInfoRequest;
+import com.dev6.rejordbe.presentation.controller.dto.userInfo.UpdateUserInfoResponse;
 import io.swagger.annotations.*;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -20,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final SignUpService signUpService;
+    private final UserInfoService userInfoService;
 
     @ApiOperation(
             value = "회원가입",
@@ -34,8 +43,8 @@ public class UserController {
             @ApiResponse(code = 409, message = "존재하는 유저ID 또는 닉네임", response = SignUpResponse.class)
     })
     @PostMapping(
-            produces = {"application/json"},
-            consumes = {"application/json"}
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_PROBLEM_JSON_VALUE},
+            consumes = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<SignUpResponse> signUp(@ApiParam(value = "회원가입 정보", required = true) @RequestBody final SignUpRequest signUpUserRequest) {
@@ -69,5 +78,37 @@ public class UserController {
                         .nickname(savedResult.getNickname())
                         .userType(savedResult.getUserType())
                         .build());
+    }
+
+    @ApiOperation(
+            value = "회원 정보 수정",
+            nickname = "updateUserInfo",
+            notes = "회원 정보 수정 API. 현재 닉네임만 수정 가능.",
+            response = UpdateUserInfoResponse.class,
+            authorizations = {@Authorization(value = "TBD")},
+            tags = "Users")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "유저 정보 변경 성공"),
+            @ApiResponse(code = 400, message = "정책 위반 데이터", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "존재하지 않는 유저", response = ErrorResponse.class),
+            @ApiResponse(code = 409, message = "이미 존재하는 닉네임", response = ErrorResponse.class)
+    })
+    @PatchMapping(
+            value = "/{uid}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_PROBLEM_JSON_VALUE},
+            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<UpdateUserInfoResponse> updateUserInfo(
+            @Schema(description = "유저 uid", required = true) @NonNull @PathVariable String uid,
+            @ApiParam(value = "수정할 회원 정보", required = true) @RequestBody UpdateUserInfoRequest request
+    ) {
+        UserResult updatedUser = userInfoService.updateUserInfo(
+                Users.builder().uid(uid).nickname(request.getNickname()).build());
+        return ResponseEntity.ok(UpdateUserInfoResponse.builder()
+                .uid(updatedUser.getUid())
+                .userId(updatedUser.getUserId())
+                .nickname(updatedUser.getNickname())
+                .userType(updatedUser.getUserType())
+                .build());
     }
 }

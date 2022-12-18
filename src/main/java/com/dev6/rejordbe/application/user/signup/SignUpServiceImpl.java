@@ -8,6 +8,7 @@ import com.dev6.rejordbe.exception.DuplicatedNicknameException;
 import com.dev6.rejordbe.exception.DuplicatedUserIdException;
 import com.dev6.rejordbe.infrastructure.user.SignUpRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.Objects;
  * SignUpServiceImpl
  */
 @Service
+@Transactional
 @lombok.RequiredArgsConstructor
 public class SignUpServiceImpl implements SignUpService {
 
