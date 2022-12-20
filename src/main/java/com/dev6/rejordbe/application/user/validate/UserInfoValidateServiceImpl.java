@@ -36,7 +36,7 @@ public class UserInfoValidateServiceImpl implements UserInfoValidateService {
 
             // 영문(소문자), 숫자 이외의 문자가 있는면 에러
             // 아이디가 숫자만으로 구성되어 있으면 에러
-            final Pattern pattern = Pattern.compile("(^\\d+$|[!@#$%^&*(),.?\\\":{}|<>]|[A-Z])");
+            final Pattern pattern = Pattern.compile("(^\\d+$|\\W|[A-Z])");
             if (pattern.matcher(userId).find()) {
                 errors.add(new IllegalParameterException("ILLEGAL_USERID"));
                 return false;
@@ -47,6 +47,10 @@ public class UserInfoValidateServiceImpl implements UserInfoValidateService {
 
     /**
      * {@inheritDoc}
+     * <ol>
+     *     <li>영문, 한글, 숫자 구성 가능</li>
+     *     <li>최소 2글자 이상 ~ 최대 15글자 이하</li>
+     * </ol>
      */
     @Override
     public boolean validateNickname(String nickname, List<RuntimeException> errors) {
@@ -60,7 +64,13 @@ public class UserInfoValidateServiceImpl implements UserInfoValidateService {
                 errors.add(new IllegalParameterException("ILLEGAL_NICKNAME"));
                 errorFree = false;
             }
-            // TODO 한글, 영문, 숫자, 툭수문자 이외의 문자가 있는지 체크 필요
+
+            // 영문, 한글, 숫자이외의 문자가 포함되어 있으면 에러
+            Pattern pattern = Pattern.compile("[^\\w|가-힣]");
+            if (pattern.matcher(nickname).find()) {
+                errors.add(new IllegalParameterException("ILLEGAL_NICKNAME"));
+                errorFree = false;
+            }
         }
         return errorFree;
     }
