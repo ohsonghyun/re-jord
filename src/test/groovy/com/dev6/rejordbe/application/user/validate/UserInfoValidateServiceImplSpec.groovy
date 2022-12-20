@@ -32,9 +32,25 @@ class UserInfoValidateServiceImplSpec extends Specification {
         'userId 길이가 20이면 성공' | 'useruseruseruseruser'  | true           | 0
     }
 
-//    def "UserId는 영문과 숫자로만 구성된다"() {
-//        // TODO
-//    }
+    def "영문(소문자)만으로는 생성가능하나, 숫자로만 생성은 불가능하다"() {
+        given:
+        List<RuntimeException> errors = new ArrayList<>()
+
+        when:
+        def result = userInfoValidateService.validateUserId(userId, errors)
+
+        then:
+        result == validateResult
+        errors.size() == errorCount
+
+        where:
+        testCase                | userId        | validateResult | errorCount
+        '영문으로만 구성된 경우'          | 'userid'      | true           | 0
+        '숫자로만 구성된 경우'           | '12345'       | false          | 1
+        '영문(소문자)과 숫자의 조합인 경우'   | 'userid1234'  | true           | 0
+        '영문과 숫자 이외의 문자가 포함된 경우' | 'userid$1234' | false          | 1
+        '영문(대문자)가 포함된 경우'       | 'userId1234'  | false           | 1
+    }
 
     // Nickname 관련
     @Unroll("#testCase")
