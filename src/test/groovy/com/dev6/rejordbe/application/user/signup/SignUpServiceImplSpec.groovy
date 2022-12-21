@@ -2,6 +2,7 @@ package com.dev6.rejordbe.application.user.signup
 
 import com.dev6.rejordbe.application.id.IdGenerator
 import com.dev6.rejordbe.application.user.validate.UserInfoValidateService
+import com.dev6.rejordbe.domain.exception.ExceptionCode
 import com.dev6.rejordbe.domain.user.UserType
 import com.dev6.rejordbe.domain.user.Users
 import com.dev6.rejordbe.exception.DuplicatedNicknameException
@@ -164,12 +165,12 @@ class SignUpServiceImplSpec extends Specification {
         given:
         userInfoValidateService.validateUserId(null, _ as List<RuntimeException>) >> {
             String userIds, List<RuntimeException> list ->
-                list.add(new IllegalParameterException("ILLEGAL_USERID"))
+                list.add(new IllegalParameterException(ExceptionCode.ILLEGAL_USERID.name()))
                 return false
         }
         userInfoValidateService.validatePassword(null, _ as List<RuntimeException>) >> {
             String passwords, List<RuntimeException> list ->
-                list.add(new IllegalParameterException("ILLEGAL_PASSWORD"))
+                list.add(new IllegalParameterException(ExceptionCode.ILLEGAL_PASSWORD.name()))
                 return false
         }
         signUpRepository.findUserByUserId(_ as String) >> Optional.empty()

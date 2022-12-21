@@ -2,6 +2,7 @@ package com.dev6.rejordbe.presentation.controller
 
 import com.dev6.rejordbe.application.user.signup.SignUpService
 import com.dev6.rejordbe.application.user.userinfo.UserInfoService
+import com.dev6.rejordbe.domain.exception.ExceptionCode
 import com.dev6.rejordbe.domain.user.UserType
 import com.dev6.rejordbe.domain.user.Users
 import com.dev6.rejordbe.domain.user.dto.UserResult
@@ -79,9 +80,9 @@ class UserControllerSpec extends Specification {
     def "정책에 맞지 않은 데이터가 있으면 회원가입에 실패하고 400을 반환한다"() {
         given:
         List<RuntimeException> errors = new ArrayList<>();
-        errors.add(new IllegalParameterException("ILLEGAL_USERID"))
-        errors.add(new IllegalParameterException("ILLEGAL_NICKNAME"))
-        errors.add(new IllegalParameterException("ILLEGAL_PASSWORD"))
+        errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_USERID.name()))
+        errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_NICKNAME.name()))
+        errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_PASSWORD.name()))
 
         when(signUpService.signUp(isA(Users.class)))
                 .thenReturn(
@@ -103,9 +104,9 @@ class UserControllerSpec extends Specification {
                                 )))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath('\$.errors.size()').value(3))
-                .andExpect(jsonPath('\$.errors[0]').value('ILLEGAL_USERID'))
-                .andExpect(jsonPath('\$.errors[1]').value('ILLEGAL_NICKNAME'))
-                .andExpect(jsonPath('\$.errors[2]').value('ILLEGAL_PASSWORD'))
+                .andExpect(jsonPath('\$.errors[0]').value(ExceptionCode.ILLEGAL_USERID.name()))
+                .andExpect(jsonPath('\$.errors[1]').value(ExceptionCode.ILLEGAL_NICKNAME.name()))
+                .andExpect(jsonPath('\$.errors[2]').value(ExceptionCode.ILLEGAL_PASSWORD.name()))
     }
 
     def "동일한 유저ID 또는 닉네임이 존재하면 회원가입에 실패하고 409을 반환한다"() {
@@ -134,8 +135,8 @@ class UserControllerSpec extends Specification {
                                 )))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath('\$.errors.size()').value(2))
-                .andExpect(jsonPath('\$.errors[0]').value('DUPLICATED_USERID'))
-                .andExpect(jsonPath('\$.errors[1]').value('DUPLICATED_NICKNAME'))
+                .andExpect(jsonPath('\$.errors[0]').value(ExceptionCode.DUPLICATED_USERID.name()))
+                .andExpect(jsonPath('\$.errors[1]').value(ExceptionCode.DUPLICATED_NICKNAME.name()))
     }
 
     // /회원가입
@@ -184,10 +185,10 @@ class UserControllerSpec extends Specification {
                 .andExpect(jsonPath("\$.message").value(message))
 
         where:
-        testCase             | message               | exception                                | resultStatus
-        '정책에 맞지 않은 닉네임: 400' | "ILLEGAL_NICKNAME"    | new IllegalParameterException(message)   | status().isBadRequest()
-        '이미 존재하는 닉네임: 409'   | "DUPLICATED_NICKNAME" | new DuplicatedNicknameException(message) | status().isConflict()
-        '존재하지 않는 유저: 404'    | "USER_NOT_FOUND"      | new UserNotFoundException(message)       | status().isNotFound()
+        testCase             | message                                  | exception                                | resultStatus
+        '정책에 맞지 않은 닉네임: 400' | ExceptionCode.ILLEGAL_NICKNAME.name()    | new IllegalParameterException(message)   | status().isBadRequest()
+        '이미 존재하는 닉네임: 409'   | ExceptionCode.DUPLICATED_NICKNAME.name() | new DuplicatedNicknameException(message) | status().isConflict()
+        '존재하지 않는 유저: 404'    | ExceptionCode.USER_NOT_FOUND.name()      | new UserNotFoundException(message)       | status().isNotFound()
     }
     // /닉네임 수정
 }
