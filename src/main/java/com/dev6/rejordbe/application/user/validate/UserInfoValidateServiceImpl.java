@@ -1,5 +1,6 @@
 package com.dev6.rejordbe.application.user.validate;
 
+import com.dev6.rejordbe.domain.exception.ExceptionCode;
 import com.dev6.rejordbe.exception.IllegalParameterException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -25,12 +26,12 @@ public class UserInfoValidateServiceImpl implements UserInfoValidateService {
     public boolean validateUserId(String userId, List<RuntimeException> errors) {
         boolean errorFree = true;
         if (StringUtils.isBlank(userId)) {
-            errors.add(new IllegalParameterException("ILLEGAL_USERID"));
+            errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_USERID.name()));
             errorFree = false;
         } else {
             // 영문, 숫자 조합으로 5~20자 이내
             if (userId.length() < 5 || userId.length() > 20) {
-                errors.add(new IllegalParameterException("ILLEGAL_USERID"));
+                errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_USERID.name()));
                 errorFree = false;
             }
 
@@ -38,7 +39,7 @@ public class UserInfoValidateServiceImpl implements UserInfoValidateService {
             // 아이디가 숫자만으로 구성되어 있으면 에러
             final Pattern pattern = Pattern.compile("(^\\d+$|\\W|[A-Z])");
             if (pattern.matcher(userId).find()) {
-                errors.add(new IllegalParameterException("ILLEGAL_USERID"));
+                errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_USERID.name()));
                 return false;
             }
         }
@@ -56,19 +57,19 @@ public class UserInfoValidateServiceImpl implements UserInfoValidateService {
     public boolean validateNickname(String nickname, List<RuntimeException> errors) {
         boolean errorFree = true;
         if (StringUtils.isBlank(nickname)) {
-            errors.add(new IllegalParameterException("ILLEGAL_NICKNAME"));
+            errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_NICKNAME.name()));
             errorFree = false;
         } else {
             // 한글, 영문, 숫자, 특수문자 조합으로 2~15자 이내
             if (nickname.length() < 2 || nickname.length() > 15) {
-                errors.add(new IllegalParameterException("ILLEGAL_NICKNAME"));
+                errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_NICKNAME.name()));
                 errorFree = false;
             }
 
             // 영문, 한글, 숫자이외의 문자가 포함되어 있으면 에러
             Pattern pattern = Pattern.compile("[^\\w|가-힣]");
             if (pattern.matcher(nickname).find()) {
-                errors.add(new IllegalParameterException("ILLEGAL_NICKNAME"));
+                errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_NICKNAME.name()));
                 errorFree = false;
             }
         }
@@ -82,7 +83,7 @@ public class UserInfoValidateServiceImpl implements UserInfoValidateService {
     public boolean validatePassword(String password, List<RuntimeException> errors) {
         boolean errorFree = true;
         if (StringUtils.isBlank(password)) {
-            errors.add(new IllegalParameterException("ILLEGAL_PASSWORD"));
+            errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_PASSWORD.name()));
             errorFree = false;
         }
         return errorFree;

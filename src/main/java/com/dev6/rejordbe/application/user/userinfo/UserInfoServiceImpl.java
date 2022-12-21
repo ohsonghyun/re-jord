@@ -1,6 +1,7 @@
 package com.dev6.rejordbe.application.user.userinfo;
 
 import com.dev6.rejordbe.application.user.validate.UserInfoValidateService;
+import com.dev6.rejordbe.domain.exception.ExceptionCode;
 import com.dev6.rejordbe.domain.user.Users;
 import com.dev6.rejordbe.domain.user.dto.UserResult;
 import com.dev6.rejordbe.exception.DuplicatedNicknameException;
@@ -33,16 +34,16 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public UserResult updateUserInfo(@NonNull final Users newUserInfo) {
         if (!userInfoValidateService.validateNickname(newUserInfo.getNickname(), new ArrayList<>())) {
-            throw new IllegalParameterException("ILLEGAL_NICKNAME");
+            throw new IllegalParameterException(ExceptionCode.ILLEGAL_NICKNAME.name());
         }
         userInfoRepository.findUserByNickname(newUserInfo.getNickname())
                 .ifPresent(existingUser -> {
                     log.info("UserInfoServiceImpl.updateNickname: DUPLICATED_NICKNAME: {}", newUserInfo.getNickname());
-                    throw new DuplicatedNicknameException("DUPLICATED_NICKNAME");
+                    throw new DuplicatedNicknameException(ExceptionCode.DUPLICATED_NICKNAME.name());
                 });
 
         Users targetUser = userInfoRepository.findById(newUserInfo.getUid())
-                .orElseThrow(() -> new UserNotFoundException("USER_NOT_FOUND"));
+                .orElseThrow(() -> new UserNotFoundException(ExceptionCode.USER_NOT_FOUND.name()));
 
         targetUser.update(Users.builder().nickname(newUserInfo.getNickname()).build());
         return UserResult.builder()

@@ -2,6 +2,7 @@ package com.dev6.rejordbe.application.user.signup;
 
 import com.dev6.rejordbe.application.id.IdGenerator;
 import com.dev6.rejordbe.application.user.validate.UserInfoValidateService;
+import com.dev6.rejordbe.domain.exception.ExceptionCode;
 import com.dev6.rejordbe.domain.user.Users;
 import com.dev6.rejordbe.domain.user.dto.UserResult;
 import com.dev6.rejordbe.exception.DuplicatedNicknameException;
@@ -39,8 +40,10 @@ public class SignUpServiceImpl implements SignUpService {
                     .build();
         }
 
-        signUpRepository.findUserByUserId(newUser.getUserId()).ifPresent(user -> errors.add(new DuplicatedUserIdException("DUPLICATED_USERID")));
-        signUpRepository.findUserByNickname(newUser.getNickname()).ifPresent(user -> errors.add(new DuplicatedNicknameException("DUPLICATED_NICKNAME")));
+        signUpRepository.findUserByUserId(newUser.getUserId())
+                .ifPresent(user -> errors.add(new DuplicatedUserIdException(ExceptionCode.DUPLICATED_USERID.name())));
+        signUpRepository.findUserByNickname(newUser.getNickname())
+                .ifPresent(user -> errors.add(new DuplicatedNicknameException(ExceptionCode.DUPLICATED_NICKNAME.name())));
         if (!errors.isEmpty()) {
             return UserResult.builder()
                     .errors(errors)
