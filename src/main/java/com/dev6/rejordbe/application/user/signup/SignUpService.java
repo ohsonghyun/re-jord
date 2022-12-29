@@ -15,4 +15,12 @@ public interface SignUpService {
      * @return {@code UserResult} 가입처리 결과
      */
     UserResult signUp(final Users newUser);
+
+    /**
+     * 회원가입시 아이디 중복 체크
+     *
+     * @param userId
+     * @return 아이디가 없으면 ture, 있으면 false
+     */
+    String checkDuplicatedUserId(String userId);
 }

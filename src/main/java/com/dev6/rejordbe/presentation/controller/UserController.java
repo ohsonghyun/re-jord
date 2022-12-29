@@ -5,6 +5,7 @@ import com.dev6.rejordbe.application.user.userinfo.UserInfoService;
 import com.dev6.rejordbe.domain.user.Users;
 import com.dev6.rejordbe.domain.user.dto.UserResult;
 import com.dev6.rejordbe.exception.IllegalParameterException;
+import com.dev6.rejordbe.presentation.controller.dto.checkDuplicate.CheckDuplicatedUserIdResponse;
 import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
 import com.dev6.rejordbe.presentation.controller.dto.signup.SignUpRequest;
 import com.dev6.rejordbe.presentation.controller.dto.signup.SignUpResponse;
@@ -77,6 +78,31 @@ public class UserController {
                         .userId(savedResult.getUserId())
                         .nickname(savedResult.getNickname())
                         .userType(savedResult.getUserType())
+                        .build());
+    }
+
+    @ApiOperation(
+            value = "아이디 중복 체크",
+            nickname = "checkDuplicatedUserId",
+            notes = "아이디 중복 체크 API. ",
+            response = CheckDuplicatedUserIdResponse.class,
+            authorizations = {@Authorization(value = "TBD")},
+            tags = "userId")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "정상"),
+            @ApiResponse(code = 400, message = "정책 위반 데이터", response = ErrorResponse.class),
+            @ApiResponse(code = 409, message = "존재하는 유저ID", response = ErrorResponse.class)
+    })
+    @GetMapping(
+            value = "/{userId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_PROBLEM_JSON_VALUE}
+    )
+    public ResponseEntity<CheckDuplicatedUserIdResponse> checkDuplicatedUserId(
+            @Schema(description = "유저 ID", required = true) @NonNull @PathVariable String userId
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                CheckDuplicatedUserIdResponse.builder()
+                        .userId(signUpService.checkDuplicatedUserId(userId))
                         .build());
     }
 

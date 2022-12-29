@@ -199,4 +199,47 @@ class SignUpServiceImplSpec extends Specification {
         'userId & password가 누락' | null     | 'nickname' | null       | UserType.BASIC | 2
     }
 
+    def "아이디 중복 체크: 성공한 경우"() {
+        // 테스트 대상 클래스는 무엇일까요? -> SignUpServiceImpl
+        // 테스트 대상 메서드(함수) 는 무엇? -> checkUserId
+        given:
+        signUpRepository.findUserByUserId(_ as String) >> returnValue
+        userInfoValidateService.validateUserId(_ as String, _ as List<RuntimeException>) >> true
+
+        when:
+        def duplicateCheckedUserId = signUpService.checkDuplicatedUserId(userId)
+
+        then:
+        // users 가 저장이 되고 있는지? -> 기존 user에서 userId가 있는지 확인해야 하는건데.. -> 기존유저가 눈으로 보이지 않는다.
+        result == duplicateCheckedUserId
+
+        where:
+        userId    | returnValue      | result
+        'userId'  | Optional.empty() | userId
+    }
+
+    def "아이디 중복 체크: 아이디 정책을 만족시키지 못하면 에러"() {
+        given:
+        userInfoValidateService.validateUserId(_ as String, _ as List<RuntimeException>) >> false
+
+        when:
+        signUpService.checkDuplicatedUserId('userId')
+
+        then:
+        thrown(IllegalParameterException)
+    }
+
+    def "아이디 중복 체크: 중복되서 실패한 경우 에러"() {
+        given:
+        signUpRepository.findUserByUserId(_ as String) >> Optional.of(Users.builder().build())
+        userInfoValidateService.validateUserId(_ as String, _ as List<RuntimeException>) >> true
+
+        when:
+        signUpService.checkDuplicatedUserId('userId')
+
+        then:
+        thrown(DuplicatedUserIdException)
+
+    }
+
 }
