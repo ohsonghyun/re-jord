@@ -6,7 +6,7 @@ import com.dev6.rejordbe.domain.user.UserType
 import com.dev6.rejordbe.domain.user.dto.UserResult
 import com.dev6.rejordbe.exception.UserNotFoundException
 import com.dev6.rejordbe.presentation.controller.dto.login.LoginRequest
-import com.dev6.rejordbe.presentation.controller.user.LoginController
+import com.dev6.rejordbe.presentation.controller.user.login.LoginController
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest

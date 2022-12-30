@@ -1,4 +1,4 @@
-package com.dev6.rejordbe.presentation.controller.user;
+package com.dev6.rejordbe.presentation.controller.user.login;
 
 import com.dev6.rejordbe.application.user.login.LoginService;
 import com.dev6.rejordbe.domain.cookie.CookieNames;
