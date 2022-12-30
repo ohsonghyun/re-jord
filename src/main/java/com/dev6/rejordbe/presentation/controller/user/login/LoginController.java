@@ -30,7 +30,7 @@ public class LoginController {
             notes = "로그인 API.",
             response = LoginResponse.class,
             authorizations = {@Authorization(value = "TBD")},
-            tags = "로그인"
+            tags = "로그인 컨트롤러"
     )
     @ApiResponses(value = {
             @ApiResponse(
