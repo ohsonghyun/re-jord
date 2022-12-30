@@ -1,6 +1,7 @@
 package com.dev6.rejordbe.presentation.controller;
 
 import com.dev6.rejordbe.exception.DuplicatedNicknameException;
+import com.dev6.rejordbe.exception.DuplicatedUserIdException;
 import com.dev6.rejordbe.exception.IllegalParameterException;
 import com.dev6.rejordbe.exception.UserNotFoundException;
 import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
@@ -37,6 +38,14 @@ public class UserControllerAdvice {
 
     @ExceptionHandler(DuplicatedNicknameException.class)
     public ResponseEntity<ErrorResponse> exceptionHandler(DuplicatedNicknameException exception) {
+        return new ResponseEntity<>(
+                ErrorResponse.builder().message(exception.getMessage()).build(),
+                headers(),
+                HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(DuplicatedUserIdException.class)
+    public ResponseEntity<ErrorResponse> exceptionHandler(DuplicatedUserIdException exception) {
         return new ResponseEntity<>(
                 ErrorResponse.builder().message(exception.getMessage()).build(),
                 headers(),

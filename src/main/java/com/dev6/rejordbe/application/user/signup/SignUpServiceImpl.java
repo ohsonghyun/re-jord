@@ -7,7 +7,9 @@ import com.dev6.rejordbe.domain.user.Users;
 import com.dev6.rejordbe.domain.user.dto.UserResult;
 import com.dev6.rejordbe.exception.DuplicatedNicknameException;
 import com.dev6.rejordbe.exception.DuplicatedUserIdException;
+import com.dev6.rejordbe.exception.IllegalParameterException;
 import com.dev6.rejordbe.infrastructure.user.SignUpRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +20,9 @@ import java.util.Objects;
 /**
  * SignUpServiceImpl
  */
+@Slf4j
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @lombok.RequiredArgsConstructor
 public class SignUpServiceImpl implements SignUpService {
 
@@ -30,6 +33,7 @@ public class SignUpServiceImpl implements SignUpService {
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public UserResult signUp(Users newUser) {
         final List<RuntimeException> errors = new ArrayList<>();
@@ -78,6 +82,21 @@ public class SignUpServiceImpl implements SignUpService {
         boolean userIdResult = userInfoValidateService.validateUserId(anUser.getUserId(), errors);
         boolean passwordResult = userInfoValidateService.validatePassword(anUser.getPassword(), errors);
         return userIdResult && passwordResult && Objects.nonNull(anUser.getUserType());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String isNotDuplicatedUserId(String userId) {
+        if (!userInfoValidateService.validateUserId(userId, new ArrayList<>())) {
+            throw new IllegalParameterException((ExceptionCode.ILLEGAL_USERID.name()));
+        }
+        signUpRepository.findUserByUserId(userId).ifPresent(existingUserId -> {
+            log.info("SignUpServiceImpl.checkDuplicatedUserId: DUPLICATED_USERID: {}", userId);
+            throw new DuplicatedUserIdException(ExceptionCode.DUPLICATED_USERID.name());
+        });
+        return userId;
     }
 
 }
