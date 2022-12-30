@@ -24,6 +24,7 @@ import spock.lang.Unroll
 
 import static org.mockito.ArgumentMatchers.isA
 import static org.mockito.Mockito.when
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
@@ -192,4 +193,34 @@ class UserControllerSpec extends Specification {
         '존재하지 않는 유저: 404'    | ExceptionCode.USER_NOT_FOUND.name()      | new UserNotFoundException(message)       | status().isNotFound()
     }
     // /닉네임 수정
+
+    // 아이디 중복 체크
+    def "아이디 중복이 되지 않으면 200을 반환한다"() {
+        given:
+        when(signUpService.isNotDuplicatedUserId(isA(String.class)))
+                .thenReturn('userId')
+
+        expect:
+        mvc.perform(get(baseUrl+'/userId/duplication')
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath('\$.userId').value("userId"))
+    }
+
+    def "아이디 중복 실패 케이스: #testCase 반환"() {
+        given:
+        when(signUpService.isNotDuplicatedUserId(isA(String.class))).thenThrow(exception)
+
+        expect:
+        mvc.perform(get(baseUrl + '/userId/duplication')
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(resultStatus)
+                .andExpect(jsonPath("\$.message").value(message))
+
+        where:
+        testCase                   | message             | exception                                | resultStatus
+        '정책에 맞지 않은 아이디: 400' | "ILLEGAL_USERID"    | new IllegalParameterException(message)   | status().isBadRequest()
+        '이미 존재하는 아이디: 409'    | "DUPLICATED_USERID" | new DuplicatedUserIdException(message)   | status().isConflict()
+    }
+    // /아이디 중복 체크
 }

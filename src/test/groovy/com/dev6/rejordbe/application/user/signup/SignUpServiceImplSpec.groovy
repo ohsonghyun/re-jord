@@ -199,4 +199,44 @@ class SignUpServiceImplSpec extends Specification {
         'userId & password가 누락' | null     | 'nickname' | null       | UserType.BASIC | 2
     }
 
+    def "아이디 중복 체크: 성공한 경우"() {
+        given:
+        signUpRepository.findUserByUserId(_ as String) >> returnValue
+        userInfoValidateService.validateUserId(_ as String, _ as List<RuntimeException>) >> true
+
+        when:
+        def duplicateCheckedUserId = signUpService.isNotDuplicatedUserId(userId)
+
+        then:
+        result == duplicateCheckedUserId
+
+        where:
+        userId    | returnValue      | result
+        'userId'  | Optional.empty() | userId
+    }
+
+    def "아이디 중복 체크: 아이디 정책을 만족시키지 못하면 에러"() {
+        given:
+        userInfoValidateService.validateUserId(_ as String, _ as List<RuntimeException>) >> false
+
+        when:
+        signUpService.isNotDuplicatedUserId('userId')
+
+        then:
+        thrown(IllegalParameterException)
+    }
+
+    def "아이디 중복 체크: 중복되서 실패한 경우 에러"() {
+        given:
+        signUpRepository.findUserByUserId(_ as String) >> Optional.of(Users.builder().build())
+        userInfoValidateService.validateUserId(_ as String, _ as List<RuntimeException>) >> true
+
+        when:
+        signUpService.isNotDuplicatedUserId('userId')
+
+        then:
+        thrown(DuplicatedUserIdException)
+
+    }
+
 }
