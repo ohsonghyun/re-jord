@@ -196,11 +196,11 @@ class UserControllerSpec extends Specification {
     // 아이디 중복 체크
     def "아이디 중복이 되지 않으면 200을 반환한다"() {
         given:
-        when(signUpService.checkDuplicatedUserId(isA(String.class)))
+        when(signUpService.isNotDuplicatedUserId(isA(String.class)))
                 .thenReturn('userId')
 
         expect:
-        mvc.perform(get(baseUrl+'/userId')
+        mvc.perform(get(baseUrl+'/userId/duplication')
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath('\$.userId').value("userId"))
@@ -208,10 +208,10 @@ class UserControllerSpec extends Specification {
 
     def "아이디 중복 실패 케이스: #testCase 반환"() {
         given:
-        when(signUpService.checkDuplicatedUserId(isA(String.class))).thenThrow(exception)
+        when(signUpService.isNotDuplicatedUserId(isA(String.class))).thenThrow(exception)
 
         expect:
-        mvc.perform(get(baseUrl + '/userId')
+        mvc.perform(get(baseUrl + '/userId/duplication')
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(resultStatus)
                 .andExpect(jsonPath("\$.message").value(message))

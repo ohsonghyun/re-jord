@@ -85,21 +85,17 @@ public class SignUpServiceImpl implements SignUpService {
     }
 
     /**
-     * 회원가입시 아이디 중복 체크
-     * @param userId
-     * @return userId가 없으면 ture
+     * {@inheritDoc}
      */
     @Override
-    public String checkDuplicatedUserId(String userId) {
+    public String isNotDuplicatedUserId(String userId) {
         if (!userInfoValidateService.validateUserId(userId, new ArrayList<>())) {
-            throw new IllegalParameterException(("ILLEGAL_USERID"));
+            throw new IllegalParameterException((ExceptionCode.ILLEGAL_USERID.name()));
         }
-
         signUpRepository.findUserByUserId(userId).ifPresent(existingUserId -> {
             log.info("SignUpServiceImpl.checkDuplicatedUserId: DUPLICATED_USERID: {}", userId);
-            throw new DuplicatedUserIdException("DUPLICATED_USERID");
+            throw new DuplicatedUserIdException(ExceptionCode.DUPLICATED_USERID.name());
         });
-
         return userId;
     }
 

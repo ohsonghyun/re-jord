@@ -37,7 +37,7 @@ public class UserController {
             notes = "회원가입API. 에러인 경우에는 errors 필드에만 값 설정 후 리스폰스",
             response = SignUpResponse.class,
             authorizations = {@Authorization(value = "TBD")},
-            tags = "Users")
+            tags = "유저 컨트롤러")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "정상"),
             @ApiResponse(code = 400, message = "정책 위반 데이터", response = SignUpResponse.class),
@@ -87,22 +87,22 @@ public class UserController {
             notes = "아이디 중복 체크 API. ",
             response = CheckDuplicatedUserIdResponse.class,
             authorizations = {@Authorization(value = "TBD")},
-            tags = "userId")
+            tags = "유저 컨트롤러")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "정상"),
             @ApiResponse(code = 400, message = "정책 위반 데이터", response = ErrorResponse.class),
             @ApiResponse(code = 409, message = "존재하는 유저ID", response = ErrorResponse.class)
     })
     @GetMapping(
-            value = "/{userId}",
+            value = "/{userId}/duplication",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_PROBLEM_JSON_VALUE}
     )
-    public ResponseEntity<CheckDuplicatedUserIdResponse> checkDuplicatedUserId(
+    public ResponseEntity<CheckDuplicatedUserIdResponse> isNotDuplicatedUserId(
             @Schema(description = "유저 ID", required = true) @NonNull @PathVariable String userId
     ) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 CheckDuplicatedUserIdResponse.builder()
-                        .userId(signUpService.checkDuplicatedUserId(userId))
+                        .userId(signUpService.isNotDuplicatedUserId(userId))
                         .build());
     }
 
@@ -112,7 +112,7 @@ public class UserController {
             notes = "회원 정보 수정 API. 현재 닉네임만 수정 가능.",
             response = UpdateUserInfoResponse.class,
             authorizations = {@Authorization(value = "TBD")},
-            tags = "Users")
+            tags = "유저 컨트롤러")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "유저 정보 변경 성공"),
             @ApiResponse(code = 400, message = "정책 위반 데이터", response = ErrorResponse.class),

@@ -200,17 +200,14 @@ class SignUpServiceImplSpec extends Specification {
     }
 
     def "아이디 중복 체크: 성공한 경우"() {
-        // 테스트 대상 클래스는 무엇일까요? -> SignUpServiceImpl
-        // 테스트 대상 메서드(함수) 는 무엇? -> checkUserId
         given:
         signUpRepository.findUserByUserId(_ as String) >> returnValue
         userInfoValidateService.validateUserId(_ as String, _ as List<RuntimeException>) >> true
 
         when:
-        def duplicateCheckedUserId = signUpService.checkDuplicatedUserId(userId)
+        def duplicateCheckedUserId = signUpService.isNotDuplicatedUserId(userId)
 
         then:
-        // users 가 저장이 되고 있는지? -> 기존 user에서 userId가 있는지 확인해야 하는건데.. -> 기존유저가 눈으로 보이지 않는다.
         result == duplicateCheckedUserId
 
         where:
@@ -223,7 +220,7 @@ class SignUpServiceImplSpec extends Specification {
         userInfoValidateService.validateUserId(_ as String, _ as List<RuntimeException>) >> false
 
         when:
-        signUpService.checkDuplicatedUserId('userId')
+        signUpService.isNotDuplicatedUserId('userId')
 
         then:
         thrown(IllegalParameterException)
@@ -235,7 +232,7 @@ class SignUpServiceImplSpec extends Specification {
         userInfoValidateService.validateUserId(_ as String, _ as List<RuntimeException>) >> true
 
         when:
-        signUpService.checkDuplicatedUserId('userId')
+        signUpService.isNotDuplicatedUserId('userId')
 
         then:
         thrown(DuplicatedUserIdException)

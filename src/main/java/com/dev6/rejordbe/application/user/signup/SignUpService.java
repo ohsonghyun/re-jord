@@ -2,6 +2,8 @@ package com.dev6.rejordbe.application.user.signup;
 
 import com.dev6.rejordbe.domain.user.Users;
 import com.dev6.rejordbe.domain.user.dto.UserResult;
+import com.dev6.rejordbe.exception.DuplicatedUserIdException;
+import com.dev6.rejordbe.exception.IllegalParameterException;
 
 /**
  * SignUpService
@@ -17,10 +19,12 @@ public interface SignUpService {
     UserResult signUp(final Users newUser);
 
     /**
-     * 회원가입시 아이디 중복 체크
+     * 아이디 중복 체크
      *
-     * @param userId
-     * @return 아이디가 없으면 ture, 있으면 false
+     * @param userId {@code String} 확인대상 유저ID
+     * @return {@code String} 확인대상 유저ID
+     * @throws IllegalParameterException {@code userId} 가 정책에 어긋나는 경우
+     * @throws DuplicatedUserIdException {@code userId} 가 중복되는 경우
      */
-    String checkDuplicatedUserId(String userId);
+    String isNotDuplicatedUserId(String userId);
 }
