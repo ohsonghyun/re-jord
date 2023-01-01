@@ -12,6 +12,7 @@ import com.dev6.rejordbe.exception.IllegalParameterException
 import com.dev6.rejordbe.exception.UserNotFoundException
 import com.dev6.rejordbe.presentation.controller.dto.signup.SignUpRequest
 import com.dev6.rejordbe.presentation.controller.dto.userInfo.UpdateUserInfoRequest
+import com.dev6.rejordbe.presentation.controller.user.info.UserController
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest

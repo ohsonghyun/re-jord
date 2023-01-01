@@ -1,4 +1,4 @@
-package com.dev6.rejordbe.presentation.controller;
+package com.dev6.rejordbe.presentation.controller.user.info;
 
 import com.dev6.rejordbe.application.user.signup.SignUpService;
 import com.dev6.rejordbe.application.user.userinfo.UserInfoService;
