@@ -6,6 +6,7 @@ import com.dev6.rejordbe.domain.user.Users
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.context.annotation.Import
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 import spock.lang.Specification
 
 import javax.persistence.EntityManager
@@ -15,6 +16,7 @@ import javax.persistence.PersistenceContext
  * UserInfoRepositorySpec
  */
 @DataJpaTest
+@EnableJpaAuditing
 @Import(TestConfig.class)
 class UserInfoRepositorySpec extends Specification {
 
@@ -113,6 +115,7 @@ class UserInfoRepositorySpec extends Specification {
         def resultUserInfo = userInfoRepository.findById(uid).orElseThrow()
         resultUserInfo.getUserId() != "newUserId" // userId는 변경 불가
         resultUserInfo.getNickname() == newNickname
+        resultUserInfo.getModifiedDate().isAfter(resultUserInfo.getCreatedDate())
 
         where:
         uid   | userId   | nickname   | password   | userType       | newNickname
