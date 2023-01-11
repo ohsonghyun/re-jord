@@ -1,5 +1,6 @@
 package com.dev6.rejordbe.domain.user;
 
+import com.dev6.rejordbe.domain.BaseTime;
 import com.dev6.rejordbe.exception.IllegalParameterException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -19,7 +20,7 @@ import javax.persistence.Id;
 @lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @lombok.Builder
-public class Users {
+public class Users extends BaseTime {
 
     @Id
     @Column(name = "uid")

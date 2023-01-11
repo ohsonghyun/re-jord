@@ -6,17 +6,20 @@ import com.dev6.rejordbe.domain.user.Users
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.context.annotation.Import
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 import javax.persistence.PersistenceException
+import java.time.LocalDateTime
 
 /**
  * UsersRepositorySpec
  */
 @DataJpaTest
+@EnableJpaAuditing
 @Import(TestConfig.class)
 class SignUpRepositorySpec extends Specification {
 
@@ -28,6 +31,7 @@ class SignUpRepositorySpec extends Specification {
 
     def "#userType 유저를 생성할 수 있다"() {
         given:
+        def now = LocalDateTime.now()
         def newUser = Users.builder()
                 .uid(uid)
                 .userId(userId)
@@ -51,6 +55,8 @@ class SignUpRepositorySpec extends Specification {
         anUser.getNickname() == nickname
         anUser.getPassword() == password
         anUser.getUserType() == userType
+        anUser.getCreatedDate().isAfter(now)
+        anUser.getModifiedDate().isAfter(now)
 
         where:
         uid   | userId   | nickname   | password   | userType
