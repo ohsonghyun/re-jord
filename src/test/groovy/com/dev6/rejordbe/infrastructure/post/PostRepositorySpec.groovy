@@ -3,6 +3,7 @@ package com.dev6.rejordbe.infrastructure.post
 import com.dev6.rejordbe.TestConfig
 import com.dev6.rejordbe.domain.post.Post
 import com.dev6.rejordbe.domain.post.PostType
+import com.dev6.rejordbe.domain.post.ReviewType
 import com.dev6.rejordbe.domain.user.Users
 import com.dev6.rejordbe.infrastructure.user.SignUpRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -45,7 +46,8 @@ class PostRepositorySpec extends Specification {
         def newPost = Post.builder()
                 .postId('postId')
                 .contents('contents')
-                .postType(PostType.SHARE)
+                .postType(PostType.CHALLENGE)
+                .reviewType(ReviewType.FEELING)
                 .user(user)
                 .build()
 
@@ -62,6 +64,7 @@ class PostRepositorySpec extends Specification {
         aPost.getPostId() == newPost.getPostId()
         aPost.getContents() == newPost.getContents()
         aPost.getPostType() == newPost.getPostType()
+        aPost.getReviewType() == newPost.getReviewType()
         aPost.getCreatedDate().isAfter(now)
         aPost.getModifiedDate().isAfter(now)
     }

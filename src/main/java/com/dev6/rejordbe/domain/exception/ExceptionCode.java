@@ -10,6 +10,7 @@ public enum ExceptionCode {
     DUPLICATED_NICKNAME,
     DUPLICATED_USERID,
     USER_NOT_FOUND,
+    ILLEGAL_CONTENT,
 
     // INTERNAL_SERVER_ERROR -------------------------------------
     INTERNAL_ILLEGAL_PARAM
