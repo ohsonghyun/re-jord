@@ -50,7 +50,7 @@ public class UserInfoValidateServiceImpl implements UserInfoValidateService {
      * {@inheritDoc}
      * <ol>
      *     <li>영문, 한글, 숫자 구성 가능</li>
-     *     <li>최소 2글자 이상 ~ 최대 15글자 이하</li>
+     *     <li>최소 2글자 이상 ~ 최대 10글자 이하</li>
      * </ol>
      */
     @Override
@@ -60,8 +60,8 @@ public class UserInfoValidateServiceImpl implements UserInfoValidateService {
             errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_NICKNAME.name()));
             errorFree = false;
         } else {
-            // 한글, 영문, 숫자, 특수문자 조합으로 2~15자 이내
-            if (nickname.length() < 2 || nickname.length() > 15) {
+            // 한글, 영문, 숫자, 특수문자 조합으로 2~10자 이내
+            if (nickname.length() < 2 || nickname.length() > 10) {
                 errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_NICKNAME.name()));
                 errorFree = false;
             }
