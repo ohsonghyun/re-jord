@@ -1,4 +1,4 @@
-package com.dev6.rejordbe.infrastructure.post
+package com.dev6.rejordbe.infrastructure.post.add
 
 import com.dev6.rejordbe.TestConfig
 import com.dev6.rejordbe.domain.post.Post
@@ -21,7 +21,7 @@ import java.time.LocalDateTime
 @DataJpaTest
 @EnableJpaAuditing
 @Import(TestConfig.class)
-class PostRepositorySpec extends Specification {
+class WritePostRepositorySpec extends Specification {
 
     @PersistenceContext
     EntityManager entityManager
@@ -29,7 +29,7 @@ class PostRepositorySpec extends Specification {
     @Autowired
     SignUpRepository signUpRepository
     @Autowired
-    PostRepository postRepository
+    WritePostRepository writePostRepository
 
     def "게시글을 추가할 수 있다"() {
         given:
@@ -50,13 +50,13 @@ class PostRepositorySpec extends Specification {
                 .build()
 
         when:
-        postRepository.save(newPost)
+        writePostRepository.save(newPost)
 
         entityManager.flush()
         entityManager.clear()
 
         then:
-        def postOptional = postRepository.findById(newPost.getPostId())
+        def postOptional = writePostRepository.findById(newPost.getPostId())
         postOptional.isPresent()
         def aPost = postOptional.orElseThrow()
         aPost.getPostId() == newPost.getPostId()
