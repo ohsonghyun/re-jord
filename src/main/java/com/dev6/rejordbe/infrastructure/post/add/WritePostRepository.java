@@ -1,4 +1,4 @@
-package com.dev6.rejordbe.infrastructure.post;
+package com.dev6.rejordbe.infrastructure.post.add;
 
 import com.dev6.rejordbe.domain.post.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * PostRepository
  */
-public interface PostRepository extends JpaRepository<Post, String> {
+public interface WritePostRepository extends JpaRepository<Post, String> {
 }
