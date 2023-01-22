@@ -45,7 +45,7 @@ class WritePostRepositorySpec extends Specification {
         def newPost = Post.builder()
                 .postId('postId')
                 .contents('contents')
-                .postType(PostType.CHALLENGE)
+                .postType(PostType.SHARE)
                 .user(user)
                 .build()
 

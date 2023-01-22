@@ -14,5 +14,5 @@ public interface WritePostService {
      * @return {@code PostResult} 추가한 게시글
      * TODO throw 정보 추가해주세요
      */
-    PostResult writePost(final Post newPost);
+    PostResult writePost(final Post newPost, final String uid);
 }
