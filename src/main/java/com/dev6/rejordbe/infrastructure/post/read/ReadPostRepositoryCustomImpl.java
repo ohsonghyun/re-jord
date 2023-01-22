@@ -36,6 +36,7 @@ public class ReadPostRepositoryCustomImpl implements ReadPostRepositoryCustom {
                 )
                 .from(post)
                 .where(post.createdDate.loe(offsetTime))
+                .orderBy(post.createdDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

@@ -35,7 +35,7 @@ class ReadPostRepositoryCustomSpec extends Specification {
     @Autowired
     ReadPostRepository readPostRepository
 
-    def "특정시간 이후의 게시글 취득할 수 있다: 데이터가 있는 경우"() {
+    def "특정시간 이후의 게시글을 최신글 순으로 취득할 수 있다: 데이터가 있는 경우"() {
         given:
         // 유저 생성
         def user = Users.builder()
@@ -70,17 +70,18 @@ class ReadPostRepositoryCustomSpec extends Specification {
         allPosts.getContent().size() == 10
         allPosts.getContent().get(0) instanceof PostResult
         def it = Assertions.assertThat(allPosts.getContent())
+        // 최신글 순으로 반환
         it.extractingResultOf('getPostId').containsExactly(
-                'postId0',
-                'postId1',
-                'postId2',
-                'postId3',
-                'postId4',
-                'postId5',
-                'postId6',
-                'postId7',
+                'postId9',
                 'postId8',
-                'postId9'
+                'postId7',
+                'postId6',
+                'postId5',
+                'postId4',
+                'postId3',
+                'postId2',
+                'postId1',
+                'postId0'
         )
         it.extractingResultOf('getContents').containsOnly('contents')
         it.extractingResultOf('getUid').containsOnly('uid')
