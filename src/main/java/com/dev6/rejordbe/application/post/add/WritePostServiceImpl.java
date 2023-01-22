@@ -5,7 +5,7 @@ import com.dev6.rejordbe.domain.exception.ExceptionCode;
 import com.dev6.rejordbe.domain.post.Post;
 import com.dev6.rejordbe.domain.post.dto.PostResult;
 import com.dev6.rejordbe.exception.IllegalParameterException;
-import com.dev6.rejordbe.infrastructure.post.PostRepository;
+import com.dev6.rejordbe.infrastructure.post.add.WritePostRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @lombok.RequiredArgsConstructor
 public class WritePostServiceImpl implements WritePostService {
 
-    private final PostRepository postRepository;
+    private final WritePostRepository writePostRepository;
     private final IdGenerator idGenerator;
 
     @Transactional
@@ -30,12 +30,11 @@ public class WritePostServiceImpl implements WritePostService {
             throw new IllegalParameterException(ExceptionCode.ILLEGAL_CONTENT.name());
         }
 
-        Post postResult = postRepository.save(
+        Post postResult = writePostRepository.save(
                 Post.builder()
                         .postId(idGenerator.generate("PS"))
                         .contents(newPost.getContents())
                         .postType(newPost.getPostType())
-                        .reviewType((newPost.getReviewType()))
                         .user(newPost.getUser())
                         .build()
         );
@@ -44,7 +43,6 @@ public class WritePostServiceImpl implements WritePostService {
                 .postId(postResult.getPostId())
                 .contents(postResult.getContents())
                 .postType(postResult.getPostType())
-                .reviewType(postResult.getReviewType())
                 .uid(postResult.getUser().getUid())
                 .build();
     }

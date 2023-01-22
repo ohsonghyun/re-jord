@@ -27,10 +27,6 @@ public class Post extends BaseTime {
     @Column(name = "post_type")
     private PostType postType;
 
-    @Enumerated(value = EnumType.STRING)
-    @Column(name = "review_type")
-    private ReviewType reviewType;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "uid")
     private Users user;
