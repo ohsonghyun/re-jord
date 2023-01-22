@@ -25,7 +25,7 @@ import java.time.LocalDateTime
 @DataJpaTest
 @EnableJpaAuditing
 @Import(TestConfig.class)
-class ReadPostRepositoryCustomSpec extends Specification {
+class ReadPostRepositorySpec extends Specification {
 
     @PersistenceContext
     EntityManager entityManager
