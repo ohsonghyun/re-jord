@@ -35,7 +35,7 @@ class ReadPostRepositorySpec extends Specification {
     @Autowired
     ReadPostRepository readPostRepository
 
-    def "특정시간 이후의 게시글을 최신글 순으로 취득할 수 있다: 데이터가 있는 경우"() {
+    def "특정시간 이전의 게시글을 최신글 순으로 취득할 수 있다: 데이터가 있는 경우"() {
         given:
         // 유저 생성
         def user = Users.builder()
@@ -87,7 +87,7 @@ class ReadPostRepositorySpec extends Specification {
         it.extractingResultOf('getUid').containsOnly('uid')
     }
 
-    def "특정시간 이후의 게시글 취득할 수 있다: 데이터가 없는 경우"() {
+    def "특정시간 이전의 게시글 취득할 수 있다: 데이터가 없는 경우"() {
         // 데이터 입력 전 시간
         def now = LocalDateTime.now()
         // 유저 생성
