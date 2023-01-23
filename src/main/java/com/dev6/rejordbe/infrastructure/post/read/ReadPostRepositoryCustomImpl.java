@@ -42,11 +42,10 @@ public class ReadPostRepositoryCustomImpl implements ReadPostRepositoryCustom {
                 .fetch();
 
         Long total = queryFactory
-                .select(post.count())
+                .select(post.postId.count())
                 .from(post)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetchFirst();
+                .where(post.createdDate.loe(offsetTime))
+                .fetchOne();
 
         return new PageImpl<>(content, pageable, total);
     }
