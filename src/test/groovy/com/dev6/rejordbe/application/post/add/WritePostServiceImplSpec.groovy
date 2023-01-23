@@ -123,6 +123,7 @@ class WritePostServiceImplSpec extends Specification {
         postId   | contents   | postType           | uid
         'postId' | ''         | PostType.SHARE     | 'uid'
         'postId' | '  '       | PostType.SHARE     | 'uid'
+        'postId' | null       | PostType.SHARE     | 'uid'
     }
 
 }

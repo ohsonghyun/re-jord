@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
@@ -37,8 +38,9 @@ public class WritePostServiceImpl implements WritePostService {
     public PostResult writePost(@NonNull Post newPost, @NonNull String uid) {
         Users user = userInfoRepository.findById(uid).orElseThrow(() -> new UserNotFoundException(ExceptionCode.USER_NOT_FOUND.name()));
 
-        if (newPost.getContents().trim().isEmpty()) {
-            throw new IllegalParameterException(ExceptionCode.ILLEGAL_CONTENT.name());
+        if (!StringUtils.hasText(newPost.getContents())) {
+            log.info("WritePostServiceImpl.writePost: ILLEGAL_CONTENTS: {}", newPost.getContents());
+            throw new IllegalParameterException(ExceptionCode.ILLEGAL_CONTENTS.name());
         }
 
         Post postResult = writePostRepository.save(

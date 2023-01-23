@@ -12,23 +12,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * PostAddController
+ * AddPostController
  */
-@Api(tags = "게시글 컨트롤러")
+@Api(tags = "게시글 작성 컨트롤러")
 @RestController
 @RequestMapping("/v1/post")
 @lombok.RequiredArgsConstructor
-public class PostAddController {
+public class AddPostController {
 
     private final WritePostService writePostService;
 
     @ApiOperation(
-            value = "게시물 등록",
+            value = "게시물 작성",
             nickname = "addPost",
-            notes = "게시물 등록 API",
+            notes = "게시물 작성 API",
             response = AddPostResponse.class,
             authorizations = {@Authorization(value = "TBD")},
-            tags = "게시글 컨트롤러"
+            tags = "게시글 작성 컨트롤러"
     )
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "정상"),

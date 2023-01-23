@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
- * PostAddControllerAdvice
+ * AddPostControllerAdvice
  */
-@RestControllerAdvice(basePackageClasses = PostAddController.class)
+@RestControllerAdvice(basePackageClasses = AddPostController.class)
 @Slf4j
-public class PostAddControllerAdvice {
+public class AddPostControllerAdvice {
 
     @ExceptionHandler(IllegalParameterException.class)
     public ResponseEntity<ErrorResponse> exceptionHandler(IllegalParameterException exception){

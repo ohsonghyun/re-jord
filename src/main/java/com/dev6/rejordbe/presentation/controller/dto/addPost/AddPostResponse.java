@@ -2,14 +2,13 @@ package com.dev6.rejordbe.presentation.controller.dto.addPost;
 
 import com.dev6.rejordbe.domain.post.PostType;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
 
 import java.io.Serializable;
 
 /**
  * AddPostResponse
  */
-@Builder
+@lombok.Builder
 @lombok.Getter
 public class AddPostResponse implements Serializable {
     @Schema(description = "게시글 ID")

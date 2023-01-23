@@ -8,7 +8,7 @@ import com.dev6.rejordbe.domain.post.dto.PostResult
 import com.dev6.rejordbe.exception.IllegalParameterException
 import com.dev6.rejordbe.exception.UserNotFoundException
 import com.dev6.rejordbe.presentation.controller.dto.addPost.AddPostRequest
-import com.dev6.rejordbe.presentation.controller.post.add.PostAddController
+import com.dev6.rejordbe.presentation.controller.post.add.AddPostController
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -24,8 +24,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@WebMvcTest(PostAddController)
-class PostAddControllerSpec extends Specification {
+@WebMvcTest(AddPostController)
+class AddPostControllerSpec extends Specification {
 
     @Autowired
     MockMvc mvc
@@ -92,9 +92,9 @@ class PostAddControllerSpec extends Specification {
                 .andExpect(jsonPath("\$.message").value(message))
 
         where:
-        testCase               | message                              | exception                               | resultStatus
-        '정책 위반 데이터: 400'   | ExceptionCode.ILLEGAL_CONTENT.name() | new IllegalParameterException(message)  | status().isBadRequest()
-        '존재하지 않는 유저: 404' | ExceptionCode.USER_NOT_FOUND.name()  | new UserNotFoundException(message)      | status().isNotFound()
+        testCase                      | message                               | exception                               | resultStatus
+        'contents 정책 위반 데이터: 400' | ExceptionCode.ILLEGAL_CONTENTS.name() | new IllegalParameterException(message)  | status().isBadRequest()
+        '존재하지 않는 유저: 404'        | ExceptionCode.USER_NOT_FOUND.name()   | new UserNotFoundException(message)      | status().isNotFound()
 
     }
 }

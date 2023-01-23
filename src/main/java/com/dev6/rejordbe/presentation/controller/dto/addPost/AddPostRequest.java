@@ -27,7 +27,6 @@ public class AddPostRequest implements Serializable {
     /**
      * AddPostRequest를 Post객체로 변환
      */
-
     public Post toPost() {
         return Post.builder()
                 .postId(this.postId)
