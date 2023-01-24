@@ -13,8 +13,9 @@ public interface WritePostService {
     /**
      * 새로운 게시글을 추가
      *
-     * @param newPost {@code PostResult} 새로운 게시글 정보
-     * @return {@code Post, uid} 추가한 게시글
+     * @param newPost {@code Post} 새로운 게시글 정보
+     * @param uid {@code String} 새로운 게시글 작성자 uid
+     * @return {@code PostResult} 추가한 게시글 정보
      * @throws IllegalParameterException {@code contents} 가 정책에 어긋나는 경우
      * @throws UserNotFoundException {@code uid} 가 존재하지 않는 유저일 경우
      */
