@@ -9,10 +9,11 @@ import com.dev6.rejordbe.exception.UserNotFoundException;
  * WritePostService
  */
 public interface WritePostService {
+
     /**
      * 새로운 게시글을 추가
      *
-     * @param newPost {@code Post} 새로운 게시글 정보
+     * @param newPost {@code PostResult} 새로운 게시글 정보
      * @return {@code Post, uid} 추가한 게시글
      * @throws IllegalParameterException {@code contents} 가 정책에 어긋나는 경우
      * @throws UserNotFoundException {@code uid} 가 존재하지 않는 유저일 경우
