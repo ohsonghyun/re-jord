@@ -4,7 +4,7 @@ import com.dev6.rejordbe.domain.challengeReview.ChallengeReview;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * ChallengeReviewRepository
+ * ReadChallengeReviewRepository
  */
-public interface ReadChallengeReviewRepository extends JpaRepository<ChallengeReview, String> {
+public interface ReadChallengeReviewRepository extends JpaRepository<ChallengeReview, String>, ReadChallengeReviewRepositoryCustom {
 }

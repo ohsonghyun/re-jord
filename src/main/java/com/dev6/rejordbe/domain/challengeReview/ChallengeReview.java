@@ -23,7 +23,7 @@ public class ChallengeReview extends BaseTime {
 
     @Column(name = "challenge_review_type")
     @Enumerated(value = EnumType.STRING)
-    ChallengeReviewType challengeReviewType;
+    private ChallengeReviewType challengeReviewType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "uid")
