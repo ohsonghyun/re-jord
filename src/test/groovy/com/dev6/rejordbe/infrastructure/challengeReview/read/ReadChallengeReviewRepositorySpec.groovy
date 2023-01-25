@@ -1,4 +1,4 @@
-package com.dev6.rejordbe.infrastructure.challengeReview
+package com.dev6.rejordbe.infrastructure.challengeReview.read
 
 import com.dev6.rejordbe.TestConfig
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview
@@ -21,7 +21,7 @@ import java.time.LocalDateTime
 @DataJpaTest
 @EnableJpaAuditing
 @Import(TestConfig.class)
-class ChallengeReviewRepositorySpec extends Specification {
+class ReadChallengeReviewRepositorySpec extends Specification {
 
     @PersistenceContext
     EntityManager entityManager
@@ -29,7 +29,7 @@ class ChallengeReviewRepositorySpec extends Specification {
     @Autowired
     SignUpRepository signUpRepository
     @Autowired
-    ChallengeReviewRepository challengeReviewRepository
+    ReadChallengeReviewRepository readChallengeReviewRepository
 
     def "챌린지 후기를 추가할 수 있다"() {
         given:
@@ -49,13 +49,13 @@ class ChallengeReviewRepositorySpec extends Specification {
                 .build()
 
         when:
-        challengeReviewRepository.save(newChallengeReview)
+        readChallengeReviewRepository.save(newChallengeReview)
 
         entityManager.flush()
         entityManager.clear()
 
         then:
-        def challengeReviewOptional = challengeReviewRepository.findById(newChallengeReview.getChallengeReviewId())
+        def challengeReviewOptional = readChallengeReviewRepository.findById(newChallengeReview.getChallengeReviewId())
         challengeReviewOptional.isPresent()
         def aChallengeReview = challengeReviewOptional.orElseThrow()
         aChallengeReview.getChallengeReviewId() == newChallengeReview.getChallengeReviewId()
