@@ -20,7 +20,7 @@ import javax.persistence.PersistenceContext
 import java.time.LocalDateTime
 
 /**
- * ReadPostRepositoryCustomSpec
+ * ReadPostRepositorySpec
  */
 @DataJpaTest
 @EnableJpaAuditing
