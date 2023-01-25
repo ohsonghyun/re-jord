@@ -42,8 +42,8 @@ class PostInfoControllerSpec extends Specification {
         when(readPostService.allPosts(isA(LocalDateTime.class), isA(Pageable.class)))
                 .thenReturn(new PageImpl<PostResult>(
                         List.of(
-                                new PostResult('postId1', 'content', PostType.OTHERS, 'uid1'),
-                                new PostResult('postId2', 'content', PostType.OTHERS, 'uid2')
+                                new PostResult('postId1', 'content', PostType.OTHERS, 'uid1', 'nickname1', LocalDateTime.now()),
+                                new PostResult('postId2', 'content', PostType.OTHERS, 'uid2', 'nickname2', LocalDateTime.now())
                         ),
                         PageRequest.of(0, 5),
                         1)
@@ -56,6 +56,12 @@ class PostInfoControllerSpec extends Specification {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath('\$.content[0].postId').value('postId1'))
                 .andExpect(jsonPath('\$.content[1].postId').value('postId2'))
+                .andExpect(jsonPath('\$.content[0].uid').value('uid1'))
+                .andExpect(jsonPath('\$.content[1].uid').value('uid2'))
+                .andExpect(jsonPath('\$.content[0].nickname').value('nickname1'))
+                .andExpect(jsonPath('\$.content[1].nickname').value('nickname2'))
+                .andExpect(jsonPath('\$.content[0].createdDate').isNotEmpty())
+                .andExpect(jsonPath('\$.content[1].createdDate').isNotEmpty())
                 .andExpect(jsonPath('\$.pageable.pageNumber').value(0))
                 .andExpect(jsonPath('\$.pageable.pageSize').value(5))
                 .andExpect(jsonPath('\$.totalPages').value(1))

@@ -31,7 +31,9 @@ public class ReadPostRepositoryCustomImpl implements ReadPostRepositoryCustom {
                                 post.postId,
                                 post.contents,
                                 post.postType,
-                                post.user.uid
+                                post.user.uid,
+                                post.user.nickname,
+                                post.createdDate
                         )
                 )
                 .from(post)
