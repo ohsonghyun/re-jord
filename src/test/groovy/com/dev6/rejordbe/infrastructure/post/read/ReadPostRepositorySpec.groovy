@@ -40,6 +40,7 @@ class ReadPostRepositorySpec extends Specification {
         // 유저 생성
         def user = Users.builder()
                 .uid('uid')
+                .nickname('nickname')
                 .build()
         signUpRepository.save(user)
 
@@ -85,6 +86,8 @@ class ReadPostRepositorySpec extends Specification {
         )
         it.extractingResultOf('getContents').containsOnly('contents')
         it.extractingResultOf('getUid').containsOnly('uid')
+        it.extractingResultOf('getNickname').containsOnly('nickname')
+        it.extractingResultOf('getCreatedDate').isNotEmpty()
     }
 
     def "특정시간 이전의 게시글 취득할 수 있다: 데이터가 없는 경우"() {

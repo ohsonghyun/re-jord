@@ -32,8 +32,8 @@ class ReadPostServiceImplSpec extends Specification {
         readPostRepository.searchAll(_ as LocalDateTime, _ as Pageable)
                 >> new PageImpl<PostResult>(
                 List.of(
-                        new PostResult('postId1', 'content', PostType.OTHERS, 'uid1'),
-                        new PostResult('postId2', 'content', PostType.OTHERS, 'uid2')
+                        new PostResult('postId1', 'content', PostType.OTHERS, 'uid1', 'nickname1', LocalDateTime.now()),
+                        new PostResult('postId2', 'content', PostType.OTHERS, 'uid2', 'nickname2', LocalDateTime.now())
                 ),
                 pageRequest,
                 1)
@@ -49,6 +49,8 @@ class ReadPostServiceImplSpec extends Specification {
         it.extractingResultOf('getContents').containsOnly('content')
         it.extractingResultOf('getPostType').containsOnly(PostType.OTHERS)
         it.extractingResultOf('getUid').containsExactly('uid1', 'uid2')
+        it.extractingResultOf('getNickname').containsExactly('nickname1', 'nickname2')
+        it.extractingResultOf('getCreatedDate').isNotEmpty()
     }
 
     def "기준 시각이 지정되지 않은 경우에는 에러: 400"() {
