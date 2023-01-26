@@ -61,5 +61,5 @@ class ReadPostServiceImplSpec extends Specification {
         thrown(IllegalParameterException)
     }
 
-    // 게시글 데이터의 유무에 대한 테스트는 ReadPostRepositoryCustomSpec 으로 대체
+    // 게시글 데이터의 유무에 대한 테스트는 ReadPostRepositorySpec 으로 대체
 }
