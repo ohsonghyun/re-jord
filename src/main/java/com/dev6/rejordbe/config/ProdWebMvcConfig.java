@@ -25,8 +25,7 @@ public class ProdWebMvcConfig implements WebMvcConfigurer {
         // 모든 Origin에 오픈. 서버에서 필요에 따라 access 제어
         registry.addMapping("/v1/**")
                 // TODO PROD 도메인 설정
-                .allowedOrigins("*")
-                .allowCredentials(true);
+                .allowedOrigins("*");
     }
 
     @Override

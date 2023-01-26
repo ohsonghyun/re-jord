@@ -24,8 +24,8 @@ public class DevWebMvcConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         // 모든 Origin에 오픈. 서버에서 필요에 따라 access 제어
         registry.addMapping("/v1/**")
-                .allowedOrigins("http://localhost:3000", "http://localhost:8080")
-                .allowCredentials(true);
+                //.allowedOrigins("http://localhost:3000", "http://localhost:8080")
+                .allowedOrigins("*");
     }
 
     @Override
