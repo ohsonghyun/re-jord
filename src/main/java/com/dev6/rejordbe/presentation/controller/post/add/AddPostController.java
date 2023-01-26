@@ -2,6 +2,7 @@ package com.dev6.rejordbe.presentation.controller.post.add;
 
 import com.dev6.rejordbe.application.post.add.WritePostService;
 import com.dev6.rejordbe.domain.post.dto.PostResult;
+import com.dev6.rejordbe.presentation.controller.argumentResolver.LoggedIn;
 import com.dev6.rejordbe.presentation.controller.dto.addPost.AddPostRequest;
 import com.dev6.rejordbe.presentation.controller.dto.addPost.AddPostResponse;
 import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
@@ -32,6 +33,7 @@ public class AddPostController {
     )
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "정상"),
+            @ApiResponse(code = 400, message = "옳지 않은 데이터 접근", response = ErrorResponse.class),
             @ApiResponse(code = 400, message = "정책 위반 데이터", response = ErrorResponse.class),
             @ApiResponse(code = 404, message = "존재하지 않는 유저", response = ErrorResponse.class)
     })
@@ -40,8 +42,9 @@ public class AddPostController {
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<AddPostResponse> addPost(@ApiParam(value = "게시글 작성 정보", required = true) @RequestBody final AddPostRequest addPostRequest) {
-        PostResult postResult = writePostService.writePost(addPostRequest.toPost(), addPostRequest.getUid());
+    public ResponseEntity<AddPostResponse> addPost(
+            @ApiParam(value = "게시글 작성 정보", required = true) @RequestBody final AddPostRequest addPostRequest, @LoggedIn final String uid) {
+        PostResult postResult = writePostService.writePost(addPostRequest.toPost(), uid);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(AddPostResponse.builder()

@@ -21,8 +21,6 @@ public class AddPostRequest implements Serializable {
     private String contents;
     @Schema(description = "게시글 카테고리", required = true)
     private PostType postType;
-    @Schema(description = "유저 UID", required = true)
-    private String uid;
 
     /**
      * AddPostRequest를 Post객체로 변환
