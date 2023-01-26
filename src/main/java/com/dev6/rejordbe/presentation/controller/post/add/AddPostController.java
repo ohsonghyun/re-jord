@@ -26,7 +26,7 @@ public class AddPostController {
     @ApiOperation(
             value = "게시물 작성",
             nickname = "addPost",
-            notes = "게시물 작성 API",
+            notes = "게시물 작성 API. 세션쿠키 필요",
             response = AddPostResponse.class,
             authorizations = {@Authorization(value = "TBD")},
             tags = "게시글 작성 컨트롤러"
@@ -43,7 +43,9 @@ public class AddPostController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<AddPostResponse> addPost(
-            @ApiParam(value = "게시글 작성 정보", required = true) @RequestBody final AddPostRequest addPostRequest, @LoggedIn final String uid) {
+            @ApiParam(value = "게시글 작성 정보", required = true) @RequestBody final AddPostRequest addPostRequest,
+            @ApiParam(hidden = true) @LoggedIn final String uid
+    ) {
         PostResult postResult = writePostService.writePost(addPostRequest.toPost(), uid);
 
         return ResponseEntity.status(HttpStatus.CREATED)
