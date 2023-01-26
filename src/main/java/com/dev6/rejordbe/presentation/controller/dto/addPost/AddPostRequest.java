@@ -27,7 +27,6 @@ public class AddPostRequest implements Serializable {
      */
     public Post toPost() {
         return Post.builder()
-                .postId(this.postId)
                 .contents(this.contents)
                 .postType(this.postType)
                 .build();
