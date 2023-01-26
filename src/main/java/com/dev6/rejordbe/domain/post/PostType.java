@@ -5,6 +5,5 @@ package com.dev6.rejordbe.domain.post;
  */
 public enum PostType {
     SHARE, // 공유
-    CHALLENGE, // 챌린지
     OTHERS; // 기타
 }
