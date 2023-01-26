@@ -17,6 +17,7 @@ public enum ExceptionCode {
     DUPLICATED_NICKNAME,
     DUPLICATED_USERID,
     USER_NOT_FOUND,
+    CHALLENGE_REVIEW_NOT_FOUND,
 
     // INTERNAL_SERVER_ERROR -------------------------------------
     INTERNAL_ILLEGAL_PARAM;
