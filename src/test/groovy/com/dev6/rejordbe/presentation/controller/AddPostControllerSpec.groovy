@@ -46,7 +46,7 @@ class AddPostControllerSpec extends Specification {
     @MockBean
     WritePostService writePostService
 
-    private static final String baseUrl = '/v1/post'
+    private static final String baseUrl = '/v1/posts'
 
     def setup() {
         addPostController = new AddPostController(writePostService)

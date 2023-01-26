@@ -26,7 +26,7 @@ import java.util.Objects;
 @Api(tags = "챌린지 게시글 정보 컨트롤러")
 @Slf4j
 @RestController
-@RequestMapping("/v1/challengeReviewInfo")
+@RequestMapping("/v1/challengeReviewInfos")
 @lombok.RequiredArgsConstructor
 public class ChallengeReviewInfoController {
 

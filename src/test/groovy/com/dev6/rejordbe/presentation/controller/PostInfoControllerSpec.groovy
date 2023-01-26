@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(PostInfoController.class)
 class PostInfoControllerSpec extends Specification {
-    private final String BASE_URL = '/v1/postInfo'
+    private final String BASE_URL = '/v1/postInfos'
 
     @Autowired
     private MockMvc mvc

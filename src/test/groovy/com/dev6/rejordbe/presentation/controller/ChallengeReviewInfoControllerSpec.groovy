@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @WebMvcTest(ChallengeReviewInfoController.class)
 class ChallengeReviewInfoControllerSpec extends Specification {
-    private final String BASE_URL = '/v1/challengeReviewInfo'
+    private final String BASE_URL = '/v1/challengeReviewInfos'
 
     @Autowired
     private MockMvc mvc

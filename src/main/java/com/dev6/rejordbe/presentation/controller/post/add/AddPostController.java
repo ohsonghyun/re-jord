@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Api(tags = "게시글 작성 컨트롤러")
 @RestController
-@RequestMapping("/v1/post")
+@RequestMapping("/v1/posts")
 @lombok.RequiredArgsConstructor
 public class AddPostController {
 
