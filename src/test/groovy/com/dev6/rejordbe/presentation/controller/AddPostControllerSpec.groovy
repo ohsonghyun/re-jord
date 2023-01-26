@@ -7,14 +7,21 @@ import com.dev6.rejordbe.domain.post.PostType
 import com.dev6.rejordbe.domain.post.dto.PostResult
 import com.dev6.rejordbe.exception.IllegalParameterException
 import com.dev6.rejordbe.exception.UserNotFoundException
+import com.dev6.rejordbe.presentation.controller.argumentResolver.LoggedInUserArgumentResolver
 import com.dev6.rejordbe.presentation.controller.dto.addPost.AddPostRequest
 import com.dev6.rejordbe.presentation.controller.post.add.AddPostController
+import com.dev6.rejordbe.presentation.controller.post.add.AddPostControllerAdvice
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.core.MethodParameter
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.setup.MockMvcBuilders
+import org.springframework.web.bind.support.WebDataBinderFactory
+import org.springframework.web.context.request.NativeWebRequest
+import org.springframework.web.method.support.ModelAndViewContainer
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -27,8 +34,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(AddPostController)
 class AddPostControllerSpec extends Specification {
 
-    @Autowired
     MockMvc mvc
+    AddPostController addPostController
+    MockLoggedInUserArgumentResolver mockLoggedInUserArgumentResolver = new MockLoggedInUserArgumentResolver()
+
     @Autowired
     ObjectMapper objectMapper
     @MockBean
@@ -36,9 +45,15 @@ class AddPostControllerSpec extends Specification {
 
     private static final String baseUrl = '/v1/post'
 
-    // TODO LoggedIn annotation 설정해서 uid 갖고오기
+    def setup() {
+        addPostController = new AddPostController(writePostService)
+        mvc = MockMvcBuilders.standaloneSetup(addPostController)
+                .setControllerAdvice(new AddPostControllerAdvice())
+                .setCustomArgumentResolvers(mockLoggedInUserArgumentResolver)
+                .build();
+    }
 
-    /*def "게시글 등록 성공시 201을 반환한다"() {
+    def "게시글 등록 성공시 201을 반환한다"() {
         given:
         when(writePostService.writePost(isA(Post.class), isA(String.class)))
                 .thenReturn(
@@ -80,7 +95,7 @@ class AddPostControllerSpec extends Specification {
         expect:
         mvc.perform(
                 post(baseUrl)
-                .contentType(MediaType.APPLICATION_JSON).content(
+                        .contentType(MediaType.APPLICATION_JSON).content(
                         objectMapper.writeValueAsString(
                                 AddPostRequest.builder()
                                         .postId('postId')
@@ -96,6 +111,12 @@ class AddPostControllerSpec extends Specification {
         'contents 정책 위반 데이터: 400' | ExceptionCode.ILLEGAL_CONTENTS.name() | new IllegalParameterException(message)  | status().isBadRequest()
         '존재하지 않는 유저: 404'        | ExceptionCode.USER_NOT_FOUND.name()   | new UserNotFoundException(message)      | status().isNotFound()
 
-    }*/
+    }
 
+    private class MockLoggedInUserArgumentResolver extends LoggedInUserArgumentResolver {
+        @Override
+        Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+            return "uid"
+        }
+    }
 }
