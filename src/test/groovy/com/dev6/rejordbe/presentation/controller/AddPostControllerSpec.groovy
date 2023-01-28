@@ -75,7 +75,6 @@ class AddPostControllerSpec extends Specification {
                         .content(
                                 objectMapper.writeValueAsString(
                                         AddPostRequest.builder()
-                                                .postId(postId)
                                                 .contents(contents)
                                                 .postType(postType)
                                                 .build()
@@ -103,7 +102,6 @@ class AddPostControllerSpec extends Specification {
                         .contentType(MediaType.APPLICATION_JSON).content(
                         objectMapper.writeValueAsString(
                                 AddPostRequest.builder()
-                                        .postId('postId')
                                         .contents('contents')
                                         .postType(PostType.OTHERS)
                                         .build()
