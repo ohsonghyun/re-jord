@@ -1,5 +1,6 @@
 package com.dev6.rejordbe.presentation.controller
 
+import com.dev6.rejordbe.TestSecurityConfig
 import com.dev6.rejordbe.application.post.add.WritePostService
 import com.dev6.rejordbe.domain.cookie.CookieNames
 import com.dev6.rejordbe.domain.exception.ExceptionCode
@@ -16,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.annotation.Import
 import org.springframework.core.MethodParameter
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
@@ -35,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest(AddPostController)
+@Import(TestSecurityConfig.class)
 class AddPostControllerSpec extends Specification {
 
     MockMvc mvc

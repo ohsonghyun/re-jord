@@ -1,5 +1,6 @@
 package com.dev6.rejordbe.presentation.controller
 
+import com.dev6.rejordbe.TestSecurityConfig
 import com.dev6.rejordbe.application.user.login.LoginService
 import com.dev6.rejordbe.domain.exception.ExceptionCode
 import com.dev6.rejordbe.domain.user.UserType
@@ -10,8 +11,17 @@ import com.dev6.rejordbe.presentation.controller.user.login.LoginController
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Import
+import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
+import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.core.context.SecurityContext
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.web.SecurityFilterChain
 import org.springframework.test.web.servlet.MockMvc
 import spock.lang.Specification
 
@@ -25,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * LoginControllerSpec
  */
 @WebMvcTest(LoginController)
+@Import(TestSecurityConfig.class)
 class LoginControllerSpec extends Specification {
 
     private static final String baseUrl = '/v1/login'
@@ -48,6 +59,7 @@ class LoginControllerSpec extends Specification {
         expect:
         mvc.perform(
                 post(baseUrl)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer asfsaf")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(
                                 objectMapper.writeValueAsString(

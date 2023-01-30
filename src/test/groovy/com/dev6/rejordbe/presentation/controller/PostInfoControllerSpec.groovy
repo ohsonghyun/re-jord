@@ -1,5 +1,6 @@
 package com.dev6.rejordbe.presentation.controller
 
+import com.dev6.rejordbe.TestSecurityConfig
 import com.dev6.rejordbe.application.post.read.ReadPostService
 import com.dev6.rejordbe.domain.exception.ExceptionCode
 import com.dev6.rejordbe.domain.post.PostType
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.annotation.Import
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
@@ -26,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest(PostInfoController.class)
+@Import(TestSecurityConfig.class)
 class PostInfoControllerSpec extends Specification {
     private final String BASE_URL = '/v1/postInfos'
 
