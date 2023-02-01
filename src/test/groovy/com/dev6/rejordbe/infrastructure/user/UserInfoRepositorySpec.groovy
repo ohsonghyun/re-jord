@@ -1,8 +1,10 @@
 package com.dev6.rejordbe.infrastructure.user
 
 import com.dev6.rejordbe.TestConfig
-import com.dev6.rejordbe.domain.user.UserType
+import com.dev6.rejordbe.domain.role.Role
+import com.dev6.rejordbe.domain.role.RoleType
 import com.dev6.rejordbe.domain.user.Users
+import com.dev6.rejordbe.infrastructure.role.RoleInfoRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.context.annotation.Import
@@ -24,6 +26,8 @@ class UserInfoRepositorySpec extends Specification {
     EntityManager entityManager;
 
     @Autowired
+    RoleInfoRepository roleInfoRepository
+    @Autowired
     UserInfoRepository userInfoRepository
 
     // ----------------------------------------------------
@@ -32,13 +36,14 @@ class UserInfoRepositorySpec extends Specification {
 
     def "유저를 UserId와 패스워드를 통해 검색할 수 있다"() {
         given:
+        def role = roleInfoRepository.save(new Role(roleType))
         userInfoRepository.save(
                 Users.builder()
                         .uid(uid)
                         .userId(userId)
                         .nickname(nickname)
                         .password(password)
-                        .userType(userType)
+                        .roles(Collections.singletonList(role))
                         .build())
         entityManager.flush()
         entityManager.clear()
@@ -52,22 +57,24 @@ class UserInfoRepositorySpec extends Specification {
         anUser.getUserId() == userId
         anUser.getNickname() == nickname
         anUser.getPassword() == password
-        anUser.getUserType() == userType
+        anUser.getRoles().size() == 1
+        anUser.getRoles().get(0).getName() == roleType
 
         where:
-        uid   | userId   | nickname   | password   | userType
-        "uid" | "userId" | "nickname" | "password" | UserType.BASIC
+        uid   | userId   | nickname   | password   | roleType
+        "uid" | "userId" | "nickname" | "password" | RoleType.ROLE_USER
     }
 
     def "유저를 UserId 또는 패스워드가 null인 경우에도 검색은 가능하다"() {
         given:
+        def role = roleInfoRepository.save(new Role(roleType))
         userInfoRepository.save(
                 Users.builder()
                         .uid('uid')
                         .userId('userId')
                         .nickname('nickname')
                         .password('password')
-                        .userType(userType)
+                        .roles(Collections.singletonList(role))
                         .build())
         entityManager.flush()
         entityManager.clear()
@@ -79,9 +86,9 @@ class UserInfoRepositorySpec extends Specification {
         userOptional.isEmpty()
 
         where:
-        testCase             | uid   | userId   | nickname   | password   | userType
-        "userId가 null인 경우"   | "uid" | null     | "nickname" | "password" | UserType.BASIC
-        "password가 null인 경우" | "uid" | "userId" | "nickname" | null       | UserType.BASIC
+        testCase             | uid   | userId   | nickname   | password   | roleType
+        "userId가 null인 경우"   | "uid" | null     | "nickname" | "password" | RoleType.ROLE_USER
+        "password가 null인 경우" | "uid" | "userId" | "nickname" | null       | RoleType.ROLE_USER
     }
 
     // ----------------------------------------------------
@@ -90,13 +97,14 @@ class UserInfoRepositorySpec extends Specification {
 
     def "유저 닉네임을 수정할 수 있다"() {
         given: "유저 생성"
+        def role = roleInfoRepository.save(new Role(roleType))
         userInfoRepository.save(
                 Users.builder()
                         .uid(uid)
                         .userId(userId)
                         .nickname(nickname)
                         .password(password)
-                        .userType(userType)
+                        .roles(Collections.singletonList(role))
                         .build())
         entityManager.flush()
         entityManager.clear()
@@ -118,8 +126,8 @@ class UserInfoRepositorySpec extends Specification {
         resultUserInfo.getModifiedDate().isAfter(resultUserInfo.getCreatedDate())
 
         where:
-        uid   | userId   | nickname   | password   | userType       | newNickname
-        "uid" | "userId" | "nickname" | "password" | UserType.BASIC | "newNickname"
+        uid   | userId   | nickname   | password   | roleType           | newNickname
+        "uid" | "userId" | "nickname" | "password" | RoleType.ROLE_USER | "newNickname"
     }
 
 }

@@ -1,11 +1,14 @@
 package com.dev6.rejordbe.application.user.validate;
 
 import com.dev6.rejordbe.domain.exception.ExceptionCode;
+import com.dev6.rejordbe.domain.role.RoleType;
 import com.dev6.rejordbe.exception.IllegalParameterException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 /**
@@ -87,5 +90,24 @@ public class UserInfoValidateServiceImpl implements UserInfoValidateService {
             errorFree = false;
         }
         return errorFree;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean validateRoleTypes(List<String> roleNames, List<RuntimeException> errors) {
+        if (CollectionUtils.isEmpty(roleNames)) {
+            errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_ROLE.name()));
+            return false;
+        }
+        List<String> roleTypes = List.of(RoleType.ROLE_ADMIN, RoleType.ROLE_USER);
+        for (String roleName : roleNames) {
+            if (!roleTypes.contains(roleName)) {
+                errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_ROLE.name()));
+                return false;
+            }
+        }
+        return true;
     }
 }

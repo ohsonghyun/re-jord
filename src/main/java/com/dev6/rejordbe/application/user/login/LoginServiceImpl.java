@@ -29,7 +29,8 @@ public class LoginServiceImpl implements LoginService {
                         .uid(anUser.getUid())
                         .userId(anUser.getUserId())
                         .nickname(anUser.getNickname())
-                        .userType(anUser.getUserType())
+                        // FIXME by flowertaekk
+                        //.userType(anUser.getUserType())
                         .build())
                 .orElseThrow(() -> {
                     log.info("LoginServiceImpl.logIn: USER_NOT_FOUND: {}", userId);

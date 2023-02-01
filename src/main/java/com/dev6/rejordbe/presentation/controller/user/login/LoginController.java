@@ -59,7 +59,7 @@ public class LoginController {
                         .uid(loginResult.getUid())
                         .userId(loginResult.getUserId())
                         .nickname(loginResult.getNickname())
-                        .userType(loginResult.getUserType())
+                        .roles(loginResult.getRoles())
                         .build());
     }
 }

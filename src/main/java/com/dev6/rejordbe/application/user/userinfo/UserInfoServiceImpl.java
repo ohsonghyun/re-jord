@@ -50,7 +50,8 @@ public class UserInfoServiceImpl implements UserInfoService {
                 .uid(targetUser.getUid())
                 .userId(targetUser.getUserId())
                 .nickname(targetUser.getNickname())
-                .userType(targetUser.getUserType())
+                // FIXME by flowertaekk
+                //.userType(targetUser.getUserType())
                 .build();
     }
 }

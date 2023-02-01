@@ -1,7 +1,5 @@
 package com.dev6.rejordbe.presentation.controller.dto.signup;
 
-import com.dev6.rejordbe.domain.user.UserType;
-import com.dev6.rejordbe.domain.user.Users;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -21,7 +19,7 @@ public class SignUpResponse implements Serializable {
     @Schema(description = "유저 닉네임")
     private String nickname;
     @Schema(description = "유저 타입")
-    private UserType userType;
+    private List<String> roles;
     @Schema(description = "에러(에러인 경우에만)")
     private List<String> errors;
 }

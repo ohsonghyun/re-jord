@@ -1,5 +1,7 @@
 package com.dev6.rejordbe.domain.exception;
 
+import org.eclipse.jdt.internal.compiler.env.IModule;
+
 /**
  * ExceptionCode
  */
@@ -7,6 +9,7 @@ public enum ExceptionCode {
     ILLEGAL_USERID,
     ILLEGAL_NICKNAME,
     ILLEGAL_PASSWORD,
+    ILLEGAL_ROLE,
     ILLEGAL_DATE_TIME,
     ILLEGAL_CONTENTS,
     ILLEGAL_ACCESS,
@@ -15,5 +18,5 @@ public enum ExceptionCode {
     USER_NOT_FOUND,
 
     // INTERNAL_SERVER_ERROR -------------------------------------
-    INTERNAL_ILLEGAL_PARAM
+    INTERNAL_ILLEGAL_PARAM;
 }

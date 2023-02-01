@@ -30,5 +30,14 @@ public interface UserInfoValidateService {
      * @return {@code boolean} validation 성공시 true
      */
     boolean validatePassword(final String password, final List<RuntimeException> errors);
+
+    /**
+     * ROLE 정책 체크
+     *
+     * @param roleNames {@code List<String>} role 목록
+     * @param errors {@code List<RuntimeException>} validation 실패 정보를 저장할 리스트
+     * @return {@code boolean} validation 성공시 true
+     */
+    boolean validateRoleTypes(final List<String> roleNames, final List<RuntimeException> errors);
 }
 

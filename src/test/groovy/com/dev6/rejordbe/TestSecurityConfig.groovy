@@ -12,6 +12,7 @@ import org.springframework.security.web.SecurityFilterChain
  */
 @TestConfiguration
 class TestSecurityConfig {
+    // TODO SecurityConfig 와 동일하게 변경할 것! 어떻게 동기화 안 되나...?
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) {
         httpSecurity.csrf().disable();

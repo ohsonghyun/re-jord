@@ -3,19 +3,21 @@ package com.dev6.rejordbe.application.user.signup;
 import com.dev6.rejordbe.application.id.IdGenerator;
 import com.dev6.rejordbe.application.user.validate.UserInfoValidateService;
 import com.dev6.rejordbe.domain.exception.ExceptionCode;
+import com.dev6.rejordbe.domain.role.Role;
+import com.dev6.rejordbe.domain.role.RoleType;
 import com.dev6.rejordbe.domain.user.Users;
 import com.dev6.rejordbe.domain.user.dto.UserResult;
 import com.dev6.rejordbe.exception.DuplicatedNicknameException;
 import com.dev6.rejordbe.exception.DuplicatedUserIdException;
 import com.dev6.rejordbe.exception.IllegalParameterException;
+import com.dev6.rejordbe.infrastructure.role.RoleInfoRepository;
 import com.dev6.rejordbe.infrastructure.user.SignUpRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * SignUpServiceImpl
@@ -27,6 +29,7 @@ import java.util.Objects;
 public class SignUpServiceImpl implements SignUpService {
 
     private final SignUpRepository signUpRepository;
+    private final RoleInfoRepository roleInfoRepository;
     private final UserInfoValidateService userInfoValidateService;
     private final IdGenerator idGenerator;
 
@@ -35,9 +38,9 @@ public class SignUpServiceImpl implements SignUpService {
      */
     @Transactional
     @Override
-    public UserResult signUp(Users newUser) {
+    public UserResult signUp(Users newUser, List<String> roleNames) {
         final List<RuntimeException> errors = new ArrayList<>();
-        boolean validationResult = validateParam(newUser, errors);
+        boolean validationResult = validateParam(newUser, roleNames, errors);
         if (!validationResult) {
             return UserResult.builder()
                     .errors(errors)
@@ -54,6 +57,8 @@ public class SignUpServiceImpl implements SignUpService {
                     .build();
         }
 
+        List<Role> roles = roleInfoRepository.findByNameIn(roleNames);
+
         Users saveResult = signUpRepository.save(
                 Users.builder()
                         .uid(idGenerator.generate("US"))
@@ -61,27 +66,32 @@ public class SignUpServiceImpl implements SignUpService {
                         // 20230224 릴리즈에는 nickname이 userId와 동일한 사양
                         .nickname(newUser.getUserId())
                         .password(newUser.getPassword())
-                        .userType(newUser.getUserType())
+                        .roles(roles)
                         .build());
 
         return UserResult.builder()
                 .uid(saveResult.getUid())
                 .userId(saveResult.getUserId())
                 .nickname(saveResult.getNickname())
-                .userType(saveResult.getUserType())
+                .roles(
+                        saveResult.getRoles().stream()
+                                .map(Role::getName)
+                                .collect(Collectors.toList()))
                 .build();
     }
 
     /**
      * 회원가입시 필요한 유저정보 체크
      *
-     * @param anUser {@code Users}
-     * @param errors {@code List<RuntimeException>} validation 실패 정보를 저장할 리스트
+     * @param anUser    {@code Users}
+     * @param roleNames {@code List<String>} role 리스트
+     * @param errors    {@code List<RuntimeException>} validation 실패 정보를 저장할 리스트
      */
-    private boolean validateParam(Users anUser, List<RuntimeException> errors) {
+    private boolean validateParam(Users anUser, List<String> roleNames, List<RuntimeException> errors) {
         boolean userIdResult = userInfoValidateService.validateUserId(anUser.getUserId(), errors);
         boolean passwordResult = userInfoValidateService.validatePassword(anUser.getPassword(), errors);
-        return userIdResult && passwordResult && Objects.nonNull(anUser.getUserType());
+        boolean roleResult = userInfoValidateService.validateRoleTypes(roleNames, errors);
+        return userIdResult && passwordResult && roleResult;
     }
 
     /**

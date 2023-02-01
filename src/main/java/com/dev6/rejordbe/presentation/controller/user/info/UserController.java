@@ -19,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+
 /**
  * UserController
  */
@@ -49,7 +51,7 @@ public class UserController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<SignUpResponse> signUp(@ApiParam(value = "회원가입 정보", required = true) @RequestBody final SignUpRequest signUpUserRequest) {
-        UserResult savedResult = signUpService.signUp(signUpUserRequest.toUser());
+        UserResult savedResult = signUpService.signUp(signUpUserRequest.toUser(), signUpUserRequest.getRoles());
 
         // 에러. 회원가입 실패
         if (savedResult.hasErrors()) {
@@ -77,7 +79,7 @@ public class UserController {
                         .uid(savedResult.getUid())
                         .userId(savedResult.getUserId())
                         .nickname(savedResult.getNickname())
-                        .userType(savedResult.getUserType())
+                        .roles(savedResult.getRoles())
                         .build());
     }
 
@@ -134,7 +136,8 @@ public class UserController {
                 .uid(updatedUser.getUid())
                 .userId(updatedUser.getUserId())
                 .nickname(updatedUser.getNickname())
-                .userType(updatedUser.getUserType())
+                // FIXME by flowertaekk
+                //.userType(updatedUser.getUserType())
                 .build());
     }
 }

@@ -4,8 +4,9 @@ import com.dev6.rejordbe.domain.challengeReview.ChallengeReview;
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReviewType;
 import com.dev6.rejordbe.domain.post.Post;
 import com.dev6.rejordbe.domain.post.PostType;
-import com.dev6.rejordbe.domain.user.UserType;
 import com.dev6.rejordbe.domain.user.Users;
+import com.dev6.rejordbe.domain.role.Role;
+import com.dev6.rejordbe.domain.role.RoleType;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 import java.util.stream.IntStream;
 
 /**
@@ -23,17 +25,33 @@ import java.util.stream.IntStream;
 @lombok.RequiredArgsConstructor
 public class InitData {
 
+    private final InitRoles initRoles;
     private final InitUsers initUsers;
     private final InitPosts initPosts;
     private final InitChallengeReviews initChallengeReviews;
 
     @PostConstruct
     public void init() {
+        initRoles.init();
         initUsers.init();
         initPosts.init();
         initChallengeReviews.init();
     }
 
+    // ROLES ---------------------------------------------------
+    @Component
+    static class InitRoles {
+        @PersistenceContext
+        EntityManager em;
+
+        @Transactional
+        public void init() {
+            em.persist(new Role(RoleType.ROLE_ADMIN));
+            em.persist(new Role(RoleType.ROLE_USER));
+        }
+    }
+
+    // USERS ---------------------------------------------------
     @Component
     static class InitUsers {
         @PersistenceContext
@@ -41,13 +59,14 @@ public class InitData {
 
         @Transactional
         public void init() {
+            List<Role> roles = em.createQuery("select r from Role r where r.name='ROLE_USER'", Role.class).getResultList();
             em.persist(
                     Users.builder()
                             .uid("web-uid")
                             .userId("web-client")
                             .nickname("웹유저")
                             .password("password")
-                            .userType(UserType.BASIC)
+                            .roles(roles)
                             .build()
             );
             em.persist(
@@ -56,7 +75,7 @@ public class InitData {
                             .userId("android-client")
                             .nickname("안드로이드유저")
                             .password("password")
-                            .userType(UserType.BASIC)
+                            .roles(roles)
                             .build()
             );
             em.persist(
@@ -65,7 +84,7 @@ public class InitData {
                             .userId("ios-client")
                             .nickname("아이폰 유저")
                             .password("password")
-                            .userType(UserType.BASIC)
+                            .roles(roles)
                             .build()
             );
         }
