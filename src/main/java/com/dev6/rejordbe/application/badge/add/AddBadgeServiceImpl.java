@@ -7,7 +7,7 @@ import com.dev6.rejordbe.domain.badge.BadgeCode;
 import com.dev6.rejordbe.domain.badge.dto.BadgeResult;
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview;
 import com.dev6.rejordbe.domain.exception.ExceptionCode;
-import com.dev6.rejordbe.exception.ChallengeReviewNotFoundException;
+import com.dev6.rejordbe.exception.ParentIdNotFoundException;
 import com.dev6.rejordbe.infrastructure.badge.add.AddBadgeRepository;
 import com.dev6.rejordbe.infrastructure.challengeReview.add.WriteChallengeReviewRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -34,14 +34,14 @@ public class AddBadgeServiceImpl implements AddBadgeService {
     @Transactional
     @Override
     public BadgeResult addBadge(@NonNull String parentId) {
-        ChallengeReview challengeReview = writeChallengeReviewRepository.findById(parentId).orElseThrow(()-> new ChallengeReviewNotFoundException(ExceptionCode.CHALLENGE_REVIEW_NOT_FOUND.name()));
+        ChallengeReview challengeReview = writeChallengeReviewRepository.findById(parentId).orElseThrow(()-> new ParentIdNotFoundException(ExceptionCode.CHALLENGE_REVIEW_NOT_FOUND.name()));
 
         Badge badgeResult = addBadgeRepository.save(
                 Badge.builder()
                         .badgeId(idGenerator.generate("BG"))
                         .badgeCode(BadgeCode.FIRST_WEEK)
                         .challengeReview(challengeReview)
-                        .acquirementType(AcquirementType.BASIC)
+                        .acquirementType(AcquirementType.CHALLENGE_REVIEW )
                         .build()
         );
 

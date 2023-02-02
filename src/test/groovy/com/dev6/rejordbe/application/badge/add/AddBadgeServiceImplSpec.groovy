@@ -5,7 +5,7 @@ import com.dev6.rejordbe.domain.badge.Badge
 import com.dev6.rejordbe.domain.badge.BadgeCode
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview
 import com.dev6.rejordbe.domain.badge.AcquirementType
-import com.dev6.rejordbe.exception.ChallengeReviewNotFoundException
+import com.dev6.rejordbe.exception.ParentIdNotFoundException
 import com.dev6.rejordbe.infrastructure.badge.add.AddBadgeRepository
 import com.dev6.rejordbe.infrastructure.challengeReview.add.WriteChallengeReviewRepository
 import spock.lang.Specification
@@ -52,7 +52,7 @@ class AddBadgeServiceImplSpec extends Specification {
 
         where:
         badgeId   | badgeCode            | challengeReviewId   | acquirementType
-        'badgeId' | BadgeCode.FIRST_WEEK | 'challengeReviewId' | AcquirementType.BASIC
+        'badgeId' | BadgeCode.FIRST_WEEK | 'challengeReviewId' | AcquirementType.CHALLENGE_REVIEW
     }
 
     def "존재하지 않는 챌린지 리뷰이면 에러"() {
@@ -73,10 +73,10 @@ class AddBadgeServiceImplSpec extends Specification {
         addBadgeService.addBadge(challengeReviewId)
 
         then:
-        thrown(ChallengeReviewNotFoundException)
+        thrown(ParentIdNotFoundException)
 
         where:
         badgeId   | badgeCode            | challengeReviewId   | acquirementType
-        'badgeId' | BadgeCode.FIRST_WEEK | 'challengeReviewId' | AcquirementType.BASIC
+        'badgeId' | BadgeCode.FIRST_WEEK | 'challengeReviewId' | AcquirementType.CHALLENGE_REVIEW
     }
 }

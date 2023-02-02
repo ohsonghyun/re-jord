@@ -4,7 +4,6 @@ import com.dev6.rejordbe.application.badge.add.AddBadgeService
 import com.dev6.rejordbe.application.challengeReview.add.WriteChallengeReviewService
 import com.dev6.rejordbe.application.footprint.add.AddFootprintService
 import com.dev6.rejordbe.domain.badge.AcquirementType
-import com.dev6.rejordbe.domain.badge.Badge
 import com.dev6.rejordbe.domain.badge.BadgeCode
 import com.dev6.rejordbe.domain.badge.dto.BadgeResult
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview
@@ -13,7 +12,7 @@ import com.dev6.rejordbe.domain.challengeReview.dto.ChallengeReviewResult
 import com.dev6.rejordbe.domain.cookie.CookieNames
 import com.dev6.rejordbe.domain.exception.ExceptionCode
 import com.dev6.rejordbe.domain.footprint.dto.FootprintResult
-import com.dev6.rejordbe.exception.ChallengeReviewNotFoundException
+import com.dev6.rejordbe.exception.ParentIdNotFoundException
 import com.dev6.rejordbe.exception.IllegalParameterException
 import com.dev6.rejordbe.exception.UserNotFoundException
 import com.dev6.rejordbe.presentation.controller.argumentResolver.LoggedInUserArgumentResolver
@@ -53,15 +52,11 @@ class AddChallengeReviewControllerSpec extends Specification {
     ObjectMapper objectMapper
     @MockBean
     WriteChallengeReviewService writeChallengeReviewService
-    @MockBean
-    AddFootprintService addFootprintService
-    @MockBean
-    AddBadgeService addBadgeService
 
     private static final String baseUrl = '/v1/addChallengeReview'
 
     def setup() {
-        addChallengeReviewController = new AddChallengeReviewController(writeChallengeReviewService, addFootprintService, addBadgeService)
+        addChallengeReviewController = new AddChallengeReviewController(writeChallengeReviewService)
         mvc = MockMvcBuilders.standaloneSetup(addChallengeReviewController)
                 .setControllerAdvice(new AddChallengeReviewControllerAdvice())
                 .setCustomArgumentResolvers(mockLoggedInUserArgumentResolver)
@@ -78,26 +73,6 @@ class AddChallengeReviewControllerSpec extends Specification {
                                 .challengeReviewType(challengeReviewType)
                                 .uid(uid)
                                 .build())
-
-        when(addBadgeService.addBadge(isA(String.class)))
-                .thenReturn(
-                        BadgeResult.builder()
-                            .badgeId('badgeId')
-                            .badgeCode(BadgeCode.FIRST_WEEK)
-                            .parentId(uid)
-                            .acquirementType(AcquirementType.BASIC)
-                            .build()
-                )
-
-        when(addFootprintService.addFootprint((isA(String.class))))
-                .thenReturn(
-                        FootprintResult.builder()
-                            .footprintId('footprintId')
-                            .footprintNum(1)
-                            .parentId(uid)
-                            .acquirementType(com.dev6.rejordbe.domain.footprint.AcquirementType.BASIC)
-                            .build()
-                )
 
         expect:
         mvc.perform(
@@ -143,25 +118,17 @@ class AddChallengeReviewControllerSpec extends Specification {
                 .andExpect(jsonPath("\$.message").value(message))
 
         where:
-        testCase                      | message                               | exception                               | resultStatus
-        'contents 정책 위반 데이터: 400' | ExceptionCode.ILLEGAL_CONTENTS.name() | new IllegalParameterException(message) | status().isBadRequest()
-        '존재하지 않는 유저: 404'        | ExceptionCode.USER_NOT_FOUND.name()    | new UserNotFoundException(message)     | status().isNotFound()
+        testCase                      | message                                         | exception                              | resultStatus
+        'contents 정책 위반 데이터: 400' | ExceptionCode.ILLEGAL_CONTENTS.name()           | new IllegalParameterException(message) | status().isBadRequest()
+        '존재하지 않는 유저: 404'        | ExceptionCode.USER_NOT_FOUND.name()             | new UserNotFoundException(message)     | status().isNotFound()
+        '존재하지 않는 유저: 404'        | ExceptionCode.CHALLENGE_REVIEW_NOT_FOUND.name() | new ParentIdNotFoundException(message) | status().isNotFound()
     }
 
     @Unroll
     def "존재하지 않는 챌린지 리뷰"() {
         given:
         when(writeChallengeReviewService.writeChallengeReview(isA(ChallengeReview.class), isA(String.class)))
-                .thenReturn(
-                        ChallengeReviewResult.builder()
-                                .challengeReviewId('challengeReviewId')
-                                .contents('contents')
-                                .challengeReviewType(ChallengeReviewType.FEELING)
-                                .uid('uid')
-                                .build())
-
-        when(addBadgeService.addBadge(isA(String.class))).thenThrow(exception)
-        when(addFootprintService.addFootprint(isA(String.class))).thenThrow(exception)
+                .thenThrow(exception)
 
         expect:
         mvc.perform(
@@ -180,7 +147,7 @@ class AddChallengeReviewControllerSpec extends Specification {
 
         where:
         message                                         | exception                                     | resultStatus
-        ExceptionCode.CHALLENGE_REVIEW_NOT_FOUND.name() | new ChallengeReviewNotFoundException(message) | status().isNotFound()
+        ExceptionCode.CHALLENGE_REVIEW_NOT_FOUND.name() | new ParentIdNotFoundException(message)        | status().isNotFound()
     }
 
     private class MockLoggedInUserArgumentResolver extends LoggedInUserArgumentResolver {

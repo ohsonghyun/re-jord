@@ -35,8 +35,8 @@ class ReadChallengeReviewServiceImplSpec extends Specification {
         readChallengeReviewRepository.searchAll(_ as LocalDateTime, _ as Pageable)
                 >> new PageImpl<ChallengeReviewResult>(
                 List.of(
-                        new ChallengeReviewResult('challengeReviewId1', 'content', ChallengeReviewType.FREE, 'uid1', 'nickname1', LocalDateTime.now()),
-                        new ChallengeReviewResult('challengeReviewId2', 'content', ChallengeReviewType.FREE, 'uid2', 'nickname2', LocalDateTime.now())
+                        new ChallengeReviewResult('challengeReviewId1', 'content', ChallengeReviewType.HARDSHIP, 'uid1', 'nickname1', LocalDateTime.now()),
+                        new ChallengeReviewResult('challengeReviewId2', 'content', ChallengeReviewType.HARDSHIP, 'uid2', 'nickname2', LocalDateTime.now())
                 ),
                 pageRequest,
                 1)
@@ -50,7 +50,7 @@ class ReadChallengeReviewServiceImplSpec extends Specification {
         def it = Assertions.assertThat(challengeReviews.getContent())
         it.extractingResultOf('getChallengeReviewId').containsExactly('challengeReviewId1', 'challengeReviewId2')
         it.extractingResultOf('getContents').containsOnly('content')
-        it.extractingResultOf('getChallengeReviewType').containsOnly(ChallengeReviewType.FREE)
+        it.extractingResultOf('getChallengeReviewType').containsOnly(ChallengeReviewType.HARDSHIP)
         it.extractingResultOf('getUid').containsExactly('uid1', 'uid2')
         it.extractingResultOf('getNickname').containsExactly('nickname1', 'nickname2')
         it.extractingResultOf('getCreatedDate').isNotEmpty()

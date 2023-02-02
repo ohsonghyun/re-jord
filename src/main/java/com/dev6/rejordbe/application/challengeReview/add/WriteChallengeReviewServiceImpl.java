@@ -1,6 +1,8 @@
 package com.dev6.rejordbe.application.challengeReview.add;
 
 
+import com.dev6.rejordbe.application.badge.add.AddBadgeService;
+import com.dev6.rejordbe.application.footprint.add.AddFootprintService;
 import com.dev6.rejordbe.application.id.IdGenerator;
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview;
 import com.dev6.rejordbe.domain.challengeReview.dto.ChallengeReviewResult;
@@ -28,6 +30,8 @@ public class WriteChallengeReviewServiceImpl implements WriteChallengeReviewServ
     private final WriteChallengeReviewRepository writeChallengeReviewRepository;
     private final IdGenerator idGenerator;
     private final UserInfoRepository userInfoRepository;
+    private final AddFootprintService addFootprintService;
+    private final AddBadgeService addBadgeService;
 
     /**
      * {@inheritDoc}
@@ -50,6 +54,11 @@ public class WriteChallengeReviewServiceImpl implements WriteChallengeReviewServ
                         .user(user)
                         .build()
         );
+
+        if(!challengeReviewResult.getChallengeReviewId().isEmpty()){
+            addBadgeService.addBadge(challengeReviewResult.getChallengeReviewId());
+            addFootprintService.addFootprint(challengeReviewResult.getChallengeReviewId());
+        }
 
         return ChallengeReviewResult.builder()
                 .challengeReviewId(challengeReviewResult.getChallengeReviewId())

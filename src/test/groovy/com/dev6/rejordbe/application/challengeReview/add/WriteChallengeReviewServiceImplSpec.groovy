@@ -1,5 +1,7 @@
 package com.dev6.rejordbe.application.challengeReview.add
 
+import com.dev6.rejordbe.application.badge.add.AddBadgeService
+import com.dev6.rejordbe.application.footprint.add.AddFootprintService
 import com.dev6.rejordbe.application.id.IdGenerator
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReviewType
@@ -18,13 +20,17 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
     WriteChallengeReviewService writeChallengeReviewService
     WriteChallengeReviewRepository writeChallengeReviewRepository
     UserInfoRepository userInfoRepository
+    AddFootprintService addFootprintService
+    AddBadgeService addBadgeService
     IdGenerator idGenerator
 
     def setup() {
         writeChallengeReviewRepository = Mock(WriteChallengeReviewRepository.class)
         idGenerator = Mock(IdGenerator.class)
         userInfoRepository = Mock(UserInfoRepository.class)
-        writeChallengeReviewService = new WriteChallengeReviewServiceImpl(writeChallengeReviewRepository, idGenerator, userInfoRepository)
+        addFootprintService = Mock(AddFootprintService.class)
+        addBadgeService = Mock(AddBadgeService.class)
+        writeChallengeReviewService = new WriteChallengeReviewServiceImpl(writeChallengeReviewRepository, idGenerator, userInfoRepository, addFootprintService, addBadgeService)
     }
 
     def "에러가 없는 경우 챌린지 리뷰를 등록할 수 있다"() {
@@ -90,6 +96,8 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
         where:
         challengeReviewId   | contents   | challengeReviewType         | uid
         'challengeReviewId' | 'contents' | ChallengeReviewType.FEELING | 'uid'
+        'challengeReviewId' | 'contents' | ChallengeReviewType.FEELING | null
+
     }
 
     def "필수 입력값 content가 비어있으면 에러"() {

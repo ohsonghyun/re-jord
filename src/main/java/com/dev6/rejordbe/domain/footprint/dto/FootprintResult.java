@@ -11,7 +11,7 @@ import com.dev6.rejordbe.domain.footprint.AcquirementType;
 @lombok.Builder
 public class FootprintResult {
     private final String footprintId;
-    private final Integer footprintNum;
+    private final Integer footprintAmount;
     private final String parentId;
     private final AcquirementType acquirementType;
 }

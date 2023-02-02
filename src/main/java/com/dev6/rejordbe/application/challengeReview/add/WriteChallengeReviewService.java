@@ -13,7 +13,7 @@ public interface WriteChallengeReviewService {
     /**
      * 새로운 챌린지 리뷰 추가
      *
-     * @param challengeReview {@code ChallengeReview} 새로운 챌린지 지류 정보
+     * @param challengeReview {@code ChallengeReview} 새로운 챌린지 리뷰 정보
      * @param uid {@code String} 새로운 챌린지 리뷰 작성자 uid
      * @return {@code ChallengeReviewResult} 추가한 챌린지 리뷰 정보
      * @throws IllegalParameterException {@code contents} 가 정책에 어긋나는 경우

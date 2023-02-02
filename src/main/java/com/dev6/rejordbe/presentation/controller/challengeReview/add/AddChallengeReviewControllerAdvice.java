@@ -1,11 +1,10 @@
 package com.dev6.rejordbe.presentation.controller.challengeReview.add;
 
-import com.dev6.rejordbe.exception.ChallengeReviewNotFoundException;
+import com.dev6.rejordbe.exception.ParentIdNotFoundException;
 import com.dev6.rejordbe.exception.IllegalAccessException;
 import com.dev6.rejordbe.exception.IllegalParameterException;
 import com.dev6.rejordbe.exception.UserNotFoundException;
 import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
-import com.dev6.rejordbe.presentation.controller.post.add.AddPostController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -45,8 +44,8 @@ public class AddChallengeReviewControllerAdvice {
                 HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(ChallengeReviewNotFoundException.class)
-    public ResponseEntity<ErrorResponse> exceptionHandler(ChallengeReviewNotFoundException exception) {
+    @ExceptionHandler(ParentIdNotFoundException.class)
+    public ResponseEntity<ErrorResponse> exceptionHandler(ParentIdNotFoundException exception) {
         return new ResponseEntity<>(
                 ErrorResponse.builder().message(exception.getMessage()).build(),
                 headers(),

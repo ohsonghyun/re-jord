@@ -46,7 +46,7 @@ class AddBadgeRepositorySpec extends Specification {
                 .badgeId('badgeId')
                 .badgeCode(BadgeCode.FIRST_WEEK)
                 .challengeReview(challengeReview)
-                .acquirementType(AcquirementType.BASIC)
+                .acquirementType(AcquirementType.CHALLENGE_REVIEW)
                 .build()
 
         when:

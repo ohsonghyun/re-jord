@@ -43,9 +43,9 @@ class AddFootprintRepositorySpec extends Specification {
 
         def newFootprint = Footprint.builder()
                     .footprintId('footprintId')
-                    .footprintNum(1)
+                    .footprintAmount(1)
                     .challengeReview(challengeReview)
-                    .acquirementType(AcquirementType.BASIC)
+                    .acquirementType(AcquirementType.CHALLENGE_REVIEW)
                     .build()
 
         when:
@@ -59,7 +59,7 @@ class AddFootprintRepositorySpec extends Specification {
         footprintOptional.isPresent()
         def aFootprint = footprintOptional.orElseThrow()
         aFootprint.getFootprintId() == newFootprint.getFootprintId()
-        aFootprint.getFootprintNum() == newFootprint.getFootprintNum()
+        aFootprint.getFootprintAmount() == newFootprint.getFootprintAmount()
         aFootprint.getAcquirementType() == newFootprint.getAcquirementType()
         aFootprint.getCreatedDate().isAfter(now)
         aFootprint.getModifiedDate().isAfter(now)

@@ -21,8 +21,8 @@ public class Footprint extends BaseTime {
     @Column(name = "footprint_id")
     private String footprintId;
 
-    @Column(name = "footprint_num")
-    private Integer footprintNum;
+    @Column(name = "footprint_amount")
+    private Integer footprintAmount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")

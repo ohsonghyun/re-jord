@@ -24,8 +24,6 @@ import org.springframework.web.bind.annotation.*;
 public class AddChallengeReviewController {
 
     private final WriteChallengeReviewService writeChallengeReviewService;
-    private final AddFootprintService addFootprintService;
-    private final AddBadgeService addBadgeService;
 
     @ApiOperation(
             value = "챌린지 리뷰 작성",
@@ -52,12 +50,6 @@ public class AddChallengeReviewController {
             @ApiParam(hidden = true) @LoggedIn String uid
     ) {
         ChallengeReviewResult challengeReviewResult = writeChallengeReviewService.writeChallengeReview(addChallengeReviewRequest.toChallengeReview(), uid);
-
-        // TODO 챌린지 리뷰 작성 이후 발자국, 배지 획득하는 페이지 만들지 1.29 회의에서 결정
-        if(!challengeReviewResult.getChallengeReviewId().isEmpty()){
-            addBadgeService.addBadge(challengeReviewResult.getChallengeReviewId());
-            addFootprintService.addFootprint(challengeReviewResult.getChallengeReviewId());
-        }
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(AddChallengeReviewResponse.builder()
