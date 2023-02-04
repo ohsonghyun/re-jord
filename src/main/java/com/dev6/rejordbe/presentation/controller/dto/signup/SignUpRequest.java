@@ -21,7 +21,7 @@ public class SignUpRequest implements Serializable {
     @Schema(description = "유저 패스워드", required = true)
     private String password;
 
-    @Schema(description = "유저 타입", example = "ROLE_USER, ROLE_ADMIN", required = true)
+    @Schema(description = "유저 타입", example = "[ROLE_USER, ROLE_ADMIN]", required = true)
     private List<String> roles;
 
     /**
