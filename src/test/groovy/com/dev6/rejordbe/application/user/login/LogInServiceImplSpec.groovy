@@ -1,5 +1,7 @@
 package com.dev6.rejordbe.application.user.login
 
+import com.dev6.rejordbe.domain.role.Role
+import com.dev6.rejordbe.domain.role.RoleType
 import com.dev6.rejordbe.domain.user.Users
 import com.dev6.rejordbe.exception.UserNotFoundException
 import com.dev6.rejordbe.infrastructure.user.UserInfoRepository
@@ -28,6 +30,7 @@ class LogInServiceImplSpec extends Specification {
                 Users.builder()
                         .userId(userId)
                         .password(password)
+                        .roles(List.of(new Role(RoleType.ROLE_USER)))
                         .build()
         )
 

@@ -36,10 +36,6 @@ public class Users extends BaseTime {
     @Column(name = "password")
     private String password;
 
-//    @Enumerated
-//    @Column(name = "user_type")
-//    private UserType userType;
-
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles = new ArrayList<>();
 
