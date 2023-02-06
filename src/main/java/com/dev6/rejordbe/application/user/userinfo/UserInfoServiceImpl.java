@@ -11,10 +11,16 @@ import com.dev6.rejordbe.exception.UserNotFoundException;
 import com.dev6.rejordbe.infrastructure.user.UserInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,7 +32,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 @lombok.RequiredArgsConstructor
 @Slf4j
-public class UserInfoServiceImpl implements UserInfoService {
+public class UserInfoServiceImpl implements UserInfoService, UserDetailsService {
 
     private final UserInfoRepository userInfoRepository;
     private final UserInfoValidateService userInfoValidateService;
@@ -62,5 +68,27 @@ public class UserInfoServiceImpl implements UserInfoService {
                                 .collect(Collectors.toList())
                 )
                 .build();
+    }
+
+    /**
+     * JWT 토큰 생성을 위한 유저 정보 취득
+     * <p>UsernamePasswordAuthenticationToken에 넣어준 username(uid) 값으로 유저 정보 취득</p>
+     *
+     * @param uid the uid identifying the user whose data is required.
+     * @return {@code UserDetails}
+     * @throws UsernameNotFoundException
+     */
+    @Override
+    public UserDetails loadUserByUsername(String uid) throws UsernameNotFoundException {
+        Optional<Users> userOptional = userInfoRepository.findById(uid);
+        Users anUser = userOptional.orElseThrow(() -> {
+            log.error("UserInfoServiceImpl.loadUserByUsername: ILLEGAL_UID {}", uid);
+            throw new UsernameNotFoundException("UserInfoServiceImpl.loadUserByUsername: ILLEGAL_UID");
+        });
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        anUser.getRoles().forEach(role -> {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        });
+        return new User(anUser.getUid(), anUser.getPassword(), authorities);
     }
 }

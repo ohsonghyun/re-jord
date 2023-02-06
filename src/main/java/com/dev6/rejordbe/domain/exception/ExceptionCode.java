@@ -6,6 +6,7 @@ import org.eclipse.jdt.internal.compiler.env.IModule;
  * ExceptionCode
  */
 public enum ExceptionCode {
+    ILLEGAL_UID,
     ILLEGAL_USERID,
     ILLEGAL_NICKNAME,
     ILLEGAL_PASSWORD,
