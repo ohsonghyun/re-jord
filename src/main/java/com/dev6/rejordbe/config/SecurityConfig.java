@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
@@ -21,15 +23,30 @@ public class SecurityConfig {
             "/v2/api-docs"
     };
 
-
+    /**
+     * 리소스별 접근제어 설정
+     *
+     * @param httpSecurity
+     * @return {@code SecurityFilterChain}
+     * @throws Exception
+     */
     @Bean
     SecurityFilterChain filterChain(final HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable();
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        // TODO flowertaekk 접근제어설정
         httpSecurity.authorizeRequests().antMatchers("/v1/**").permitAll();
         httpSecurity.authorizeRequests().antMatchers(SWAGGER).permitAll();
         httpSecurity.authorizeRequests().requestMatchers(PathRequest.toH2Console()).permitAll();
         httpSecurity.authorizeRequests().anyRequest().authenticated();
         return httpSecurity.build();
+    }
+
+    /**
+     * 패스워드 암호화 객체
+     */
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
