@@ -2,6 +2,7 @@ package com.dev6.rejordbe.application.user.userinfo;
 
 import com.dev6.rejordbe.application.user.validate.UserInfoValidateService;
 import com.dev6.rejordbe.domain.exception.ExceptionCode;
+import com.dev6.rejordbe.domain.role.Role;
 import com.dev6.rejordbe.domain.user.Users;
 import com.dev6.rejordbe.domain.user.dto.UserResult;
 import com.dev6.rejordbe.exception.DuplicatedNicknameException;
@@ -14,6 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * UserInfoServiceImpl
@@ -50,8 +54,13 @@ public class UserInfoServiceImpl implements UserInfoService {
                 .uid(targetUser.getUid())
                 .userId(targetUser.getUserId())
                 .nickname(targetUser.getNickname())
-                // FIXME by flowertaekk
-                //.userType(targetUser.getUserType())
+                .roles(
+                        Optional.ofNullable(targetUser.getRoles())
+                                .orElse(Collections.emptyList())
+                                .stream()
+                                .map(Role::getName)
+                                .collect(Collectors.toList())
+                )
                 .build();
     }
 }

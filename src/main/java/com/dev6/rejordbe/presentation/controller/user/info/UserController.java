@@ -136,8 +136,7 @@ public class UserController {
                 .uid(updatedUser.getUid())
                 .userId(updatedUser.getUserId())
                 .nickname(updatedUser.getNickname())
-                // FIXME by flowertaekk
-                //.userType(updatedUser.getUserType())
+                .roles(updatedUser.getRoles())
                 .build());
     }
 }
