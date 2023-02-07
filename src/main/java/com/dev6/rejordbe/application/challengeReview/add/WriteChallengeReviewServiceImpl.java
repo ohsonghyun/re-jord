@@ -5,6 +5,7 @@ import com.dev6.rejordbe.application.badge.add.AddBadgeService;
 import com.dev6.rejordbe.application.footprint.add.AddFootprintService;
 import com.dev6.rejordbe.application.id.IdGenerator;
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview;
+import com.dev6.rejordbe.domain.challengeReview.ChallengeReviewType;
 import com.dev6.rejordbe.domain.challengeReview.dto.ChallengeReviewResult;
 import com.dev6.rejordbe.domain.exception.ExceptionCode;
 import com.dev6.rejordbe.domain.user.Users;
@@ -50,7 +51,9 @@ public class WriteChallengeReviewServiceImpl implements WriteChallengeReviewServ
                 ChallengeReview.builder()
                         .challengeReviewId(idGenerator.generate("CR"))
                         .contents(newChallengeReview.getContents())
-                        .challengeReviewType(newChallengeReview.getChallengeReviewType())
+                        .challengeReviewType(
+                                checkChallengeReviewType(newChallengeReview.getChallengeReviewType())
+                        )
                         .user(user)
                         .build()
         );
@@ -66,5 +69,14 @@ public class WriteChallengeReviewServiceImpl implements WriteChallengeReviewServ
                 .challengeReviewType(challengeReviewResult.getChallengeReviewType())
                 .uid(challengeReviewResult.getUser().getUid())
                 .build();
+    }
+
+    public ChallengeReviewType checkChallengeReviewType(ChallengeReviewType challengeReviewType) {
+
+        if(challengeReviewType == null) {
+            challengeReviewType = ChallengeReviewType.FEELING;
+        }
+
+        return challengeReviewType;
     }
 }

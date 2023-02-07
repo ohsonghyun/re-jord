@@ -50,11 +50,11 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
         when:
         def saveResult = writeChallengeReviewService.writeChallengeReview(
                 ChallengeReview.builder()
-                    .challengeReviewId(challengeReviewId)
-                    .contents(contents)
-                    .challengeReviewType(challengeReviewType)
-                    .user(anUser)
-                    .build(), uid)
+                        .challengeReviewId(challengeReviewId)
+                        .contents(contents)
+                        .challengeReviewType(challengeReviewType)
+                        .user(anUser)
+                        .build(), uid)
 
         then:
         saveResult.getChallengeReviewId() == challengeReviewId
@@ -64,7 +64,7 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
 
         where:
         challengeReviewId   | contents   | challengeReviewType         | uid
-        'challengeReviewId' | 'contents' | ChallengeReviewType.FEELING | 'uid'
+        'challengeReviewId' | 'contents' | ChallengeReviewType.HARDSHIP | 'uid'
     }
 
     def "존재하지 않는 유저면 에러"() {
@@ -131,5 +131,40 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
         'challengeReviewId' | ''       | ChallengeReviewType.FEELING | 'uid'
         'challengeReviewId' | '  '     | ChallengeReviewType.FEELING | 'uid'
         'challengeReviewId' | null     | ChallengeReviewType.FEELING | 'uid'
+    }
+
+    def "챌린지 리뷰 주제 null 인 경우 느낀점 기본값으로 설정해주기"() {
+        def anUser = Users.builder()
+                .uid(uid)
+                .build()
+
+        userInfoRepository.findById(uid) >> Optional.of(anUser)
+
+        writeChallengeReviewRepository.save(_ as ChallengeReview) >> ChallengeReview.builder()
+                .challengeReviewId(challengeReviewId)
+                .contents(contents)
+                .challengeReviewType(resultChallengeReviewType)
+                .user(anUser)
+                .build()
+
+        when:
+        def saveResult = writeChallengeReviewService.writeChallengeReview(
+                ChallengeReview.builder()
+                        .challengeReviewId(challengeReviewId)
+                        .contents(contents)
+                        .challengeReviewType(challengeReviewType)
+                        .user(anUser)
+                        .build(), uid)
+
+        then:
+        saveResult.getChallengeReviewId() == challengeReviewId
+        saveResult.getContents() == contents
+        saveResult.getChallengeReviewType() == resultChallengeReviewType
+        saveResult.getUid() == uid
+
+        where:
+        challengeReviewId   | contents   | challengeReviewType | resultChallengeReviewType   | uid
+        'challengeReviewId' | 'contents' | null                | ChallengeReviewType.FEELING | 'uid'
+
     }
 }
