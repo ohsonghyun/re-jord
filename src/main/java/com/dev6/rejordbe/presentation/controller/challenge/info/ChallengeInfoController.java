@@ -52,8 +52,10 @@ public class ChallengeInfoController {
                 .challengeId("CH_challengeId")
                 .title("찬 물로 세탁하기")
                 .contents("찬물로 세탁하면 온수로 세탁할 때보다 10%의 탄소배출을 줄일 수 있습니다.")
-                .footprintAmount(1)
+                .footprintAmount(15)
                 .badgeId("BG_badgeId")
+                .badgeName("badgeName")
+                .textColor("textColor")
                 .build());
     }
 }

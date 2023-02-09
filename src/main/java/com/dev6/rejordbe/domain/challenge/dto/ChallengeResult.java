@@ -14,8 +14,10 @@ public class ChallengeResult {
     private final String challengeId;
     private final String title;
     private final String contents;
-    private final Integer footprintAmount;
     private final String badgeId;
-    private final Image iconImage;
-    private final String imgColor;
+    private final String badgeName;
+    private final Integer footprintAmount;
+    private final Image imgFront;
+    private final Image imgBack;
+    private final String textColor;
 }

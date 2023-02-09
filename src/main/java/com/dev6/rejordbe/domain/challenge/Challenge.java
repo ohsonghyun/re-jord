@@ -1,6 +1,7 @@
 package com.dev6.rejordbe.domain.challenge;
 
 import javax.persistence.*;
+import java.awt.*;
 
 /**
  * Challenge
@@ -25,7 +26,18 @@ public class Challenge {
     @Column(name = "footprint_amount")
     private Integer footprintAmount;
 
-    // TODO 챌린지 리뷰 작성 api 올라오면 badge 테이블이랑 연결하기
+    @Column(name = "badge_name")
+    private String badgeName;
+
     @Column(name = "badge_id")
     private String badgeId;
+
+    @Column(name = "img_front")
+    private Image imgFront;
+
+    @Column(name = "img_back")
+    private Image imgBack;
+
+    @Column(name = "text_color")
+    private String textColor;
 }
