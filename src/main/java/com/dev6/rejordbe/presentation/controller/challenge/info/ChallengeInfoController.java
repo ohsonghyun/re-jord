@@ -1,14 +1,21 @@
 package com.dev6.rejordbe.presentation.controller.challenge.info;
 
 import com.dev6.rejordbe.domain.challenge.dto.ChallengeResult;
+import com.dev6.rejordbe.domain.exception.ExceptionCode;
+import com.dev6.rejordbe.exception.IllegalParameterException;
 import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * ChallengeInfoController
@@ -28,12 +35,19 @@ public class ChallengeInfoController {
             authorizations = {@Authorization(value = "TBD")},
             tags = "오늘 챌린지 정보 컨트롤러")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "정상")
+            @ApiResponse(code = 200, message = "정상"),
+            @ApiResponse(code = 400, message = "취득기준시각이 없는 경우", response = ErrorResponse.class)
     })
     @GetMapping(
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_PROBLEM_JSON_VALUE}
     )
-    public ResponseEntity<ChallengeResult> todayChallengeInfo() {
+    public ResponseEntity<ChallengeResult> todayChallengeInfo(
+            @NonNull @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @ApiParam(value = "취득기준시각", example = "2023-01-23T23:16:59", required = true)
+            final LocalDateTime requestTime) {
+        if (Objects.isNull(requestTime)) {
+            log.warn("ChallengeInfoController.todayChallengeInfo: ILLEGAL_DATE_TIME: {}", requestTime);
+            throw new IllegalParameterException(ExceptionCode.ILLEGAL_DATE_TIME.name());
+        }
         return ResponseEntity.ok(ChallengeResult.builder()
                 .challengeId("CH_challengeId")
                 .title("찬 물로 세탁하기")
