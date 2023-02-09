@@ -1,7 +1,6 @@
 package com.dev6.rejordbe.domain.challenge;
 
 import javax.persistence.*;
-import java.awt.*;
 
 /**
  * Challenge
@@ -33,10 +32,10 @@ public class Challenge {
     private String badgeId;
 
     @Column(name = "img_front")
-    private Image imgFront;
+    private String imgFront;
 
     @Column(name = "img_back")
-    private Image imgBack;
+    private String imgBack;
 
     @Column(name = "text_color")
     private String textColor;

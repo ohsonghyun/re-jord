@@ -55,6 +55,8 @@ public class ChallengeInfoController {
                 .footprintAmount(15)
                 .badgeId("BG_badgeId")
                 .badgeName("badgeName")
+                .imgFront("imgFront")
+                .imgBack("imgBack")
                 .textColor("textColor")
                 .build());
     }

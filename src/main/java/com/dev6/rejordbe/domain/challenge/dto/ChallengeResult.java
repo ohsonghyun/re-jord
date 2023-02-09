@@ -1,7 +1,5 @@
 package com.dev6.rejordbe.domain.challenge.dto;
 
-import java.awt.*;
-
 /**
  * ChallengeResult
  * <p>DTO</p>
@@ -17,7 +15,7 @@ public class ChallengeResult {
     private final String badgeId;
     private final String badgeName;
     private final Integer footprintAmount;
-    private final Image imgFront;
-    private final Image imgBack;
+    private final String imgFront;
+    private final String imgBack;
     private final String textColor;
 }
