@@ -36,8 +36,16 @@ public class SecurityConfig {
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         // TODO flowertaekk 접근제어설정
         httpSecurity.authorizeRequests().antMatchers("/v1/**").permitAll();
+
+        // swagger
         httpSecurity.authorizeRequests().antMatchers(SWAGGER).permitAll();
+        // /swagger
+
+        // h2-console
         httpSecurity.authorizeRequests().requestMatchers(PathRequest.toH2Console()).permitAll();
+        httpSecurity.headers().frameOptions().disable();
+        // /h2-console
+
         httpSecurity.authorizeRequests().anyRequest().authenticated();
         return httpSecurity.build();
     }
