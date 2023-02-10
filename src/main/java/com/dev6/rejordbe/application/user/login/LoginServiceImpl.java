@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.stream.Collectors;
 
 /**
@@ -29,8 +28,8 @@ public class LoginServiceImpl implements LoginService {
      * {@inheritDoc}
      */
     @Override
-    public UserResult logIn(final String userId, final String password) {
-        return userInfoRepository.findUserByUserIdAndPassword(userId, password)
+    public UserResult findUserByUserId(final String userId) {
+        return userInfoRepository.findUserByUserId(userId)
                 .map(anUser -> UserResult.builder()
                         .uid(anUser.getUid())
                         .userId(anUser.getUserId())

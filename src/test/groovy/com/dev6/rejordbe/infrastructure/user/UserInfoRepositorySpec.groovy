@@ -34,8 +34,7 @@ class UserInfoRepositorySpec extends Specification {
     // 로그인 관련
     // ----------------------------------------------------
 
-    def "유저를 UserId와 패스워드를 통해 검색할 수 있다"() {
-        given:
+    def "UserId로 유저를 검색할 수 있다"() {
         def role = roleInfoRepository.save(new Role(roleType))
         userInfoRepository.save(
                 Users.builder()
@@ -49,7 +48,7 @@ class UserInfoRepositorySpec extends Specification {
         entityManager.clear()
 
         when:
-        def anUser = userInfoRepository.findUserByUserIdAndPassword(userId, password).orElseThrow()
+        def anUser = userInfoRepository.findUserByUserId(userId).orElseThrow()
 
         then:
         anUser != null
@@ -65,7 +64,7 @@ class UserInfoRepositorySpec extends Specification {
         "uid" | "userId" | "nickname" | "password" | RoleType.ROLE_USER
     }
 
-    def "유저를 UserId 또는 패스워드가 null인 경우에도 검색은 가능하다"() {
+    def "유저ID가 null인 경우에도 에러를 반환하지 않는다"() {
         given:
         def role = roleInfoRepository.save(new Role(roleType))
         userInfoRepository.save(
@@ -80,7 +79,7 @@ class UserInfoRepositorySpec extends Specification {
         entityManager.clear()
 
         when:
-        def userOptional = userInfoRepository.findUserByUserIdAndPassword(userId, password)
+        def userOptional = userInfoRepository.findUserByUserId(userId)
 
         then:
         userOptional.isEmpty()
@@ -88,7 +87,6 @@ class UserInfoRepositorySpec extends Specification {
         where:
         testCase             | uid   | userId   | nickname   | password   | roleType
         "userId가 null인 경우"   | "uid" | null     | "nickname" | "password" | RoleType.ROLE_USER
-        "password가 null인 경우" | "uid" | "userId" | "nickname" | null       | RoleType.ROLE_USER
     }
 
     // ----------------------------------------------------
