@@ -6,7 +6,7 @@ spring:
 
 rejord:
   jwt:
-    sort-key: ${SORT_KEY}
+    sort-key: ${SORT_KEY:sort}
     access-token:
       period: 1800000 # ms
     refresh-token:
