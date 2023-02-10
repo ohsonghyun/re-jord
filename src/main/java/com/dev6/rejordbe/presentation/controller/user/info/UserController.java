@@ -19,8 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-
 /**
  * UserController
  */
@@ -109,24 +107,23 @@ public class UserController {
     }
 
     @ApiOperation(
-            value = "회원 정보 수정",
+            value = "닉네임 수정",
             nickname = "updateUserInfo",
-            notes = "회원 정보 수정 API. 현재 닉네임만 수정 가능.",
+            notes = "닉네임 수정 API.",
             response = UpdateUserInfoResponse.class,
-            authorizations = {@Authorization(value = "TBD")},
             tags = "유저 컨트롤러")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "유저 정보 변경 성공"),
+            @ApiResponse(code = 200, message = "닉네임 변경 성공"),
             @ApiResponse(code = 400, message = "정책 위반 데이터", response = ErrorResponse.class),
             @ApiResponse(code = 404, message = "존재하지 않는 유저", response = ErrorResponse.class),
             @ApiResponse(code = 409, message = "이미 존재하는 닉네임", response = ErrorResponse.class)
     })
     @PatchMapping(
-            value = "/{uid}",
+            value = "/{uid}/nickname",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_PROBLEM_JSON_VALUE},
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<UpdateUserInfoResponse> updateUserInfo(
+    public ResponseEntity<UpdateUserInfoResponse> updateUserNickname(
             @Schema(description = "유저 uid", required = true) @NonNull @PathVariable String uid,
             @ApiParam(value = "수정할 회원 정보", required = true) @RequestBody UpdateUserInfoRequest request
     ) {

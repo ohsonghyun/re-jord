@@ -161,7 +161,7 @@ class UserControllerSpec extends Specification {
 
         expect:
         mvc.perform(
-                patch(baseUrl + '/uid')
+                patch(baseUrl + '/uid/nickname')
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
                                 UpdateUserInfoRequest.builder()
@@ -183,7 +183,7 @@ class UserControllerSpec extends Specification {
 
         expect:
         mvc.perform(
-                patch(baseUrl + '/uid')
+                patch(baseUrl + '/uid/nickname')
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
                                 UpdateUserInfoRequest.builder()
