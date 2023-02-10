@@ -15,8 +15,6 @@ import java.io.Serializable;
 @lombok.Getter
 public class AddPostRequest implements Serializable {
 
-    @Schema(description = "게시글 ID", required = true)
-    private String postId;
     @Schema(description = "게시글 내용", required = true)
     private String contents;
     @Schema(description = "게시글 카테고리", required = true)
