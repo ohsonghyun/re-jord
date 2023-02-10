@@ -11,6 +11,7 @@ import com.dev6.rejordbe.exception.DuplicatedUserIdException
 import com.dev6.rejordbe.exception.IllegalParameterException
 import com.dev6.rejordbe.infrastructure.role.RoleInfoRepository
 import com.dev6.rejordbe.infrastructure.user.SignUpRepository
+import org.springframework.security.crypto.password.PasswordEncoder
 import spock.lang.Specification
 
 /**
@@ -23,13 +24,15 @@ class SignUpServiceImplSpec extends Specification {
     RoleInfoRepository roleInfoRepository
     UserInfoValidateService userInfoValidateService
     IdGenerator idGenerator
+    PasswordEncoder passwordEncoder
 
     def setup() {
         signUpRepository = Mock(SignUpRepository.class)
         roleInfoRepository = Mock(RoleInfoRepository.class)
         userInfoValidateService = Mock(UserInfoValidateService.class)
         idGenerator = Mock(IdGenerator.class)
-        signUpService = new SignUpServiceImpl(signUpRepository, roleInfoRepository, userInfoValidateService, idGenerator)
+        passwordEncoder = Mock(PasswordEncoder.class)
+        signUpService = new SignUpServiceImpl(signUpRepository, roleInfoRepository, userInfoValidateService, idGenerator, passwordEncoder)
     }
 
     def "에러가 없는 경우 회원가입을 할 수 있다"() {

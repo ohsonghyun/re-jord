@@ -13,6 +13,7 @@ import com.dev6.rejordbe.exception.IllegalParameterException;
 import com.dev6.rejordbe.infrastructure.role.RoleInfoRepository;
 import com.dev6.rejordbe.infrastructure.user.SignUpRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +33,7 @@ public class SignUpServiceImpl implements SignUpService {
     private final RoleInfoRepository roleInfoRepository;
     private final UserInfoValidateService userInfoValidateService;
     private final IdGenerator idGenerator;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * {@inheritDoc}
@@ -65,7 +67,7 @@ public class SignUpServiceImpl implements SignUpService {
                         .userId(newUser.getUserId())
                         // 20230224 릴리즈에는 nickname이 userId와 동일한 사양
                         .nickname(newUser.getUserId())
-                        .password(newUser.getPassword())
+                        .password(passwordEncoder.encode(newUser.getPassword()))
                         .roles(roles)
                         .build());
 
