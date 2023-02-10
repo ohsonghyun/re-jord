@@ -1,5 +1,6 @@
 package com.dev6.rejordbe.config;
 
+import com.dev6.rejordbe.filter.JwtAuthorizationFilter;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,13 +11,17 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * SecurityConfig
  */
 @Configuration
 @EnableWebSecurity
+@lombok.RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtConfig jwtConfig;
 
     private static final String[] NONE_AUTH_GET_API = {
             "/v1/users/*/duplication"
@@ -24,6 +29,9 @@ public class SecurityConfig {
     private static final String[] NONE_AUTH_POST_API = {
             "/v1/users",
             "/v1/login"
+    };
+    private static final String[] NONE_AUTH_PATCH_API = {
+            "/v1/users/*/nickname"
     };
     private static final String[] SWAGGER = {
             "/swagger-ui/**",
@@ -46,6 +54,7 @@ public class SecurityConfig {
         // 미인증 접근 허용
         httpSecurity.authorizeRequests().antMatchers(HttpMethod.GET, NONE_AUTH_GET_API).permitAll();
         httpSecurity.authorizeRequests().antMatchers(HttpMethod.POST, NONE_AUTH_POST_API).permitAll();
+        httpSecurity.authorizeRequests().antMatchers(HttpMethod.PATCH, NONE_AUTH_PATCH_API).permitAll();
 
         // swagger
         httpSecurity.authorizeRequests().antMatchers(SWAGGER).permitAll();
@@ -57,6 +66,7 @@ public class SecurityConfig {
         // /h2-console
 
         httpSecurity.authorizeRequests().anyRequest().authenticated();
+        httpSecurity.addFilterBefore(new JwtAuthorizationFilter(jwtConfig), UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 
