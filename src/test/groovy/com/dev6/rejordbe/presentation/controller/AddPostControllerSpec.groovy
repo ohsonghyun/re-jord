@@ -2,7 +2,6 @@ package com.dev6.rejordbe.presentation.controller
 
 import com.dev6.rejordbe.TestSecurityConfig
 import com.dev6.rejordbe.application.post.add.WritePostService
-import com.dev6.rejordbe.domain.cookie.CookieNames
 import com.dev6.rejordbe.domain.exception.ExceptionCode
 import com.dev6.rejordbe.domain.post.Post
 import com.dev6.rejordbe.domain.post.PostType
@@ -27,8 +26,6 @@ import org.springframework.web.context.request.NativeWebRequest
 import org.springframework.web.method.support.ModelAndViewContainer
 import spock.lang.Specification
 import spock.lang.Unroll
-
-import javax.servlet.http.Cookie
 
 import static org.mockito.ArgumentMatchers.isA
 import static org.mockito.Mockito.when
@@ -73,7 +70,6 @@ class AddPostControllerSpec extends Specification {
         expect:
         mvc.perform(
                 post(baseUrl)
-                        .cookie(new Cookie(CookieNames.LOGGED_IN_UID, "session-cookie"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(
                                 objectMapper.writeValueAsString(
@@ -101,7 +97,6 @@ class AddPostControllerSpec extends Specification {
         expect:
         mvc.perform(
                 post(baseUrl)
-                        .cookie(new Cookie(CookieNames.LOGGED_IN_UID, "session-cookie"))
                         .contentType(MediaType.APPLICATION_JSON).content(
                         objectMapper.writeValueAsString(
                                 AddPostRequest.builder()
