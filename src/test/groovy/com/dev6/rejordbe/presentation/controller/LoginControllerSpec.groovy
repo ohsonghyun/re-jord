@@ -2,6 +2,7 @@ package com.dev6.rejordbe.presentation.controller
 
 import com.dev6.rejordbe.TestSecurityConfig
 import com.dev6.rejordbe.application.user.login.LoginService
+import com.dev6.rejordbe.config.JwtConfig
 import com.dev6.rejordbe.domain.exception.ExceptionCode
 import com.dev6.rejordbe.domain.role.RoleType
 import com.dev6.rejordbe.domain.user.dto.UserResult
