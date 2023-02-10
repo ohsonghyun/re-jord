@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.dev6.rejordbe.application.user.login.LoginService;
 import com.dev6.rejordbe.config.JwtConfig;
+import com.dev6.rejordbe.domain.jwt.Jwt;
 import com.dev6.rejordbe.domain.jwt.JwtToken;
 import com.dev6.rejordbe.domain.user.dto.UserResult;
 import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
@@ -28,6 +29,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.stream.Collectors;
+
+import static com.dev6.rejordbe.domain.jwt.Jwt.*;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Api(tags = "로그인 컨트롤러")
 @RestController
@@ -77,7 +81,7 @@ public class LoginController {
                 .withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + jwtConfig.getAccessToken().getPeriod())) // 30분
                 .withIssuer(httpServletRequest.getRequestURI())
-                .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+                .withClaim(ROLES, user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
 
         String refreshToken = JWT.create()
@@ -87,7 +91,7 @@ public class LoginController {
                 .sign(algorithm);
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Authorization", "Bearer " + accessToken);
+        httpHeaders.add(AUTHORIZATION, BEARER_WITH_SPACE + accessToken);
 
         return new ResponseEntity<>(
                 LoginResponse.builder()
