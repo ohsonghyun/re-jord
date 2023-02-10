@@ -65,7 +65,7 @@ public class InitData {
                             .uid("web-uid")
                             .userId("web-client")
                             .nickname("웹유저")
-                            .password("password")
+                            .password("$2a$10$SOm1ZyPwzhJ2.RwpQob0defjIKe.aD6BRv.Rye6VYeVdHrpFUKQZm") // password
                             .roles(roles)
                             .build()
             );
@@ -74,7 +74,7 @@ public class InitData {
                             .uid("android-uid")
                             .userId("android-client")
                             .nickname("안드로이드유저")
-                            .password("password")
+                            .password("$2a$10$SOm1ZyPwzhJ2.RwpQob0defjIKe.aD6BRv.Rye6VYeVdHrpFUKQZm") // password
                             .roles(roles)
                             .build()
             );
@@ -83,7 +83,7 @@ public class InitData {
                             .uid("ios-uid")
                             .userId("ios-client")
                             .nickname("아이폰 유저")
-                            .password("password")
+                            .password("$2a$10$SOm1ZyPwzhJ2.RwpQob0defjIKe.aD6BRv.Rye6VYeVdHrpFUKQZm") // password
                             .roles(roles)
                             .build()
             );
