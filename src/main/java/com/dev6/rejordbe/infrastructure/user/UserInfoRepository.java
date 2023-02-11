@@ -27,4 +27,12 @@ public interface UserInfoRepository extends JpaRepository<Users, String> {
      * @return {@code Optional<Users>}
      */
     Optional<Users> findUserByNickname(final String nickname);
+
+    /**
+     * UID로 유저 찾기
+     *
+     * @param uid {@code String}
+     * @return {@code Optional<Users>}
+     */
+    Optional<Users> findUserByUid(String uid);
 }

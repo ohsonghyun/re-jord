@@ -31,6 +31,40 @@ class UserInfoRepositorySpec extends Specification {
     UserInfoRepository userInfoRepository
 
     // ----------------------------------------------------
+    // 유저 정보 관련
+    // ----------------------------------------------------
+
+    def "UID로 유저를 검색할 수 있다"() {
+        def role = roleInfoRepository.save(new Role(roleType))
+        userInfoRepository.save(
+                Users.builder()
+                        .uid(uid)
+                        .userId(userId)
+                        .nickname(nickname)
+                        .password(password)
+                        .roles(Collections.singletonList(role))
+                        .build())
+        entityManager.flush()
+        entityManager.clear()
+
+        when:
+        def anUser = userInfoRepository.findUserByUid(uid).orElseThrow()
+
+        then:
+        anUser != null
+        anUser.getUid() == uid
+        anUser.getUserId() == userId
+        anUser.getNickname() == nickname
+        anUser.getPassword() == password
+        anUser.getRoles().size() == 1
+        anUser.getRoles().get(0).getName() == roleType
+
+        where:
+        uid   | userId   | nickname   | password   | roleType
+        "uid" | "userId" | "nickname" | "password" | RoleType.ROLE_USER
+    }
+
+    // ----------------------------------------------------
     // 로그인 관련
     // ----------------------------------------------------
 
