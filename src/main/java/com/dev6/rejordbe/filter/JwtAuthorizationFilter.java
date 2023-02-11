@@ -34,6 +34,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtConfig jwtConfig;
+    private static final String TOKEN_REFRESH_URL = "/v1/token/refresh";
 
     @Override
     protected void doFilterInternal(
@@ -41,53 +42,52 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-//        if (request.getServletPath().equals("/v1/login") || request.getServletPath().equals("/v1/token/refresh")) {
-//            filterChain.doFilter(request, response);
-//        }
-//        else {
-            // Authorization Header 획득
-            String authorizationHeader = request.getHeader(AUTHORIZATION);
+        // 토큰 갱신은 Bearer 토큰에 refreshToken 을 설정하기 때문에 제외
+        if (request.getServletPath().equals(TOKEN_REFRESH_URL)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        // Authorization Header 획득
+        String authorizationHeader = request.getHeader(AUTHORIZATION);
 
-            // Bearer 토큰 타입 확인
-            if (authorizationHeader != null && authorizationHeader.startsWith(BEARER_WITH_SPACE)) {
-                try {
-                    // JWT 추출
-                    String token = authorizationHeader.substring(BEARER_WITH_SPACE.length());
-                    // JWT decode
-                    Algorithm algorithm = Algorithm.HMAC256(jwtConfig.getSortKey());
-                    JWTVerifier verifier = JWT.require(algorithm).build();
-                    // JWT 검증
-                    DecodedJWT decodedJWT = verifier.verify(token);
+        // Bearer 토큰 타입 확인
+        if (authorizationHeader != null && authorizationHeader.startsWith(BEARER_WITH_SPACE)) {
+            try {
+                // JWT 추출
+                String token = authorizationHeader.substring(BEARER_WITH_SPACE.length());
+                // JWT decode
+                Algorithm algorithm = Algorithm.HMAC256(jwtConfig.getSortKey());
+                JWTVerifier verifier = JWT.require(algorithm).build();
+                // JWT 검증
+                DecodedJWT decodedJWT = verifier.verify(token);
 
-                    String username = decodedJWT.getSubject();
-                    String[] roles = decodedJWT.getClaim(ROLES).asArray(String.class);
+                String username = decodedJWT.getSubject();
+                String[] roles = decodedJWT.getClaim(ROLES).asArray(String.class);
 
-                    Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-                    Arrays.stream(roles).forEach(role -> {
-                        authorities.add(new SimpleGrantedAuthority(role));
-                    });
+                Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+                Arrays.stream(roles).forEach(role -> {
+                    authorities.add(new SimpleGrantedAuthority(role));
+                });
 
-                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                            new UsernamePasswordAuthenticationToken(username, null, authorities);
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                        new UsernamePasswordAuthenticationToken(username, null, authorities);
 
-                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-                    filterChain.doFilter(request, response);
-                } catch (Exception e) {
-                    log.error("JwtAuthorizationFilter.doFilterInternal: JWT_AUTH_ERROR {}", e.getMessage());
-                    response.setStatus(HttpStatus.FORBIDDEN.value());
-
-                    ErrorResponse errorResponse = ErrorResponse.builder()
-                            .message("JWT_AUTH_ERROR")
-                            .build();
-                    response.setContentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE);
-                    new ObjectMapper().writeValue(response.getOutputStream(), errorResponse);
-                }
+                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                filterChain.doFilter(request, response);
+            } catch (Exception e) {
+                log.error("JwtAuthorizationFilter.doFilterInternal: JWT_AUTH_ERROR {}", e.getMessage());
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                response.setContentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE);
+                new ObjectMapper().writeValue(
+                        response.getOutputStream(),
+                        ErrorResponse.builder()
+                                .message("JWT_AUTH_ERROR")
+                                .build());
             }
-            // Bearer 토큰 확인 실패
-            else {
-                    filterChain.doFilter(request, response);
-            }
-//        }
-
+        }
+        // Bearer 토큰 확인 실패
+        else {
+            filterChain.doFilter(request, response);
+        }
     }
 }

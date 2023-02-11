@@ -24,7 +24,8 @@ public class SecurityConfig {
     private final JwtConfig jwtConfig;
 
     private static final String[] NONE_AUTH_GET_API = {
-            "/v1/users/*/duplication"
+            "/v1/users/*/duplication",
+            "/v1/token/refresh"
     };
     private static final String[] NONE_AUTH_POST_API = {
             "/v1/users",
