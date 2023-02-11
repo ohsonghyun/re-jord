@@ -20,7 +20,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 
 import static com.dev6.rejordbe.domain.jwt.Jwt.BEARER_WITH_SPACE;
 import static com.dev6.rejordbe.domain.jwt.Jwt.ROLES;
@@ -81,7 +83,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 new ObjectMapper().writeValue(
                         response.getOutputStream(),
                         ErrorResponse.builder()
-                                .message("JWT_AUTH_ERROR")
+                                .message(e.getMessage())
                                 .build());
             }
         }
