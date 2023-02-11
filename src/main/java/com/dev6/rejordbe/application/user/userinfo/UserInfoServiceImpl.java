@@ -10,6 +10,7 @@ import com.dev6.rejordbe.exception.IllegalParameterException;
 import com.dev6.rejordbe.exception.UserNotFoundException;
 import com.dev6.rejordbe.infrastructure.user.UserInfoRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -36,6 +37,28 @@ public class UserInfoServiceImpl implements UserInfoService, UserDetailsService 
 
     private final UserInfoRepository userInfoRepository;
     private final UserInfoValidateService userInfoValidateService;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<UserResult> findUserByUid(@NonNull final String uid) {
+        Optional<Users> userOptional = userInfoRepository.findUserByUid(uid);
+        if (userOptional.isEmpty()) {
+            return Optional.empty();
+        }
+        return userOptional.map(anUser ->
+                UserResult.builder()
+                        .uid(anUser.getUid())
+                        .userId(anUser.getUserId())
+                        .nickname(anUser.getNickname())
+                        .roles(
+                                ObjectUtils.defaultIfNull(anUser.getRoles(), new ArrayList<Role>()).stream()
+                                        .map(Role::getName)
+                                        .collect(Collectors.toList())
+                        )
+                        .build());
+    }
 
     /**
      * {@inheritDoc}
