@@ -1,8 +1,6 @@
 package com.dev6.rejordbe.presentation.controller.challengeReview.add;
 
-import com.dev6.rejordbe.application.badge.add.AddBadgeService;
 import com.dev6.rejordbe.application.challengeReview.add.WriteChallengeReviewService;
-import com.dev6.rejordbe.application.footprint.add.AddFootprintService;
 import com.dev6.rejordbe.domain.challengeReview.dto.ChallengeReviewResult;
 import com.dev6.rejordbe.presentation.controller.argumentResolver.LoggedIn;
 import com.dev6.rejordbe.presentation.controller.dto.addChallengeReview.AddChallengeReviewRequest;
@@ -19,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Api(tags = "챌린지 리뷰 작성 컨트롤러")
 @RestController
-@RequestMapping("/v1/addChallengeReview")
+@RequestMapping("/v1/challengeReviews")
 @lombok.RequiredArgsConstructor
 public class AddChallengeReviewController {
 
@@ -35,10 +33,8 @@ public class AddChallengeReviewController {
     )
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "정상"),
-            @ApiResponse(code = 400, message = "옳지 않은 데이터 접근", response = ErrorResponse.class),
-            @ApiResponse(code = 400, message = "정책 위반 데이터", response = ErrorResponse.class),
-            @ApiResponse(code = 404, message = "존재하지 않는 유저", response = ErrorResponse.class),
-            @ApiResponse(code = 404, message = "존재하지 않는 챌린지 리뷰", response = ErrorResponse.class)
+            @ApiResponse(code = 400, message = "옳지 않은 데이터 접근, 정책 위반 챌린지 리뷰", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "존재하지 않는 유저, 존재하지 않는 챌린지 리뷰", response = ErrorResponse.class)
     })
     @PostMapping(
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_PROBLEM_JSON_VALUE},

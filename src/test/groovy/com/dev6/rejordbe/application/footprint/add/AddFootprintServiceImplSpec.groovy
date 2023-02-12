@@ -29,7 +29,7 @@ class AddFootprintServiceImplSpec extends Specification {
 
     def "에러가 없는 경우 발자국을 추가할 수 있다"() {
         def anChallengeReview = ChallengeReview.builder()
-                    .challengeReviewId(challengeReviewId)
+                    .id(challengeReviewId)
                     .build()
 
         writeChallengeReviewRepository.findById(challengeReviewId) >> Optional.of(anChallengeReview)
@@ -57,7 +57,7 @@ class AddFootprintServiceImplSpec extends Specification {
 
     def "존재하지 않는 챌린지 리뷰이면 에러"() {
         def anChallengeReview = ChallengeReview.builder()
-                .challengeReviewId(challengeReviewId)
+                .id(challengeReviewId)
                 .build()
 
         writeChallengeReviewRepository.findById(challengeReviewId) >> Optional.empty()

@@ -28,7 +28,7 @@ public class ReadChallengeReviewRepositoryCustomImpl implements ReadChallengeRev
         List<ChallengeReviewResult> content = queryFactory.select(
                         Projections.constructor(
                                 ChallengeReviewResult.class,
-                                challengeReview.challengeReviewId,
+                                challengeReview.id,
                                 challengeReview.contents,
                                 challengeReview.challengeReviewType,
                                 challengeReview.user.uid,
@@ -44,7 +44,7 @@ public class ReadChallengeReviewRepositoryCustomImpl implements ReadChallengeRev
                 .fetch();
 
         Long total = queryFactory
-                .select(challengeReview.challengeReviewId.count())
+                .select(challengeReview.id.count())
                 .from(challengeReview)
                 .where(challengeReview.createdDate.loe(offsetTime))
                 .fetchOne();

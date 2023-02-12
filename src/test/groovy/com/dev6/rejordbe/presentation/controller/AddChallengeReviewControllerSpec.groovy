@@ -53,7 +53,7 @@ class AddChallengeReviewControllerSpec extends Specification {
     @MockBean
     WriteChallengeReviewService writeChallengeReviewService
 
-    private static final String baseUrl = '/v1/addChallengeReview'
+    private static final String baseUrl = '/v1/challengeReviews'
 
     def setup() {
         addChallengeReviewController = new AddChallengeReviewController(writeChallengeReviewService)
@@ -77,7 +77,6 @@ class AddChallengeReviewControllerSpec extends Specification {
         expect:
         mvc.perform(
                 post(baseUrl)
-                    .cookie(new Cookie(CookieNames.LOGGED_IN_UID, "session-cookie"))
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(
                             objectMapper.writeValueAsString(
@@ -105,7 +104,6 @@ class AddChallengeReviewControllerSpec extends Specification {
         expect:
         mvc.perform(
                 post(baseUrl)
-                        .cookie(new Cookie(CookieNames.LOGGED_IN_UID, "session-cookie"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(
                                 objectMapper.writeValueAsString(
@@ -133,7 +131,6 @@ class AddChallengeReviewControllerSpec extends Specification {
         expect:
         mvc.perform(
                 post(baseUrl)
-                        .cookie(new Cookie(CookieNames.LOGGED_IN_UID, "session-cookie"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(
                                 objectMapper.writeValueAsString(

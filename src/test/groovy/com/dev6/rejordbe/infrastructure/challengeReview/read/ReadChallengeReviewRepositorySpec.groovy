@@ -50,7 +50,7 @@ class ReadChallengeReviewRepositorySpec extends Specification {
         for (int i = 0; i < 10; i++) {
             readChallengeReviewRepository.save(
                     ChallengeReview.builder()
-                            .challengeReviewId('challengeReviewId' + i)
+                            .id('challengeReviewId' + i)
                             .contents('contents')
                             .challengeReviewType(ChallengeReviewType.HARDSHIP)
                             .user(user)
@@ -106,7 +106,7 @@ class ReadChallengeReviewRepositorySpec extends Specification {
         for (int i = 0; i < 10; i++) {
             readChallengeReviewRepository.save(
                     ChallengeReview.builder()
-                            .challengeReviewId('challengeReviewId' + i)
+                            .id('challengeReviewId' + i)
                             .contents('contents')
                             .challengeReviewType(ChallengeReviewType.HARDSHIP)
                             .user(user)

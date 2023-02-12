@@ -2,6 +2,7 @@ package com.dev6.rejordbe.domain.badge;
 
 import com.dev6.rejordbe.domain.BaseTime;
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview;
+import com.dev6.rejordbe.domain.reward.BadgeReward;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
@@ -27,7 +28,7 @@ public class Badge extends BaseTime {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
-    private ChallengeReview challengeReview;
+    private BadgeReward parent;
 
     @Column(name = "acquirement_type")
     @Enumerated(value = EnumType.STRING)

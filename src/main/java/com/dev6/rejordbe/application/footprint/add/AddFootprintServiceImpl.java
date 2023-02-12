@@ -47,7 +47,7 @@ public class AddFootprintServiceImpl implements AddFootprintService {
         return FootprintResult.builder()
                 .footprintId(footprintResult.getFootprintId())
                 .footprintAmount(footprintResult.getFootprintAmount())
-                .parentId(footprintResult.getChallengeReview().getChallengeReviewId())
+                .parentId(footprintResult.getChallengeReview().getId())
                 .acquirementType(footprintResult.getAcquirementType())
                 .build();
     }

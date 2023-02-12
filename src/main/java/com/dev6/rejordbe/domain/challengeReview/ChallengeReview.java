@@ -1,6 +1,7 @@
 package com.dev6.rejordbe.domain.challengeReview;
 
 import com.dev6.rejordbe.domain.BaseTime;
+import com.dev6.rejordbe.domain.reward.BadgeReward;
 import com.dev6.rejordbe.domain.user.Users;
 
 import javax.persistence.*;
@@ -11,12 +12,15 @@ import javax.persistence.*;
 @Entity
 @lombok.Getter
 @lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
-@lombok.Builder
-public class ChallengeReview extends BaseTime {
-    @Id
-    @Column(name = "challenge_review_id")
-    private String challengeReviewId;
+public class ChallengeReview extends BadgeReward {
+
+    @lombok.Builder
+    public ChallengeReview(String id, String contents, ChallengeReviewType challengeReviewType, Users user) {
+        super(id);
+        this.contents = contents;
+        this.challengeReviewType = challengeReviewType;
+        this.user = user;
+    }
 
     @Column(name = "contents", length = 3000)
     private String contents;

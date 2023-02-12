@@ -49,7 +49,7 @@ public class WriteChallengeReviewServiceImpl implements WriteChallengeReviewServ
 
         ChallengeReview challengeReviewResult = writeChallengeReviewRepository.save(
                 ChallengeReview.builder()
-                        .challengeReviewId(idGenerator.generate("CR"))
+                        .id(idGenerator.generate("CR"))
                         .contents(newChallengeReview.getContents())
                         .challengeReviewType(
                                 checkChallengeReviewType(newChallengeReview.getChallengeReviewType())
@@ -58,13 +58,13 @@ public class WriteChallengeReviewServiceImpl implements WriteChallengeReviewServ
                         .build()
         );
 
-        if(!challengeReviewResult.getChallengeReviewId().isEmpty()){
-            addBadgeService.addBadge(challengeReviewResult.getChallengeReviewId());
-            addFootprintService.addFootprint(challengeReviewResult.getChallengeReviewId());
+        if(!challengeReviewResult.getId().isEmpty()){
+            addBadgeService.addBadge(challengeReviewResult.getId());
+            addFootprintService.addFootprint(challengeReviewResult.getId());
         }
 
         return ChallengeReviewResult.builder()
-                .challengeReviewId(challengeReviewResult.getChallengeReviewId())
+                .challengeReviewId(challengeReviewResult.getId())
                 .contents(challengeReviewResult.getContents())
                 .challengeReviewType(challengeReviewResult.getChallengeReviewType())
                 .uid(challengeReviewResult.getUser().getUid())

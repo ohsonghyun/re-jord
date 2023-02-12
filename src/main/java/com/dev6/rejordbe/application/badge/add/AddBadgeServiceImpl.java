@@ -40,7 +40,7 @@ public class AddBadgeServiceImpl implements AddBadgeService {
                 Badge.builder()
                         .badgeId(idGenerator.generate("BG"))
                         .badgeCode(BadgeCode.FIRST_WEEK)
-                        .challengeReview(challengeReview)
+                        .parent(challengeReview)
                         .acquirementType(AcquirementType.CHALLENGE_REVIEW )
                         .build()
         );
@@ -48,7 +48,7 @@ public class AddBadgeServiceImpl implements AddBadgeService {
         return BadgeResult.builder()
                 .badgeId(badgeResult.getBadgeId())
                 .badgeCode(badgeResult.getBadgeCode())
-                .parentId(badgeResult.getChallengeReview().getChallengeReviewId())
+                .parentId(badgeResult.getParent().getId())
                 .acquirementType(badgeResult.getAcquirementType())
                 .build();
     }
