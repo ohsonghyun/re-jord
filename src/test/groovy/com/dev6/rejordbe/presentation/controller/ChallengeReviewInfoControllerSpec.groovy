@@ -48,8 +48,8 @@ class ChallengeReviewInfoControllerSpec extends Specification {
         when(readChallengeReviewService.allChallengeReviews(isA(LocalDateTime.class), isA(Pageable.class)))
                 .thenReturn(new PageImpl<ChallengeReviewResult>(
                         List.of(
-                                new ChallengeReviewResult('challengeReviewId1', 'content', ChallengeReviewType.FREE, 'uid1', 'nickname1', LocalDateTime.now()),
-                                new ChallengeReviewResult('challengeReviewId2', 'content', ChallengeReviewType.FREE, 'uid2', 'nickname2', LocalDateTime.now())
+                                new ChallengeReviewResult('challengeReviewId1', 'content', ChallengeReviewType.HARDSHIP, 'uid1', 'nickname1', LocalDateTime.now()),
+                                new ChallengeReviewResult('challengeReviewId2', 'content', ChallengeReviewType.HARDSHIP, 'uid2', 'nickname2', LocalDateTime.now())
                         ),
                         PageRequest.of(0, 5),
                         1)

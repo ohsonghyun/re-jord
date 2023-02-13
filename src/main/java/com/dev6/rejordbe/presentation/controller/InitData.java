@@ -157,7 +157,7 @@ public class InitData {
                             ChallengeReview.builder()
                                     .challengeReviewId("CR_webclient" + idx)
                                     .contents("hello world web" + idx)
-                                    .challengeReviewType(ChallengeReviewType.FREE)
+                                    .challengeReviewType(ChallengeReviewType.HARDSHIP)
                                     .user(user)
                                     .build()
                     );
@@ -171,7 +171,7 @@ public class InitData {
                             ChallengeReview.builder()
                                     .challengeReviewId("CR_androidclient" + idx)
                                     .contents("hello world android" + idx)
-                                    .challengeReviewType(ChallengeReviewType.FREE)
+                                    .challengeReviewType(ChallengeReviewType.HARDSHIP)
                                     .user(user)
                                     .build()
                     );
@@ -185,7 +185,7 @@ public class InitData {
                             ChallengeReview.builder()
                                     .challengeReviewId("CR_iosclient" + idx)
                                     .contents("hello world ios" + idx)
-                                    .challengeReviewType(ChallengeReviewType.FREE)
+                                    .challengeReviewType(ChallengeReviewType.HARDSHIP)
                                     .user(user)
                                     .build()
                     );

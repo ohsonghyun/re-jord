@@ -10,10 +10,11 @@ import javax.persistence.*;
  */
 @Entity
 @lombok.Getter
-@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
 @lombok.Builder
+@lombok.AllArgsConstructor
+@lombok.NoArgsConstructor
 public class ChallengeReview extends BaseTime {
+
     @Id
     @Column(name = "challenge_review_id")
     private String challengeReviewId;

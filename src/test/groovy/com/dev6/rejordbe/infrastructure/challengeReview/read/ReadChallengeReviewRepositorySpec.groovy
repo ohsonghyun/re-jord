@@ -4,9 +4,6 @@ import com.dev6.rejordbe.TestConfig
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReviewType
 import com.dev6.rejordbe.domain.challengeReview.dto.ChallengeReviewResult
-import com.dev6.rejordbe.domain.post.Post
-import com.dev6.rejordbe.domain.post.PostType
-import com.dev6.rejordbe.domain.post.dto.PostResult
 import com.dev6.rejordbe.domain.user.Users
 import com.dev6.rejordbe.infrastructure.user.SignUpRepository
 import org.assertj.core.api.Assertions
@@ -52,7 +49,7 @@ class ReadChallengeReviewRepositorySpec extends Specification {
                     ChallengeReview.builder()
                             .challengeReviewId('challengeReviewId' + i)
                             .contents('contents')
-                            .challengeReviewType(ChallengeReviewType.FREE)
+                            .challengeReviewType(ChallengeReviewType.HARDSHIP)
                             .user(user)
                             .build()
             )
@@ -87,7 +84,7 @@ class ReadChallengeReviewRepositorySpec extends Specification {
                 'challengeReviewId0'
         )
         it.extractingResultOf('getContents').containsOnly('contents')
-        it.extractingResultOf('getChallengeReviewType').containsOnly(ChallengeReviewType.FREE)
+        it.extractingResultOf('getChallengeReviewType').containsOnly(ChallengeReviewType.HARDSHIP)
         it.extractingResultOf('getUid').containsOnly('uid')
         it.extractingResultOf('getNickname').containsOnly('nickname')
         it.extractingResultOf('getCreatedDate').isNotEmpty()
@@ -108,7 +105,7 @@ class ReadChallengeReviewRepositorySpec extends Specification {
                     ChallengeReview.builder()
                             .challengeReviewId('challengeReviewId' + i)
                             .contents('contents')
-                            .challengeReviewType(ChallengeReviewType.FREE)
+                            .challengeReviewType(ChallengeReviewType.HARDSHIP)
                             .user(user)
                             .build()
             )
