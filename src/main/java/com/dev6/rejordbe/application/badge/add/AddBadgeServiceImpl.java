@@ -1,7 +1,7 @@
 package com.dev6.rejordbe.application.badge.add;
 
 import com.dev6.rejordbe.application.id.IdGenerator;
-import com.dev6.rejordbe.domain.badge.AcquirementType;
+import com.dev6.rejordbe.domain.badge.BadgeAcquirementType;
 import com.dev6.rejordbe.domain.badge.Badge;
 import com.dev6.rejordbe.domain.badge.BadgeCode;
 import com.dev6.rejordbe.domain.badge.dto.BadgeResult;
@@ -39,9 +39,9 @@ public class AddBadgeServiceImpl implements AddBadgeService {
         Badge badgeResult = addBadgeRepository.save(
                 Badge.builder()
                         .badgeId(idGenerator.generate("BG"))
-                        .badgeCode(BadgeCode.FIRST_WEEK)
+                        .badgeCode(BadgeCode.CHALLENGE_POST)
                         .parent(challengeReview)
-                        .acquirementType(AcquirementType.CHALLENGE_REVIEW )
+                        .badgeAcquirementType(BadgeAcquirementType.CHALLENGE_REVIEW )
                         .build()
         );
 
@@ -49,7 +49,7 @@ public class AddBadgeServiceImpl implements AddBadgeService {
                 .badgeId(badgeResult.getBadgeId())
                 .badgeCode(badgeResult.getBadgeCode())
                 .parentId(badgeResult.getParent().getId())
-                .acquirementType(badgeResult.getAcquirementType())
+                .badgeAcquirementType(badgeResult.getBadgeAcquirementType())
                 .build();
     }
 }

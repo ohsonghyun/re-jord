@@ -1,14 +1,15 @@
 package com.dev6.rejordbe.application.challengeReview.add
 
-import com.dev6.rejordbe.application.badge.add.AddBadgeService
-import com.dev6.rejordbe.application.footprint.add.AddFootprintService
+
 import com.dev6.rejordbe.application.id.IdGenerator
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReviewType
 import com.dev6.rejordbe.domain.user.Users
 import com.dev6.rejordbe.exception.IllegalParameterException
 import com.dev6.rejordbe.exception.UserNotFoundException
+import com.dev6.rejordbe.infrastructure.badge.add.AddBadgeRepository
 import com.dev6.rejordbe.infrastructure.challengeReview.add.WriteChallengeReviewRepository
+import com.dev6.rejordbe.infrastructure.footprint.add.AddFootprintRepository
 import com.dev6.rejordbe.infrastructure.user.UserInfoRepository
 import spock.lang.Specification
 
@@ -19,18 +20,18 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
 
     WriteChallengeReviewService writeChallengeReviewService
     WriteChallengeReviewRepository writeChallengeReviewRepository
+    AddBadgeRepository addBadgeRepository;
+    AddFootprintRepository addFootprintRepository;
     UserInfoRepository userInfoRepository
-    AddFootprintService addFootprintService
-    AddBadgeService addBadgeService
     IdGenerator idGenerator
 
     def setup() {
         writeChallengeReviewRepository = Mock(WriteChallengeReviewRepository.class)
-        idGenerator = Mock(IdGenerator.class)
+        addBadgeRepository = Mock(AddBadgeRepository)
+        addFootprintRepository = Mock(AddFootprintRepository)
         userInfoRepository = Mock(UserInfoRepository.class)
-        addFootprintService = Mock(AddFootprintService.class)
-        addBadgeService = Mock(AddBadgeService.class)
-        writeChallengeReviewService = new WriteChallengeReviewServiceImpl(writeChallengeReviewRepository, idGenerator, userInfoRepository, addFootprintService, addBadgeService)
+        idGenerator = Mock(IdGenerator.class)
+        writeChallengeReviewService = new WriteChallengeReviewServiceImpl(writeChallengeReviewRepository, addBadgeRepository, addFootprintRepository, userInfoRepository, idGenerator)
     }
 
     def "에러가 없는 경우 챌린지 리뷰를 등록할 수 있다"() {
@@ -63,7 +64,7 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
         saveResult.getUid() == uid
 
         where:
-        challengeReviewId   | contents   | challengeReviewType         | uid
+        challengeReviewId   | contents   | challengeReviewType          | uid
         'challengeReviewId' | 'contents' | ChallengeReviewType.HARDSHIP | 'uid'
     }
 
@@ -101,18 +102,11 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
     }
 
     def "필수 입력값 content가 비어있으면 에러"() {
+        given:
         def anUser = Users.builder()
                 .uid(uid)
                 .build()
-
         userInfoRepository.findById(uid) >> Optional.of(anUser)
-
-        writeChallengeReviewRepository.save(_ as ChallengeReview) >> ChallengeReview.builder()
-                .id(challengeReviewId)
-                .contents(contents)
-                .challengeReviewType(challengeReviewType)
-                .user(anUser)
-                .build()
 
         when:
         writeChallengeReviewService.writeChallengeReview(
@@ -133,22 +127,16 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
         'challengeReviewId' | null     | ChallengeReviewType.FEELING | 'uid'
     }
 
-    def "챌린지 리뷰 주제 null 인 경우 느낀점 기본값으로 설정해주기"() {
+    def "필수 입력값 challengeReviewType가 비어있으면 에러"() {
+        given:
         def anUser = Users.builder()
                 .uid(uid)
                 .build()
 
         userInfoRepository.findById(uid) >> Optional.of(anUser)
 
-        writeChallengeReviewRepository.save(_ as ChallengeReview) >> ChallengeReview.builder()
-                .id(challengeReviewId)
-                .contents(contents)
-                .challengeReviewType(resultChallengeReviewType)
-                .user(anUser)
-                .build()
-
         when:
-        def saveResult = writeChallengeReviewService.writeChallengeReview(
+        writeChallengeReviewService.writeChallengeReview(
                 ChallengeReview.builder()
                         .id(challengeReviewId)
                         .contents(contents)
@@ -157,14 +145,10 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
                         .build(), uid)
 
         then:
-        saveResult.getChallengeReviewId() == challengeReviewId
-        saveResult.getContents() == contents
-        saveResult.getChallengeReviewType() == resultChallengeReviewType
-        saveResult.getUid() == uid
+        thrown(IllegalParameterException)
 
         where:
-        challengeReviewId   | contents   | challengeReviewType | resultChallengeReviewType   | uid
-        'challengeReviewId' | 'contents' | null                | ChallengeReviewType.FEELING | 'uid'
-
+        challengeReviewId   | contents   | challengeReviewType | uid
+        'challengeReviewId' | 'contents' | null                | 'uid'
     }
 }

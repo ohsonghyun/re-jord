@@ -1,17 +1,11 @@
 package com.dev6.rejordbe.presentation.controller
 
-import com.dev6.rejordbe.application.badge.add.AddBadgeService
+
 import com.dev6.rejordbe.application.challengeReview.add.WriteChallengeReviewService
-import com.dev6.rejordbe.application.footprint.add.AddFootprintService
-import com.dev6.rejordbe.domain.badge.AcquirementType
-import com.dev6.rejordbe.domain.badge.BadgeCode
-import com.dev6.rejordbe.domain.badge.dto.BadgeResult
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReviewType
 import com.dev6.rejordbe.domain.challengeReview.dto.ChallengeReviewResult
-import com.dev6.rejordbe.domain.cookie.CookieNames
 import com.dev6.rejordbe.domain.exception.ExceptionCode
-import com.dev6.rejordbe.domain.footprint.dto.FootprintResult
 import com.dev6.rejordbe.exception.ParentIdNotFoundException
 import com.dev6.rejordbe.exception.IllegalParameterException
 import com.dev6.rejordbe.exception.UserNotFoundException
@@ -32,8 +26,6 @@ import org.springframework.web.context.request.NativeWebRequest
 import org.springframework.web.method.support.ModelAndViewContainer
 import spock.lang.Specification
 import spock.lang.Unroll
-
-import javax.servlet.http.Cookie
 
 import static org.mockito.ArgumentMatchers.isA
 import static org.mockito.Mockito.when

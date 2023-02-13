@@ -1,9 +1,9 @@
 package com.dev6.rejordbe.application.footprint.add
 
-import com.dev6.rejordbe.application.badge.add.AddBadgeService
+
 import com.dev6.rejordbe.application.id.IdGenerator
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview
-import com.dev6.rejordbe.domain.footprint.AcquirementType
+import com.dev6.rejordbe.domain.footprint.FootprintAcquirementType
 import com.dev6.rejordbe.domain.footprint.Footprint
 import com.dev6.rejordbe.exception.ParentIdNotFoundException
 import com.dev6.rejordbe.infrastructure.challengeReview.add.WriteChallengeReviewRepository
@@ -38,7 +38,7 @@ class AddFootprintServiceImplSpec extends Specification {
                     .footprintId(footprintId)
                     .footprintAmount(footprintAmount)
                     .challengeReview(anChallengeReview)
-                    .acquirementType(acquirementType)
+                    .footprintAcquirementType(acquirementType)
                     .build()
 
         when:
@@ -48,11 +48,11 @@ class AddFootprintServiceImplSpec extends Specification {
         saveResult.getFootprintId() == footprintId
         saveResult.getFootprintAmount() == footprintAmount
         saveResult.getParentId() == challengeReviewId
-        saveResult.getAcquirementType() == acquirementType
+        saveResult.getFootprintAcquirementType() == acquirementType
 
         where:
         footprintId   | footprintAmount | challengeReviewId   | acquirementType
-        'footprintId' | 1            | 'challengeReviewId' | AcquirementType.CHALLENGE_REVIEW
+        'footprintId' | 1            | 'challengeReviewId' | FootprintAcquirementType.CHALLENGE_REVIEW
     }
 
     def "존재하지 않는 챌린지 리뷰이면 에러"() {
@@ -66,7 +66,7 @@ class AddFootprintServiceImplSpec extends Specification {
                 .footprintId(footprintId)
                 .footprintAmount(footprintAmount)
                 .challengeReview(anChallengeReview)
-                .acquirementType(acquirementType)
+                .footprintAcquirementType(acquirementType)
                 .build()
 
         when:
@@ -77,6 +77,6 @@ class AddFootprintServiceImplSpec extends Specification {
 
         where:
         footprintId   | footprintAmount | challengeReviewId   | acquirementType
-        'footprintId' | 1            | 'challengeReviewId' | AcquirementType.CHALLENGE_REVIEW
+        'footprintId' | 1            | 'challengeReviewId' | FootprintAcquirementType.CHALLENGE_REVIEW
     }
 }

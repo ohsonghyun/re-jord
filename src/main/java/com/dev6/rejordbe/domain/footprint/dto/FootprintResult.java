@@ -1,6 +1,6 @@
 package com.dev6.rejordbe.domain.footprint.dto;
 
-import com.dev6.rejordbe.domain.footprint.AcquirementType;
+import com.dev6.rejordbe.domain.footprint.FootprintAcquirementType;
 
 /**
  * FootprintResult
@@ -13,5 +13,5 @@ public class FootprintResult {
     private final String footprintId;
     private final Integer footprintAmount;
     private final String parentId;
-    private final AcquirementType acquirementType;
+    private final FootprintAcquirementType footprintAcquirementType;
 }

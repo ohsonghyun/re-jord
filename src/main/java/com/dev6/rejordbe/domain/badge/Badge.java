@@ -1,7 +1,6 @@
 package com.dev6.rejordbe.domain.badge;
 
 import com.dev6.rejordbe.domain.BaseTime;
-import com.dev6.rejordbe.domain.challengeReview.ChallengeReview;
 import com.dev6.rejordbe.domain.reward.BadgeReward;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,5 +31,5 @@ public class Badge extends BaseTime {
 
     @Column(name = "acquirement_type")
     @Enumerated(value = EnumType.STRING)
-    private AcquirementType acquirementType;
+    private BadgeAcquirementType badgeAcquirementType;
 }

@@ -2,7 +2,7 @@ package com.dev6.rejordbe.infrastructure.footprint.add
 
 import com.dev6.rejordbe.TestConfig
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview
-import com.dev6.rejordbe.domain.footprint.AcquirementType
+import com.dev6.rejordbe.domain.footprint.FootprintAcquirementType
 import com.dev6.rejordbe.domain.footprint.Footprint
 import com.dev6.rejordbe.infrastructure.challengeReview.read.ReadChallengeReviewRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -45,7 +45,7 @@ class AddFootprintRepositorySpec extends Specification {
                     .footprintId('footprintId')
                     .footprintAmount(1)
                     .challengeReview(challengeReview)
-                    .acquirementType(AcquirementType.CHALLENGE_REVIEW)
+                    .footprintAcquirementType(FootprintAcquirementType.CHALLENGE_REVIEW)
                     .build()
 
         when:
@@ -60,7 +60,7 @@ class AddFootprintRepositorySpec extends Specification {
         def aFootprint = footprintOptional.orElseThrow()
         aFootprint.getFootprintId() == newFootprint.getFootprintId()
         aFootprint.getFootprintAmount() == newFootprint.getFootprintAmount()
-        aFootprint.getAcquirementType() == newFootprint.getAcquirementType()
+        aFootprint.getFootprintAcquirementType() == newFootprint.getFootprintAcquirementType()
         aFootprint.getCreatedDate().isAfter(now)
         aFootprint.getModifiedDate().isAfter(now)
 

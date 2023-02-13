@@ -1,7 +1,7 @@
 package com.dev6.rejordbe.application.badge.add
 
 import com.dev6.rejordbe.application.id.IdGenerator
-import com.dev6.rejordbe.domain.badge.AcquirementType
+import com.dev6.rejordbe.domain.badge.BadgeAcquirementType
 import com.dev6.rejordbe.domain.badge.Badge
 import com.dev6.rejordbe.domain.badge.BadgeCode
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview
@@ -38,7 +38,7 @@ class AddBadgeServiceImplSpec extends Specification {
                     .badgeId(badgeId)
                     .badgeCode(badgeCode)
                     .parent(anChallengeReview)
-                    .acquirementType(acquirementType)
+                    .badgeAcquirementType(acquirementType)
                     .build()
 
         when:
@@ -48,11 +48,11 @@ class AddBadgeServiceImplSpec extends Specification {
         saveResult.getBadgeId() == badgeId
         saveResult.getBadgeCode() == badgeCode
         saveResult.getParentId() == challengeReviewId
-        saveResult.getAcquirementType() == acquirementType
+        saveResult.getBadgeAcquirementType() == acquirementType
 
         where:
         badgeId   | badgeCode            | challengeReviewId   | acquirementType
-        'badgeId' | BadgeCode.FIRST_WEEK | 'challengeReviewId' | AcquirementType.CHALLENGE_REVIEW
+        'badgeId' | BadgeCode.CHALLENGE_POST | 'challengeReviewId' | BadgeAcquirementType.CHALLENGE_REVIEW
     }
 
     def "존재하지 않는 챌린지 리뷰이면 에러"() {
@@ -66,7 +66,7 @@ class AddBadgeServiceImplSpec extends Specification {
                 .badgeId(badgeId)
                 .badgeCode(badgeCode)
                 .parent(anChallengeReview)
-                .acquirementType(acquirementType)
+                .badgeAcquirementType(acquirementType)
                 .build()
 
         when:
@@ -77,6 +77,6 @@ class AddBadgeServiceImplSpec extends Specification {
 
         where:
         badgeId   | badgeCode            | challengeReviewId   | acquirementType
-        'badgeId' | BadgeCode.FIRST_WEEK | 'challengeReviewId' | AcquirementType.CHALLENGE_REVIEW
+        'badgeId' | BadgeCode.CHALLENGE_POST | 'challengeReviewId' | BadgeAcquirementType.CHALLENGE_REVIEW
     }
 }

@@ -1,7 +1,7 @@
 package com.dev6.rejordbe.infrastructure.badge.add
 
 import com.dev6.rejordbe.TestConfig
-import com.dev6.rejordbe.domain.badge.AcquirementType
+import com.dev6.rejordbe.domain.badge.BadgeAcquirementType
 import com.dev6.rejordbe.domain.badge.Badge
 import com.dev6.rejordbe.domain.badge.BadgeCode
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview
@@ -44,9 +44,9 @@ class AddBadgeRepositorySpec extends Specification {
 
         def newBadge = Badge.builder()
                 .badgeId('badgeId')
-                .badgeCode(BadgeCode.FIRST_WEEK)
+                .badgeCode(BadgeCode.CHALLENGE_POST)
                 .parent(challengeReview)
-                .acquirementType(AcquirementType.CHALLENGE_REVIEW)
+                .badgeAcquirementType(BadgeAcquirementType.CHALLENGE_REVIEW)
                 .build()
 
         when:
@@ -61,7 +61,7 @@ class AddBadgeRepositorySpec extends Specification {
         def aBadge = badgeOptional.orElseThrow()
         aBadge.getBadgeId() == newBadge.getBadgeId()
         aBadge.getBadgeCode() == newBadge.getBadgeCode()
-        aBadge.getAcquirementType() == newBadge.getAcquirementType()
+        aBadge.getBadgeAcquirementType() == newBadge.getBadgeAcquirementType()
         aBadge.getCreatedDate().isAfter(now)
         aBadge.getModifiedDate().isAfter(now)
     }

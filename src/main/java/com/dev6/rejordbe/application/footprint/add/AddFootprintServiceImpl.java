@@ -3,7 +3,7 @@ package com.dev6.rejordbe.application.footprint.add;
 import com.dev6.rejordbe.application.id.IdGenerator;
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview;
 import com.dev6.rejordbe.domain.exception.ExceptionCode;
-import com.dev6.rejordbe.domain.footprint.AcquirementType;
+import com.dev6.rejordbe.domain.footprint.FootprintAcquirementType;
 import com.dev6.rejordbe.domain.footprint.Footprint;
 import com.dev6.rejordbe.domain.footprint.dto.FootprintResult;
 import com.dev6.rejordbe.exception.ParentIdNotFoundException;
@@ -40,7 +40,7 @@ public class AddFootprintServiceImpl implements AddFootprintService {
                         .footprintId(idGenerator.generate("FP"))
                         .footprintAmount(1)
                         .challengeReview(challengeReview)
-                        .acquirementType(AcquirementType.CHALLENGE_REVIEW )
+                        .footprintAcquirementType(FootprintAcquirementType.CHALLENGE_REVIEW )
                         .build()
         );
 
@@ -48,7 +48,7 @@ public class AddFootprintServiceImpl implements AddFootprintService {
                 .footprintId(footprintResult.getFootprintId())
                 .footprintAmount(footprintResult.getFootprintAmount())
                 .parentId(footprintResult.getChallengeReview().getId())
-                .acquirementType(footprintResult.getAcquirementType())
+                .footprintAcquirementType(footprintResult.getFootprintAcquirementType())
                 .build();
     }
 }

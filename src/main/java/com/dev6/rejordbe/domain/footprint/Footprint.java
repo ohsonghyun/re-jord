@@ -30,5 +30,5 @@ public class Footprint extends BaseTime {
 
     @Column(name = "acquirement_type")
     @Enumerated(value = EnumType.STRING)
-    private AcquirementType acquirementType;
+    private FootprintAcquirementType footprintAcquirementType;
 }
