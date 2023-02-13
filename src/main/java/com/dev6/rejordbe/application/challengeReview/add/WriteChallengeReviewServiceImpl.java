@@ -60,7 +60,7 @@ public class WriteChallengeReviewServiceImpl implements WriteChallengeReviewServ
 
         ChallengeReview challengeReviewResult = writeChallengeReviewRepository.save(
                 ChallengeReview.builder()
-                        .id(idGenerator.generate("CR"))
+                        .challengeReviewId(idGenerator.generate("CR"))
                         .contents(newChallengeReview.getContents())
                         .challengeReviewType(newChallengeReview.getChallengeReviewType())
                         .user(user)
@@ -70,19 +70,19 @@ public class WriteChallengeReviewServiceImpl implements WriteChallengeReviewServ
         addBadgeRepository.save(Badge.builder()
                 .badgeId(idGenerator.generate("BG"))
                 .badgeCode(BadgeCode.CHALLENGE_POST)
-                .parent(challengeReviewResult)
+                .parentId(challengeReviewResult.getChallengeReviewId())
                 .badgeAcquirementType(BadgeAcquirementType.CHALLENGE_REVIEW)
                 .build());
 
         addFootprintRepository.save(Footprint.builder()
                 .footprintId(idGenerator.generate("FP"))
                 .footprintAmount(1) // TODO flowertaekk 발자국 취득 개수는 1로 OK? -> 질문중
-                .challengeReview(challengeReviewResult)
+                .parentId(challengeReviewResult.getChallengeReviewId())
                 .footprintAcquirementType(FootprintAcquirementType.CHALLENGE_REVIEW)
                 .build());
 
         return ChallengeReviewResult.builder()
-                .challengeReviewId(challengeReviewResult.getId())
+                .challengeReviewId(challengeReviewResult.getChallengeReviewId())
                 .contents(challengeReviewResult.getContents())
                 .challengeReviewType(challengeReviewResult.getChallengeReviewType())
                 .uid(challengeReviewResult.getUser().getUid())

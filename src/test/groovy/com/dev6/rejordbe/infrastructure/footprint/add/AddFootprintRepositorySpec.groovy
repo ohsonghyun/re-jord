@@ -37,14 +37,14 @@ class AddFootprintRepositorySpec extends Specification {
         def now = LocalDateTime.now()
         // 챌린지 리뷰 생성
         def challengeReview = ChallengeReview.builder()
-                        .id('challengeReviewId')
+                        .challengeReviewId('challengeReviewId')
                         .build()
         challengeReviewRepository.save(challengeReview)
 
         def newFootprint = Footprint.builder()
                     .footprintId('footprintId')
                     .footprintAmount(1)
-                    .challengeReview(challengeReview)
+                    .parentId(challengeReview.getChallengeReviewId())
                     .footprintAcquirementType(FootprintAcquirementType.CHALLENGE_REVIEW)
                     .build()
 

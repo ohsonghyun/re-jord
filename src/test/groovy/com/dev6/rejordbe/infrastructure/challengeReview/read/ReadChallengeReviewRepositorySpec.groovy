@@ -4,9 +4,6 @@ import com.dev6.rejordbe.TestConfig
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReviewType
 import com.dev6.rejordbe.domain.challengeReview.dto.ChallengeReviewResult
-import com.dev6.rejordbe.domain.post.Post
-import com.dev6.rejordbe.domain.post.PostType
-import com.dev6.rejordbe.domain.post.dto.PostResult
 import com.dev6.rejordbe.domain.user.Users
 import com.dev6.rejordbe.infrastructure.user.SignUpRepository
 import org.assertj.core.api.Assertions
@@ -50,7 +47,7 @@ class ReadChallengeReviewRepositorySpec extends Specification {
         for (int i = 0; i < 10; i++) {
             readChallengeReviewRepository.save(
                     ChallengeReview.builder()
-                            .id('challengeReviewId' + i)
+                            .challengeReviewId('challengeReviewId' + i)
                             .contents('contents')
                             .challengeReviewType(ChallengeReviewType.HARDSHIP)
                             .user(user)
@@ -106,7 +103,7 @@ class ReadChallengeReviewRepositorySpec extends Specification {
         for (int i = 0; i < 10; i++) {
             readChallengeReviewRepository.save(
                     ChallengeReview.builder()
-                            .id('challengeReviewId' + i)
+                            .challengeReviewId('challengeReviewId' + i)
                             .contents('contents')
                             .challengeReviewType(ChallengeReviewType.HARDSHIP)
                             .user(user)

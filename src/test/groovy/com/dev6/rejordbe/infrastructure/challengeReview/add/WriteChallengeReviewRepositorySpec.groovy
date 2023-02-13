@@ -42,7 +42,7 @@ class WriteChallengeReviewRepositorySpec extends Specification {
         signUpRepository.save(user)
 
         def newChallengeReview = ChallengeReview.builder()
-                    .id('challengeReviewId')
+                    .challengeReviewId('challengeReviewId')
                     .contents('contents')
                     .challengeReviewType(ChallengeReviewType.FEELING)
                     .user(user)
@@ -55,10 +55,10 @@ class WriteChallengeReviewRepositorySpec extends Specification {
         entityManager.clear()
 
         then:
-        def challengeReviewOptional = writeChallengeReviewRepository.findById(newChallengeReview.getId())
+        def challengeReviewOptional = writeChallengeReviewRepository.findById(newChallengeReview.getChallengeReviewId())
         challengeReviewOptional.isPresent()
         def aChallengeReview = challengeReviewOptional.orElseThrow()
-        aChallengeReview.getId() == newChallengeReview.getId()
+        aChallengeReview.getChallengeReviewId() == newChallengeReview.getChallengeReviewId()
         aChallengeReview.getContents() == newChallengeReview.getContents()
         aChallengeReview.getChallengeReviewType() == newChallengeReview.getChallengeReviewType()
         aChallengeReview.getCreatedDate().isAfter(now)

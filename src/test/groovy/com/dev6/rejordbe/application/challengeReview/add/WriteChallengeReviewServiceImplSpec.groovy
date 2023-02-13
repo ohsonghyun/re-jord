@@ -42,7 +42,7 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
         userInfoRepository.findById(uid) >> Optional.of(anUser)
 
         writeChallengeReviewRepository.save(_ as ChallengeReview) >> ChallengeReview.builder()
-                .id(challengeReviewId)
+                .challengeReviewId(challengeReviewId)
                 .contents(contents)
                 .challengeReviewType(challengeReviewType)
                 .user(anUser)
@@ -51,7 +51,7 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
         when:
         def saveResult = writeChallengeReviewService.writeChallengeReview(
                 ChallengeReview.builder()
-                        .id(challengeReviewId)
+                        .challengeReviewId(challengeReviewId)
                         .contents(contents)
                         .challengeReviewType(challengeReviewType)
                         .user(anUser)
@@ -76,7 +76,7 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
         userInfoRepository.findById(uid) >> Optional.empty()
 
         writeChallengeReviewRepository.save(_ as ChallengeReview) >> ChallengeReview.builder()
-                .id(challengeReviewId)
+                .challengeReviewId(challengeReviewId)
                 .contents(contents)
                 .challengeReviewType(challengeReviewType)
                 .user(anUser)
@@ -85,7 +85,7 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
         when:
         writeChallengeReviewService.writeChallengeReview(
                 ChallengeReview.builder()
-                        .id(challengeReviewId)
+                        .challengeReviewId(challengeReviewId)
                         .contents(contents)
                         .challengeReviewType(challengeReviewType)
                         .user(anUser)
@@ -111,7 +111,7 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
         when:
         writeChallengeReviewService.writeChallengeReview(
                 ChallengeReview.builder()
-                        .id(challengeReviewId)
+                        .challengeReviewId(challengeReviewId)
                         .contents(contents)
                         .challengeReviewType(challengeReviewType)
                         .user(anUser)
@@ -138,7 +138,7 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
         when:
         writeChallengeReviewService.writeChallengeReview(
                 ChallengeReview.builder()
-                        .id(challengeReviewId)
+                        .challengeReviewId(challengeReviewId)
                         .contents(contents)
                         .challengeReviewType(challengeReviewType)
                         .user(anUser)

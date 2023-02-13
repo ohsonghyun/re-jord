@@ -1,7 +1,6 @@
 package com.dev6.rejordbe.domain.footprint;
 
 import com.dev6.rejordbe.domain.BaseTime;
-import com.dev6.rejordbe.domain.challengeReview.ChallengeReview;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
@@ -24,9 +23,8 @@ public class Footprint extends BaseTime {
     @Column(name = "footprint_amount")
     private Integer footprintAmount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
-    private ChallengeReview challengeReview;
+    @Column(name = "parent_id")
+    private String parentId;
 
     @Column(name = "acquirement_type")
     @Enumerated(value = EnumType.STRING)

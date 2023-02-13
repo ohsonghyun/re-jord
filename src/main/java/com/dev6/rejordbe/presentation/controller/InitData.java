@@ -155,7 +155,7 @@ public class InitData {
                 IntStream.range(0, 7).forEach(idx -> {
                     em.persist(
                             ChallengeReview.builder()
-                                    .id("CR_webclient" + idx)
+                                    .challengeReviewId("CR_webclient" + idx)
                                     .contents("hello world web" + idx)
                                     .challengeReviewType(ChallengeReviewType.HARDSHIP)
                                     .user(user)
@@ -169,7 +169,7 @@ public class InitData {
                 IntStream.range(0, 10).forEach(idx -> {
                     em.persist(
                             ChallengeReview.builder()
-                                    .id("CR_androidclient" + idx)
+                                    .challengeReviewId("CR_androidclient" + idx)
                                     .contents("hello world android" + idx)
                                     .challengeReviewType(ChallengeReviewType.HARDSHIP)
                                     .user(user)
@@ -183,7 +183,7 @@ public class InitData {
                 IntStream.range(0, 9).forEach(idx -> {
                     em.persist(
                             ChallengeReview.builder()
-                                    .id("CR_iosclient" + idx)
+                                    .challengeReviewId("CR_iosclient" + idx)
                                     .contents("hello world ios" + idx)
                                     .challengeReviewType(ChallengeReviewType.HARDSHIP)
                                     .user(user)

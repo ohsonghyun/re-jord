@@ -38,14 +38,14 @@ class AddBadgeRepositorySpec extends Specification {
         def now = LocalDateTime.now()
         // 챌린지 리뷰 생성
         def challengeReview = ChallengeReview.builder()
-                .id('challengeReviewId')
+                .challengeReviewId('challengeReviewId')
                 .build()
         challengeReviewRepository.save(challengeReview)
 
         def newBadge = Badge.builder()
                 .badgeId('badgeId')
                 .badgeCode(BadgeCode.CHALLENGE_POST)
-                .parent(challengeReview)
+                .parentId(challengeReview.getChallengeReviewId())
                 .badgeAcquirementType(BadgeAcquirementType.CHALLENGE_REVIEW)
                 .build()
 
