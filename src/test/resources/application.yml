@@ -1,12 +1,12 @@
 spring:
   profiles:
-    active: local
+    active: test
   jpa:
     open-in-view: false
 
 rejord:
   jwt:
-    sort-key: ${SORT_KEY}
+    sort-key: ${SORT_KEY:sort}
     access-token:
       period: 1800000 # ms
     refresh-token:

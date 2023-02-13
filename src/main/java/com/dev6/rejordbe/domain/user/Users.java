@@ -1,15 +1,16 @@
 package com.dev6.rejordbe.domain.user;
 
 import com.dev6.rejordbe.domain.BaseTime;
+import com.dev6.rejordbe.domain.role.Role;
 import com.dev6.rejordbe.exception.IllegalParameterException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * 유저 도메인
@@ -35,9 +36,8 @@ public class Users extends BaseTime {
     @Column(name = "password")
     private String password;
 
-    @Enumerated
-    @Column(name = "user_type")
-    private UserType userType;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Role> roles = new ArrayList<>();
 
     /**
      * 닉네임을 수정

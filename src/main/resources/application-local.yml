@@ -21,3 +21,7 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+rejord:
+  jwt:
+    sort-key: ${SORT_KEY:local}

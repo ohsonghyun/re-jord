@@ -1,6 +1,5 @@
 package com.dev6.rejordbe.domain.user.dto;
 
-import com.dev6.rejordbe.domain.user.UserType;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public class UserResult {
     private final String nickname;
     @Nullable
     private final String password;
-    private final UserType userType;
+    private final List<String> roles;
     @Nullable
     private final List<RuntimeException> errors;
 

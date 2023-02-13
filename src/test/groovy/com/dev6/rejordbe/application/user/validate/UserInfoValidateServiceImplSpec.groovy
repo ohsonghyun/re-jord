@@ -1,5 +1,6 @@
 package com.dev6.rejordbe.application.user.validate
 
+import com.dev6.rejordbe.domain.role.RoleType
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -24,8 +25,8 @@ class UserInfoValidateServiceImplSpec extends Specification {
         errors.size() == errorCount
 
         where:
-        testCase                 | userId                  | validateResult | errorCount
-        'userId가 null이면 에러'   | null                    | false          | 1
+        testCase             | userId                  | validateResult | errorCount
+        'userId가 null이면 에러'  | null                    | false          | 1
         'userId 길이가 4이면 에러'  | 'user'                  | false          | 1
         'userId 길이가 21이면 에러' | 'useruseruseruseruser1' | false          | 1
         'userId 길이가 5이면 성공'  | 'user5'                 | true           | 0
@@ -44,12 +45,12 @@ class UserInfoValidateServiceImplSpec extends Specification {
         errors.size() == errorCount
 
         where:
-        testCase                         | userId        | validateResult | errorCount
-        '영문으로만 구성된 경우'             | 'userid'      | true           | 0
-        '숫자로만 구성된 경우'               | '12345'       | false          | 1
-        '영문(소문자)과 숫자의 조합인 경우'    | 'userid1234'  | true           | 0
+        testCase                | userId        | validateResult | errorCount
+        '영문으로만 구성된 경우'          | 'userid'      | true           | 0
+        '숫자로만 구성된 경우'           | '12345'       | false          | 1
+        '영문(소문자)과 숫자의 조합인 경우'   | 'userid1234'  | true           | 0
         '영문과 숫자 이외의 문자가 포함된 경우' | 'userid$1234' | false          | 1
-        '영문(대문자)가 포함된 경우'          | 'userId1234'  | false          | 1
+        '영문(대문자)가 포함된 경우'       | 'userId1234'  | false          | 1
     }
 
     // Nickname 관련
@@ -66,8 +67,8 @@ class UserInfoValidateServiceImplSpec extends Specification {
         errors.size() == errorCount
 
         where:
-        testCase                   | nickname      | validateResult | errorCount
-        'nickname이 null이면 에러'   | null          | false          | 1
+        testCase               | nickname      | validateResult | errorCount
+        'nickname이 null이면 에러'  | null          | false          | 1
         'nickname 길이가 1이면 에러'  | 'u'           | false          | 1
         'nickname 길이가 11이면 에러' | 'useruseruse' | false          | 1
         'nickname 길이가 2이면 성공'  | 'us'          | true           | 0
@@ -87,13 +88,13 @@ class UserInfoValidateServiceImplSpec extends Specification {
         errors.size() == errorCount
 
         where:
-        testCase                            | nickname   | validateResult | errorCount
-        'nickname 영어 소문자인 경우'          | 'uu'       | true           | 0
-        'nickname 영어 대문자인 경우'          | 'UU'       | true           | 0
-        'nickname 한글인 경우'                | '한글'      | true           | 0
-        'nickname 숫자인 경우'                | '123'      | true           | 0
+        testCase                     | nickname   | validateResult | errorCount
+        'nickname 영어 소문자인 경우'        | 'uu'       | true           | 0
+        'nickname 영어 대문자인 경우'        | 'UU'       | true           | 0
+        'nickname 한글인 경우'            | '한글'       | true           | 0
+        'nickname 숫자인 경우'            | '123'      | true           | 0
         'nickname 영어, 한글, 숫자 혼합인 경우' | 'us12US3'  | true           | 0
-        'nickname 특수문자가 포함된 경우'       | 'us12U%S3' | false          | 1
+        'nickname 특수문자가 포함된 경우'      | 'us12U%S3' | false          | 1
     }
 
     // Password 관련
@@ -110,9 +111,31 @@ class UserInfoValidateServiceImplSpec extends Specification {
         errors.size() == errorCount
 
         where:
-        testCase                             | password | validateResult | errorCount
-        'password가 null이면 에러'             | null     | false          | 1
-        'password가 emptyString 이면 에러'     | ''       | false          | 1
-        'password가 문자열이 들어가 있으면 성공'  | 'a'      | true           | 0
+        testCase                      | password | validateResult | errorCount
+        'password가 null이면 에러'         | null     | false          | 1
+        'password가 emptyString 이면 에러' | ''       | false          | 1
+        'password가 문자열이 들어가 있으면 성공'   | 'a'      | true           | 0
+    }
+
+    // Role 관련
+    @Unroll("#testCase")
+    def "유저는 반드시 하나 이상의 올바른 ROLE을 가져야 한다"() {
+        given:
+        List<RuntimeException> errors = new ArrayList<>()
+
+        when:
+        def result = userInfoValidateService.validateRoleTypes(roles, errors)
+
+        then:
+        result == validateResult
+        errors.size() == errorCount
+
+        where:
+        testCase                            | roles                                       | validateResult | errorCount
+        'roles가 null이면 에러'                  | null                                        | false          | 1
+        'roles가 존재하지 않는 role이면 에러'          | List.of("ROLE_UNKNOWN")                     | false          | 1
+        'roles가 하나라도 존재하지 않는 role이 존재하면 에러' | List.of(RoleType.ROLE_USER, "ROLE_UNKNOWN") | false          | 1
+        'roles가 emptyList면 에러'              | Collections.emptyList()                     | false          | 1
+
     }
 }

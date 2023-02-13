@@ -1,7 +1,9 @@
 package com.dev6.rejordbe.presentation.controller.dto.login;
 
-import com.dev6.rejordbe.domain.user.UserType;
+import com.dev6.rejordbe.domain.jwt.JwtToken;
 import io.swagger.v3.oas.annotations.media.Schema;
+
+import java.util.List;
 
 /**
  * LoginRequest
@@ -18,5 +20,7 @@ public class LoginResponse {
     @Schema(description = "유저 닉네임")
     private String nickname;
     @Schema(description = "유저 타입")
-    private UserType userType;
+    private List<String> roles;
+    @Schema(description = "JWT token")
+    private JwtToken tokens;
 }

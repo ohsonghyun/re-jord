@@ -5,6 +5,8 @@ import com.dev6.rejordbe.domain.user.dto.UserResult;
 import com.dev6.rejordbe.exception.DuplicatedUserIdException;
 import com.dev6.rejordbe.exception.IllegalParameterException;
 
+import java.util.List;
+
 /**
  * SignUpService
  */
@@ -14,9 +16,10 @@ public interface SignUpService {
      * 회원가입
      *
      * @param newUser {@code Users} 신규가입 유저 정보(uid를 제외한 정보)
+     * @param roleNames {@code List<String>} 유저 권한 정보
      * @return {@code UserResult} 가입처리 결과
      */
-    UserResult signUp(final Users newUser);
+    UserResult signUp(final Users newUser, final List<String> roleNames);
 
     /**
      * 아이디 중복 체크

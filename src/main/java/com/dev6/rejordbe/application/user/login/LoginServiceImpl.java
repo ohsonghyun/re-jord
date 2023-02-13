@@ -1,12 +1,17 @@
 package com.dev6.rejordbe.application.user.login;
 
 import com.dev6.rejordbe.domain.exception.ExceptionCode;
+import com.dev6.rejordbe.domain.role.Role;
 import com.dev6.rejordbe.domain.user.dto.UserResult;
 import com.dev6.rejordbe.exception.UserNotFoundException;
 import com.dev6.rejordbe.infrastructure.user.UserInfoRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * LoginServiceImpl
@@ -23,13 +28,17 @@ public class LoginServiceImpl implements LoginService {
      * {@inheritDoc}
      */
     @Override
-    public UserResult logIn(final String userId, final String password) {
-        return userInfoRepository.findUserByUserIdAndPassword(userId, password)
+    public UserResult findUserByUserId(final String userId) {
+        return userInfoRepository.findUserByUserId(userId)
                 .map(anUser -> UserResult.builder()
                         .uid(anUser.getUid())
                         .userId(anUser.getUserId())
                         .nickname(anUser.getNickname())
-                        .userType(anUser.getUserType())
+                        .roles(
+                                ObjectUtils.defaultIfNull(anUser.getRoles(), new ArrayList<Role>()).stream()
+                                        .map(Role::getName)
+                                        .collect(Collectors.toList())
+                        )
                         .build())
                 .orElseThrow(() -> {
                     log.info("LoginServiceImpl.logIn: USER_NOT_FOUND: {}", userId);

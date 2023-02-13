@@ -1,8 +1,10 @@
 package com.dev6.rejordbe.infrastructure.user
 
 import com.dev6.rejordbe.TestConfig
-import com.dev6.rejordbe.domain.user.UserType
+import com.dev6.rejordbe.domain.role.Role
+import com.dev6.rejordbe.domain.role.RoleType
 import com.dev6.rejordbe.domain.user.Users
+import com.dev6.rejordbe.infrastructure.role.RoleInfoRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.context.annotation.Import
@@ -27,17 +29,20 @@ class SignUpRepositorySpec extends Specification {
     EntityManager entityManager;
 
     @Autowired
+    RoleInfoRepository roleInfoRepository
+    @Autowired
     SignUpRepository signUpRepository
 
-    def "#userType 유저를 생성할 수 있다"() {
+    def "#roleType 유저를 생성할 수 있다"() {
         given:
         def now = LocalDateTime.now()
+        def role = roleInfoRepository.save(new Role(roleType))
         def newUser = Users.builder()
                 .uid(uid)
                 .userId(userId)
                 .nickname(nickname)
                 .password(password)
-                .userType(userType)
+                .roles(Collections.singletonList(role))
                 .build()
 
         when:
@@ -54,43 +59,42 @@ class SignUpRepositorySpec extends Specification {
         anUser.getUserId() == userId
         anUser.getNickname() == nickname
         anUser.getPassword() == password
-        anUser.getUserType() == userType
+        anUser.getRoles().size() == 1
+        anUser.getRoles().get(0).getName() == roleType
         anUser.getCreatedDate().isAfter(now)
         anUser.getModifiedDate().isAfter(now)
 
         where:
-        uid   | userId   | nickname   | password   | userType
-        "uid" | "userId" | "nickname" | "password" | UserType.BASIC
-        "uid" | "userId" | "nickname" | "password" | UserType.ADMIN
+        uid   | userId   | nickname   | password   | roleType
+        "uid" | "userId" | "nickname" | "password" | RoleType.ROLE_USER
+        "uid" | "userId" | "nickname" | "password" | RoleType.ROLE_ADMIN
     }
 
     @Unroll
     def "#testCase 가입에 실패한다"() {
         given:
-        def newUser1 = Users.builder()
+        def role = roleInfoRepository.save(new Role(RoleType.ROLE_USER))
+
+        when:
+        // 닉네임이 'nickname' 인 첫 번째 유저 등록 -> 성공
+        signUpRepository.save(Users.builder()
                 .uid('uid')
                 .userId('userId')
                 .nickname('nickname')
                 .password('password')
-                .userType(UserType.BASIC)
-                .build()
-
-        def newUser2 = Users.builder()
-                .uid(uid)
-                .userId(userId)
-                .nickname(nickname)
-                .password('password')
-                .userType(UserType.BASIC)
-                .build()
-
-        when:
-        // 닉네임이 'nickname' 인 첫 번째 유저 등록 -> 성공
-        signUpRepository.save(newUser1)
+                .roles(Collections.singletonList(role))
+                .build())
         entityManager.flush()
         entityManager.clear()
 
         // 닉네임이 'nickname' 인 첫 번째 유저 등록 -> 실패
-        signUpRepository.save(newUser2)
+        signUpRepository.save(Users.builder()
+                .uid(uid)
+                .userId(userId)
+                .nickname(nickname)
+                .password('password')
+                .roles(Collections.singletonList(role))
+                .build())
         entityManager.flush()
         entityManager.clear()
 
@@ -105,12 +109,13 @@ class SignUpRepositorySpec extends Specification {
 
     def "닉네임으로 유저를 찾을 수 있다"() {
         given:
+        def role = roleInfoRepository.save(new Role(roleType))
         def newUser = Users.builder()
                 .uid(uid)
                 .userId(userId)
                 .nickname(nickname)
                 .password(password)
-                .userType(userType)
+                .roles(Collections.singletonList(role))
                 .build()
 
         when:
@@ -127,21 +132,23 @@ class SignUpRepositorySpec extends Specification {
         anUser.getUserId() == userId
         anUser.getNickname() == nickname
         anUser.getPassword() == password
-        anUser.getUserType() == userType
+        anUser.getRoles().size() == 1
+        anUser.getRoles().get(0).getName() == roleType
 
         where:
-        uid   | userId   | nickname   | password   | userType
-        "uid" | "userId" | "nickname" | "password" | UserType.BASIC
+        uid   | userId   | nickname   | password   | roleType
+        "uid" | "userId" | "nickname" | "password" | RoleType.ROLE_USER
     }
 
     def "유저ID로 유저를 찾을 수 있다"() {
         given:
+        def role = roleInfoRepository.save(new Role(roleType))
         def newUser = Users.builder()
                 .uid(uid)
                 .userId(userId)
                 .nickname(nickname)
                 .password(password)
-                .userType(userType)
+                .roles(Collections.singletonList(role))
                 .build()
 
         when:
@@ -158,11 +165,12 @@ class SignUpRepositorySpec extends Specification {
         anUser.getUserId() == userId
         anUser.getNickname() == nickname
         anUser.getPassword() == password
-        anUser.getUserType() == userType
+        anUser.getRoles().size() == 1
+        anUser.getRoles().get(0).getName() == roleType
 
         where:
-        uid   | userId   | nickname   | password   | userType
-        "uid" | "userId" | "nickname" | "password" | UserType.BASIC
+        uid   | userId   | nickname   | password   | roleType
+        "uid" | "userId" | "nickname" | "password" | RoleType.ROLE_USER
     }
 
 }

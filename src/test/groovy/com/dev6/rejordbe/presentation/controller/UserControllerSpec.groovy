@@ -1,9 +1,10 @@
 package com.dev6.rejordbe.presentation.controller
 
+import com.dev6.rejordbe.TestSecurityConfig
 import com.dev6.rejordbe.application.user.signup.SignUpService
 import com.dev6.rejordbe.application.user.userinfo.UserInfoService
 import com.dev6.rejordbe.domain.exception.ExceptionCode
-import com.dev6.rejordbe.domain.user.UserType
+import com.dev6.rejordbe.domain.role.RoleType
 import com.dev6.rejordbe.domain.user.Users
 import com.dev6.rejordbe.domain.user.dto.UserResult
 import com.dev6.rejordbe.exception.DuplicatedNicknameException
@@ -17,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import spock.lang.Specification
@@ -31,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest(UserController)
+@Import(TestSecurityConfig.class)
 class UserControllerSpec extends Specification {
 
     @Autowired
@@ -47,13 +50,13 @@ class UserControllerSpec extends Specification {
     // 회원가입
     def "회원가입 성공시 201을 반환한다"() {
         given:
-        when(signUpService.signUp(isA(Users.class)))
+        when(signUpService.signUp(isA(Users.class), isA(List.class)))
                 .thenReturn(
                         UserResult.builder()
                                 .uid(uid)
                                 .userId(userId)
                                 .nickname(userId)
-                                .userType(userType)
+                                .roles(Collections.singletonList(roleType))
                                 .build())
 
         expect:
@@ -65,18 +68,19 @@ class UserControllerSpec extends Specification {
                                         SignUpRequest.builder()
                                                 .userId(userId)
                                                 .password(password)
-                                                .userType(userType)
+                                                .roles(Collections.singletonList(roleType))
                                                 .build()
                                 )))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath('\$.uid').value(uid))
                 .andExpect(jsonPath('\$.userId').value(userId))
                 .andExpect(jsonPath('\$.nickname').value(userId))
-                .andExpect(jsonPath('\$.userType').value(userType.name()))
+                .andExpect(jsonPath('\$.roles.size()').value(1))
+                .andExpect(jsonPath('\$.roles[0]').value(roleType))
 
         where:
-        uid   | userId   | password   | userType
-        'uid' | 'userId' | 'password' | UserType.BASIC
+        uid   | userId   | password   | roleType
+        'uid' | 'userId' | 'password' | RoleType.ROLE_USER
     }
 
     def "정책에 맞지 않은 데이터가 있으면 회원가입에 실패하고 400을 반환한다"() {
@@ -85,8 +89,9 @@ class UserControllerSpec extends Specification {
         errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_USERID.name()))
         errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_NICKNAME.name()))
         errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_PASSWORD.name()))
+        errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_ROLE.name()))
 
-        when(signUpService.signUp(isA(Users.class)))
+        when(signUpService.signUp(isA(Users.class), isA(List.class)))
                 .thenReturn(
                         UserResult.builder()
                                 .errors(errors)
@@ -101,14 +106,15 @@ class UserControllerSpec extends Specification {
                                         SignUpRequest.builder()
                                                 .userId('')
                                                 .password('')
-                                                .userType(null)
+                                                .roles(Collections.emptyList())
                                                 .build()
                                 )))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath('\$.errors.size()').value(3))
+                .andExpect(jsonPath('\$.errors.size()').value(4))
                 .andExpect(jsonPath('\$.errors[0]').value(ExceptionCode.ILLEGAL_USERID.name()))
                 .andExpect(jsonPath('\$.errors[1]').value(ExceptionCode.ILLEGAL_NICKNAME.name()))
                 .andExpect(jsonPath('\$.errors[2]').value(ExceptionCode.ILLEGAL_PASSWORD.name()))
+                .andExpect(jsonPath('\$.errors[3]').value(ExceptionCode.ILLEGAL_ROLE.name()))
     }
 
     def "동일한 유저ID 또는 닉네임이 존재하면 회원가입에 실패하고 409을 반환한다"() {
@@ -117,7 +123,7 @@ class UserControllerSpec extends Specification {
         errors.add(new DuplicatedUserIdException("DUPLICATED_USERID"))
         errors.add(new DuplicatedNicknameException("DUPLICATED_NICKNAME"))
 
-        when(signUpService.signUp(isA(Users.class)))
+        when(signUpService.signUp(isA(Users.class), isA(List.class)))
                 .thenReturn(
                         UserResult.builder()
                                 .errors(errors)
@@ -132,7 +138,7 @@ class UserControllerSpec extends Specification {
                                         SignUpRequest.builder()
                                                 .userId('')
                                                 .password('')
-                                                .userType(null)
+                                                .roles(Collections.emptyList())
                                                 .build()
                                 )))
                 .andExpect(status().isConflict())
@@ -155,7 +161,7 @@ class UserControllerSpec extends Specification {
 
         expect:
         mvc.perform(
-                patch(baseUrl + '/uid')
+                patch(baseUrl + '/uid/nickname')
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
                                 UpdateUserInfoRequest.builder()
@@ -177,7 +183,7 @@ class UserControllerSpec extends Specification {
 
         expect:
         mvc.perform(
-                patch(baseUrl + '/uid')
+                patch(baseUrl + '/uid/nickname')
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
                                 UpdateUserInfoRequest.builder()
@@ -201,7 +207,7 @@ class UserControllerSpec extends Specification {
                 .thenReturn('userId')
 
         expect:
-        mvc.perform(get(baseUrl+'/userId/duplication')
+        mvc.perform(get(baseUrl + '/userId/duplication')
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath('\$.userId').value("userId"))
@@ -218,9 +224,9 @@ class UserControllerSpec extends Specification {
                 .andExpect(jsonPath("\$.message").value(message))
 
         where:
-        testCase                   | message             | exception                                | resultStatus
-        '정책에 맞지 않은 아이디: 400' | "ILLEGAL_USERID"    | new IllegalParameterException(message)   | status().isBadRequest()
-        '이미 존재하는 아이디: 409'    | "DUPLICATED_USERID" | new DuplicatedUserIdException(message)   | status().isConflict()
+        testCase             | message             | exception                              | resultStatus
+        '정책에 맞지 않은 아이디: 400' | "ILLEGAL_USERID"    | new IllegalParameterException(message) | status().isBadRequest()
+        '이미 존재하는 아이디: 409'   | "DUPLICATED_USERID" | new DuplicatedUserIdException(message) | status().isConflict()
     }
     // /아이디 중복 체크
 }
