@@ -23,13 +23,13 @@ import java.util.Objects;
 @Api(tags = "오늘 챌린지 정보 컨트롤러")
 @Slf4j
 @RestController
-@RequestMapping("/v1/challengeInfo")
+@RequestMapping("/v1/challengeInfos")
 @lombok.RequiredArgsConstructor
 public class ChallengeInfoController {
 
     @ApiOperation(
             value = "오늘 챌린지 정보",
-            nickname = "todayChallengeInfo",
+            nickname = "todayChallengeInfos",
             notes = "오늘 챌린지 정보 API.",
             response = ChallengeResult.class,
             authorizations = {@Authorization(value = "TBD")},
