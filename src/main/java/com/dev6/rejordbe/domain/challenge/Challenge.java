@@ -1,5 +1,7 @@
 package com.dev6.rejordbe.domain.challenge;
 
+import org.springframework.lang.NonNull;
+
 import javax.persistence.*;
 
 /**
@@ -39,4 +41,12 @@ public class Challenge {
 
     @Column(name = "text_color")
     private String textColor;
+
+    @Column(name = "flag")
+    private Boolean flag;
+
+    public Challenge update(@NonNull final Challenge challenge) {
+        this.flag = !challenge.getFlag();
+        return challenge;
+    }
 }

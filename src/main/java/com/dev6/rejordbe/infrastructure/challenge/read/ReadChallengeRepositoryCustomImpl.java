@@ -1,0 +1,36 @@
+package com.dev6.rejordbe.infrastructure.challenge.read;
+
+import com.dev6.rejordbe.domain.challenge.Challenge;
+import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
+import java.util.List;
+import java.util.Optional;
+
+import static com.dev6.rejordbe.domain.challenge.QChallenge.challenge;
+
+/**
+ * ReadChallengeRepositoryCustomImpl
+ */
+@lombok.RequiredArgsConstructor
+public class ReadChallengeRepositoryCustomImpl implements ReadChallengeRepositoryCustom {
+
+    private final JPAQueryFactory queryFactory;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<Challenge> randomChallenge() {
+        List<Challenge> random = queryFactory.selectFrom(challenge)
+                .where(challenge.flag.isFalse())
+                .orderBy(NumberExpression.random().asc())
+                .limit(1)
+                .fetch();
+
+        return Optional.ofNullable(random.get(0));
+    }
+
+
+
+}
