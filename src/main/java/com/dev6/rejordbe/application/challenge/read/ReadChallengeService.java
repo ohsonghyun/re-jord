@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface ReadChallengeService {
 
     /**
-     * flag == true 인 챌린지 정보 획득
+     * flag 가 true 인 챌린지 정보 획득
      *
      * @param flag {@code Boolean}
      * @return {@code Optional<Challenge>}

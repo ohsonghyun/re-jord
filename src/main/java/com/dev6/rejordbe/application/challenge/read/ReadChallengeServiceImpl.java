@@ -1,5 +1,6 @@
 package com.dev6.rejordbe.application.challenge.read;
 
+import com.dev6.rejordbe.application.scheduler.ChallengeScheduler;
 import com.dev6.rejordbe.domain.challenge.Challenge;
 import com.dev6.rejordbe.domain.challenge.dto.ChallengeResult;
 import com.dev6.rejordbe.domain.exception.ExceptionCode;
@@ -22,6 +23,7 @@ import java.util.Optional;
 public class ReadChallengeServiceImpl implements ReadChallengeService {
 
     private final ReadChallengeRepository readChallengeRepository;
+    private final ChallengeScheduler challengeScheduler;
 
     /**
      * {@inheritDoc}
@@ -30,9 +32,11 @@ public class ReadChallengeServiceImpl implements ReadChallengeService {
     public Optional<ChallengeResult> findChallengeByFlag(@NonNull final Boolean flag) {
         Optional<Challenge> challengeOptional = readChallengeRepository.findChallengeByFlag(flag);
 
-        if (challengeOptional.isEmpty()) {
-            throw new ChallengeNotFoundException(ExceptionCode.CHALLENGE_NOT_FOUND.name());
+        if (challengeOptional == null) {
+            challengeScheduler.run();
+            challengeOptional = readChallengeRepository.findChallengeByFlag(flag);
         }
+
 
         return challengeOptional.map(anChallenge ->
                 ChallengeResult.builder()
