@@ -45,7 +45,7 @@ public class Challenge {
     @Column(name = "flag")
     private Boolean flag;
 
-    public Challenge update(@NonNull final Challenge challenge) {
+    public Challenge updateFlag(@NonNull final Challenge challenge) {
         this.flag = !challenge.getFlag();
         return challenge;
     }

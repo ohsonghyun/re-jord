@@ -33,7 +33,7 @@ public class ReadChallengeServiceImpl implements ReadChallengeService {
         Optional<Challenge> challengeOptional = readChallengeRepository.findChallengeByFlag(flag);
 
         if (challengeOptional == null) {
-            challengeScheduler.run();
+            challengeScheduler.setChallengeEveryMidnight();
             challengeOptional = readChallengeRepository.findChallengeByFlag(flag);
         }
 

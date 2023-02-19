@@ -21,14 +21,14 @@ public class ReadChallengeRepositoryCustomImpl implements ReadChallengeRepositor
      * {@inheritDoc}
      */
     @Override
-    public Optional<Challenge> randomChallenge() {
+    public Challenge randomChallenge() {
         List<Challenge> random = queryFactory.selectFrom(challenge)
                 .where(challenge.flag.isFalse())
                 .orderBy(NumberExpression.random().asc())
                 .limit(1)
                 .fetch();
 
-        return Optional.ofNullable(random.get(0));
+        return random.get(0);
     }
 
 

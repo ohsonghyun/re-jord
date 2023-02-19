@@ -1,15 +1,11 @@
 package com.dev6.rejordbe.application.scheduler;
 
 import com.dev6.rejordbe.domain.challenge.Challenge;
-import com.dev6.rejordbe.domain.exception.ExceptionCode;
-import com.dev6.rejordbe.exception.ChallengeNotFoundException;
 import com.dev6.rejordbe.infrastructure.challenge.read.ReadChallengeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /**
  * ChallengeSchedulerImpl
@@ -25,20 +21,19 @@ public class ChallengeSchedulerImpl implements ChallengeScheduler {
     /**
      * {@inheritDoc}
      */
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "0 53 16 * * *")
     @Transactional
     @Override
-    public void run() {
-        Challenge randomChallenge = readChallengeRepository.randomChallenge()
-                .orElseThrow(() -> new ChallengeNotFoundException(ExceptionCode.CHALLENGE_NOT_FOUND.name()));
+    public void setChallengeEveryMidnight() {
+        Challenge randomChallenge = readChallengeRepository.randomChallenge();
 
         Challenge targetChallenge = readChallengeRepository.findChallengeByFlag(true)
-                .orElse(randomChallenge.update(Challenge.builder().flag(randomChallenge.getFlag()).build()));
+                .orElse(randomChallenge.updateFlag(Challenge.builder().flag(randomChallenge.getFlag()).build()));
 
-        targetChallenge.update(Challenge.builder().flag(targetChallenge.getFlag()).build());
+        targetChallenge.updateFlag(Challenge.builder().flag(targetChallenge.getFlag()).build());
 
         if (!randomChallenge.getFlag()) {
-            randomChallenge.update(Challenge.builder().flag(randomChallenge.getFlag()).build());
+            randomChallenge.updateFlag(Challenge.builder().flag(randomChallenge.getFlag()).build());
         }
     }
 }

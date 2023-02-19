@@ -1,7 +1,6 @@
 package com.dev6.rejordbe.application.scheduler
 
 import com.dev6.rejordbe.domain.challenge.Challenge
-import com.dev6.rejordbe.exception.ChallengeNotFoundException
 import com.dev6.rejordbe.infrastructure.challenge.read.ReadChallengeRepository
 import spock.lang.Specification
 
@@ -24,11 +23,11 @@ class ChallengeSchedulerImplSpec extends Specification {
         def targetChallenge = Challenge.builder().flag(true).build()
 
         // mock
-        readChallengeRepository.randomChallenge() >> Optional.of(randomChallenge)
+        readChallengeRepository.randomChallenge() >> randomChallenge
         readChallengeRepository.findChallengeByFlag(_ as Boolean) >> Optional.of(targetChallenge)
 
         when:
-        challengeScheduler.run()
+        challengeScheduler.setChallengeEveryMidnight()
 
         then:
         randomChallenge.getFlag() == true
@@ -41,28 +40,13 @@ class ChallengeSchedulerImplSpec extends Specification {
         def randomChallenge = Challenge.builder().flag(false).build()
 
         // mock
-        readChallengeRepository.randomChallenge() >> Optional.of(randomChallenge)
+        readChallengeRepository.randomChallenge() >> randomChallenge
         readChallengeRepository.findChallengeByFlag(_ as Boolean) >> Optional.empty()
 
         when:
-        challengeScheduler.run()
+        challengeScheduler.setChallengeEveryMidnight()
 
         then:
         randomChallenge.getFlag() == true
-    }
-
-    def "random 챌린지가 없는 경우"() {
-        given:
-        def targetChallenge = Challenge.builder().flag(true).build()
-
-        // mock
-        readChallengeRepository.randomChallenge() >> Optional.empty()
-        readChallengeRepository.findChallengeByFlag(_ as Boolean) >> Optional.of(targetChallenge)
-
-        when:
-        challengeScheduler.run()
-
-        then:
-        thrown(ChallengeNotFoundException)
     }
 }

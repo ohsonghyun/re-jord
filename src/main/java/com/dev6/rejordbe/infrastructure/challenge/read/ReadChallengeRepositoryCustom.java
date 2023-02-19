@@ -9,5 +9,5 @@ import java.util.Optional;
  */
 public interface ReadChallengeRepositoryCustom {
 
-    Optional<Challenge> randomChallenge();
+    Challenge randomChallenge();
 }

@@ -133,7 +133,7 @@ class ReadChallengeRepositorySpec extends Specification {
 
         when:
         def anChallenge = readChallengeRepository.findChallengeByFlag(true).orElseThrow()
-        anChallenge.update(
+        anChallenge.updateFlag(
                 Challenge.builder()
                 .flag(anChallenge.getFlag())
                 .build()
