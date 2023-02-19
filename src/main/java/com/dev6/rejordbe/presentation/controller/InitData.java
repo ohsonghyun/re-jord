@@ -1,6 +1,7 @@
 package com.dev6.rejordbe.presentation.controller;
 
 import com.dev6.rejordbe.domain.challenge.Challenge;
+import com.dev6.rejordbe.domain.challenge.ChallengeFlagType;
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview;
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReviewType;
 import com.dev6.rejordbe.domain.post.Post;
@@ -218,7 +219,7 @@ public class InitData {
                                         .imgFront("imgFront" + idx)
                                         .imgBack("imgBack" + idx)
                                         .textColor("textColor" + idx)
-                                        .flag(true)
+                                        .flag(ChallengeFlagType.TODAY)
                                         .build()
                         );
                     } else {
@@ -233,11 +234,24 @@ public class InitData {
                                         .imgFront("imgFront" + idx)
                                         .imgBack("imgBack" + idx)
                                         .textColor("textColor" + idx)
-                                        .flag(false)
+                                        .flag(ChallengeFlagType.NOT_TODAY)
                                         .build()
                         );
                     }
                 });
+                em.persist(
+                        Challenge.builder()
+                                .challengeId("CHDefault")
+                                .title("title")
+                                .contents("hello world")
+                                .footprintAmount(15)
+                                .badgeId("BG")
+                                .badgeName("BGName")
+                                .imgFront("imgFront")
+                                .imgBack("imgBack")
+                                .textColor("textColor")
+                                .flag(ChallengeFlagType.DEFAULT)
+                                .build());
             }
         }
     }

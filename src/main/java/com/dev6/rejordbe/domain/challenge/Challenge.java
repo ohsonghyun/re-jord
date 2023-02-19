@@ -1,7 +1,5 @@
 package com.dev6.rejordbe.domain.challenge;
 
-import org.springframework.lang.NonNull;
-
 import javax.persistence.*;
 
 /**
@@ -43,14 +41,15 @@ public class Challenge {
     private String textColor;
 
     @Column(name = "flag")
-    private Boolean flag;
+    @Enumerated(value = EnumType.STRING)
+    private ChallengeFlagType flag;
 
-    public Challenge updateFlagToFalse() {
-        this.flag = false;
+    public Challenge updateFlagToTheOtherDay() {
+        this.flag = ChallengeFlagType.NOT_TODAY;
         return null;
     }
 
-    public void updateFlagToTrue() {
-        this.flag = true;
+    public void updateFlagToToday() {
+        this.flag = ChallengeFlagType.TODAY;
     }
 }

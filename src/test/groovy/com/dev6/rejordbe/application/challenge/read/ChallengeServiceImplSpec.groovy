@@ -2,6 +2,7 @@ package com.dev6.rejordbe.application.challenge.read
 
 import com.dev6.rejordbe.application.scheduler.ChallengeScheduler
 import com.dev6.rejordbe.domain.challenge.Challenge
+import com.dev6.rejordbe.domain.challenge.ChallengeFlagType
 import com.dev6.rejordbe.infrastructure.challenge.read.ReadChallengeRepository
 import spock.lang.Specification
 
@@ -33,7 +34,7 @@ class ChallengeServiceImplSpec extends Specification {
                 .flag(flag)
                 .build()
         // mock
-        readChallengeRepository.findChallengeByFlag(_ as Boolean) >> Optional.of(anChallenge)
+        readChallengeRepository.findChallengeByFlag(_ as ChallengeFlagType) >> Optional.of(anChallenge)
 
         when:
         def challengeResult = readChallengeService.findChallengeByFlag().orElseThrow()
@@ -53,10 +54,10 @@ class ChallengeServiceImplSpec extends Specification {
 
         where:
         challengeId   | title   | contents   | footprintAmount | badgeId   | badgeName   | imgFront   | imgBack   | textColor   | flag
-        "challengeId" | "title" | "contents" | 15              | "badgeId" | "badgeName" | "imgFront" | "imgBack" | "textColor" | true
+        "challengeId" | "title" | "contents" | 15              | "badgeId" | "badgeName" | "imgFront" | "imgBack" | "textColor" | ChallengeFlagType.TODAY
     }
 
-    def "flag가 true인 챌린지가 없을 경우 id가 CHDefault인 챌린지를 갖고온다"() {
+    def "flag가 true인 챌린지가 없을 경우 flag가 DEFAULT인 챌린지를 갖고온다"() {
         given:
         def anChallenge = Challenge.builder()
                 .challengeId(challengeId)
@@ -71,8 +72,8 @@ class ChallengeServiceImplSpec extends Specification {
                 .flag(flag)
                 .build()
         // mock
-        readChallengeRepository.findChallengeByFlag(_ as Boolean) >> Optional.empty()
-        readChallengeRepository.findById(_ as String) >> Optional.of(anChallenge)
+        readChallengeRepository.findChallengeByFlag(ChallengeFlagType.TODAY) >> Optional.empty()
+        readChallengeRepository.findChallengeByFlag(ChallengeFlagType.DEFAULT) >> Optional.of(anChallenge)
 
         when:
         def challengeResult = readChallengeService.findChallengeByFlag().orElseThrow()
@@ -92,6 +93,6 @@ class ChallengeServiceImplSpec extends Specification {
 
         where:
         challengeId   | title   | contents   | footprintAmount | badgeId   | badgeName   | imgFront   | imgBack   | textColor   | flag
-        "CHDefault" | "title" | "contents" | 15              | "badgeId" | "badgeName" | "imgFront" | "imgBack" | "textColor" | true
+        "CHDefault"   | "title" | "contents" | 15              | "badgeId" | "badgeName" | "imgFront" | "imgBack" | "textColor" | ChallengeFlagType.DEFAULT
     }
 }

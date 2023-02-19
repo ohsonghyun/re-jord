@@ -2,6 +2,7 @@ package com.dev6.rejordbe.infrastructure.challenge.read
 
 import com.dev6.rejordbe.TestConfig
 import com.dev6.rejordbe.domain.challenge.Challenge
+import com.dev6.rejordbe.domain.challenge.ChallengeFlagType
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.context.annotation.Import
@@ -25,7 +26,7 @@ class ReadChallengeRepositorySpec extends Specification {
     @Autowired
     ReadChallengeRepository readChallengeRepository
 
-    def "flag == false 인 챌린지 중 랜덤 값을 갖고온다"() {
+    def "flag가 THE_OTHER_DAY 인 챌린지 중 랜덤 값을 갖고온다"() {
         // 챌린지 추가
         for (int i = 0; i < 5; i++) {
             readChallengeRepository.save(
@@ -39,7 +40,7 @@ class ReadChallengeRepositorySpec extends Specification {
                             .imgFront("imgFront" + i)
                             .imgBack("imgBack" + i)
                             .textColor("textColor" + i)
-                            .flag(false)
+                            .flag(ChallengeFlagType.NOT_TODAY)
                             .build()
             )
         }
@@ -92,7 +93,7 @@ class ReadChallengeRepositorySpec extends Specification {
 
         where:
         challengeId   | title   | contents   | footprintAmount | badgeId   | badgeName   | imgFront   | imgBack   | textColor   | flag
-        "CHDefault"   | "title" | "contents" | 15              | "badgeId" | "badgeName" | "imgFront" | "imgBack" | "textColor" | true
+        "CHDefault"   | "title" | "contents" | 15              | "badgeId" | "badgeName" | "imgFront" | "imgBack" | "textColor" | ChallengeFlagType.TODAY
     }
 
     def "flag == true 인 챌린지 값을 갖고온다"() {
@@ -133,7 +134,7 @@ class ReadChallengeRepositorySpec extends Specification {
 
         where:
         challengeId   | title   | contents   | footprintAmount | badgeId   | badgeName   | imgFront   | imgBack   | textColor   | flag
-        "challengeId" | "title" | "contents" | 15              | "badgeId" | "badgeName" | "imgFront" | "imgBack" | "textColor" | true
+        "challengeId" | "title" | "contents" | 15              | "badgeId" | "badgeName" | "imgFront" | "imgBack" | "textColor" | ChallengeFlagType.TODAY
     }
 
     def "챌린지 flag를 수정할 수 있다"() {
@@ -150,7 +151,7 @@ class ReadChallengeRepositorySpec extends Specification {
                             .imgFront("imgFront" + i)
                             .imgBack("imgBack" + i)
                             .textColor("textColor" + i)
-                            .flag(false)
+                            .flag(ChallengeFlagType.NOT_TODAY)
                             .build()
             )
         }
@@ -173,8 +174,8 @@ class ReadChallengeRepositorySpec extends Specification {
         entityManager.clear()
 
         when:
-        def anChallenge = readChallengeRepository.findChallengeByFlag(true).orElseThrow()
-        anChallenge.updateFlagToFalse()
+        def anChallenge = readChallengeRepository.findChallengeByFlag(flag).orElseThrow()
+        anChallenge.updateFlagToTheOtherDay()
 
         entityManager.flush()
         entityManager.clear()
@@ -190,11 +191,11 @@ class ReadChallengeRepositorySpec extends Specification {
         anChallenge.getImgFront() == imgFront
         anChallenge.getImgBack() == imgBack
         anChallenge.getTextColor() == textColor
-        anChallenge.getFlag() == !flag
+        anChallenge.getFlag().equals(ChallengeFlagType.NOT_TODAY)
 
         where:
         challengeId   | title   | contents   | footprintAmount | badgeId   | badgeName   | imgFront   | imgBack   | textColor   | flag
-        "challengeId" | "title" | "contents" | 15              | "badgeId" | "badgeName" | "imgFront" | "imgBack" | "textColor" | true
+        "challengeId" | "title" | "contents" | 15              | "badgeId" | "badgeName" | "imgFront" | "imgBack" | "textColor" | ChallengeFlagType.TODAY
 
     }
 }

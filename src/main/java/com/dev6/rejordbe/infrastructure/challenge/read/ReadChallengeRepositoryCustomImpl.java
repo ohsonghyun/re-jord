@@ -1,11 +1,11 @@
 package com.dev6.rejordbe.infrastructure.challenge.read;
 
 import com.dev6.rejordbe.domain.challenge.Challenge;
+import com.dev6.rejordbe.domain.challenge.ChallengeFlagType;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.dev6.rejordbe.domain.challenge.QChallenge.challenge;
 
@@ -23,7 +23,7 @@ public class ReadChallengeRepositoryCustomImpl implements ReadChallengeRepositor
     @Override
     public Challenge randomChallenge() {
         List<Challenge> random = queryFactory.selectFrom(challenge)
-                .where(challenge.flag.isFalse())
+                .where(challenge.flag.eq(ChallengeFlagType.NOT_TODAY))
                 .orderBy(NumberExpression.random().asc())
                 .limit(1)
                 .fetch();
