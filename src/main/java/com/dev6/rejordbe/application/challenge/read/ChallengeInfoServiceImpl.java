@@ -3,10 +3,7 @@ package com.dev6.rejordbe.application.challenge.read;
 import com.dev6.rejordbe.application.scheduler.ChallengeScheduler;
 import com.dev6.rejordbe.domain.challenge.Challenge;
 import com.dev6.rejordbe.domain.challenge.dto.ChallengeResult;
-import com.dev6.rejordbe.domain.exception.ExceptionCode;
-import com.dev6.rejordbe.exception.ChallengeNotFoundException;
 import com.dev6.rejordbe.infrastructure.challenge.read.ReadChallengeRepository;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,29 +11,37 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 /**
- * ReadChallengeServiceImpl
+ * ChallengeInfoServiceImpl
  */
 @Service
 @Slf4j
 @Transactional(readOnly = true)
 @lombok.RequiredArgsConstructor
-public class ReadChallengeServiceImpl implements ReadChallengeService {
+public class ChallengeInfoServiceImpl implements ChallengeInfoService {
 
     private final ReadChallengeRepository readChallengeRepository;
-    private final ChallengeScheduler challengeScheduler;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Optional<ChallengeResult> findChallengeByFlag(@NonNull final Boolean flag) {
-        Optional<Challenge> challengeOptional = readChallengeRepository.findChallengeByFlag(flag);
+    public Optional<ChallengeResult> findChallengeByFlag() {
+        Optional<Challenge> challengeOptional = readChallengeRepository.findChallengeByFlag(true);
 
-        if (challengeOptional == null) {
-            challengeScheduler.setChallengeEveryMidnight();
-            challengeOptional = readChallengeRepository.findChallengeByFlag(flag);
+        // TODO 디폴트 값 어떻게 보낼지 고민하기기
+       if (challengeOptional.isEmpty()) {
+            return challengeOptional.map(anChallenge ->ChallengeResult.builder()
+                    .challengeId("CHDefault")
+                    .title("title")
+                    .contents("contents")
+                    .badgeId("badgeId")
+                    .badgeName("badgeName")
+                    .footprintAmount(15)
+                    .imgFront("imgFront")
+                    .imgBack("imgBack")
+                    .textColor("textColor")
+                    .build());
         }
-
 
         return challengeOptional.map(anChallenge ->
                 ChallengeResult.builder()

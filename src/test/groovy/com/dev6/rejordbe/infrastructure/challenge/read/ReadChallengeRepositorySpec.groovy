@@ -54,6 +54,47 @@ class ReadChallengeRepositorySpec extends Specification {
         random != null
     }
 
+    def "id가 CHDefault 인 챌린지 값을 갖고온다"() {
+        // 챌린지 추가
+        readChallengeRepository.save(
+                Challenge.builder()
+                        .challengeId(challengeId)
+                        .title(title)
+                        .contents(contents)
+                        .footprintAmount(footprintAmount)
+                        .badgeId(badgeId)
+                        .badgeName(badgeName)
+                        .imgFront(imgFront)
+                        .imgBack(imgBack)
+                        .textColor(textColor)
+                        .flag(flag)
+                        .build()
+        )
+
+        entityManager.flush()
+        entityManager.clear()
+
+        when:
+        def anChallenge = readChallengeRepository.findById(challengeId).orElseThrow()
+
+        then:
+        anChallenge != null
+        anChallenge.getChallengeId() == challengeId
+        anChallenge.getTitle() == title
+        anChallenge.getContents() == contents
+        anChallenge.getFootprintAmount() == footprintAmount
+        anChallenge.getBadgeId() == badgeId
+        anChallenge.getBadgeName() == badgeName
+        anChallenge.getImgFront() == imgFront
+        anChallenge.getImgBack() == imgBack
+        anChallenge.getTextColor() == textColor
+        anChallenge.getFlag() == flag
+
+        where:
+        challengeId   | title   | contents   | footprintAmount | badgeId   | badgeName   | imgFront   | imgBack   | textColor   | flag
+        "CHDefault"   | "title" | "contents" | 15              | "badgeId" | "badgeName" | "imgFront" | "imgBack" | "textColor" | true
+    }
+
     def "flag == true 인 챌린지 값을 갖고온다"() {
         // 챌린지 추가
         readChallengeRepository.save(
@@ -133,11 +174,8 @@ class ReadChallengeRepositorySpec extends Specification {
 
         when:
         def anChallenge = readChallengeRepository.findChallengeByFlag(true).orElseThrow()
-        anChallenge.updateFlag(
-                Challenge.builder()
-                .flag(anChallenge.getFlag())
-                .build()
-        )
+        anChallenge.updateFlagToFalse()
+
         entityManager.flush()
         entityManager.clear()
 

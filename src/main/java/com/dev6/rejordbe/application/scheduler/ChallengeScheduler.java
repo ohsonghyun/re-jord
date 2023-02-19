@@ -12,5 +12,5 @@ public interface ChallengeScheduler {
      * @param
      * @return
      */
-    void setChallengeEveryMidnight();
+    void updateChallengeEveryday();
 }

@@ -1,7 +1,7 @@
 package com.dev6.rejordbe.presentation.controller
 
 import com.dev6.rejordbe.TestSecurityConfig
-import com.dev6.rejordbe.application.challenge.read.ReadChallengeService
+import com.dev6.rejordbe.application.challenge.read.ChallengeInfoService
 import com.dev6.rejordbe.domain.challenge.dto.ChallengeResult
 import com.dev6.rejordbe.domain.exception.ExceptionCode
 import com.dev6.rejordbe.presentation.controller.challenge.info.ChallengeInfoController
@@ -14,7 +14,6 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import spock.lang.Specification
 
-import static org.mockito.ArgumentMatchers.isA
 import static org.mockito.Mockito.when
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
@@ -29,7 +28,7 @@ class ChallengeInfoControllerSpec extends Specification {
     @Autowired
     ObjectMapper objectMapper
     @MockBean
-    ReadChallengeService readChallengeService
+    ChallengeInfoService readChallengeService
 
     private static final String baseUrl = '/v1/challengeInfos'
 
@@ -47,7 +46,7 @@ class ChallengeInfoControllerSpec extends Specification {
                 .textColor(textColor)
                 .build()
 
-        when(readChallengeService.findChallengeByFlag(isA(Boolean.class)))
+        when(readChallengeService.findChallengeByFlag())
             .thenReturn(Optional.of(anChallenge))
 
         expect:
@@ -72,7 +71,7 @@ class ChallengeInfoControllerSpec extends Specification {
 
     def "챌린지가 없으면 404 반환"() {
         given:
-        when(readChallengeService.findChallengeByFlag(isA(Boolean.class)))
+        when(readChallengeService.findChallengeByFlag())
                 .thenReturn(Optional.empty())
 
         expect:

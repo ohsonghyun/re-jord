@@ -17,5 +17,4 @@ public interface ReadChallengeRepository extends JpaRepository<Challenge, String
      * @return {@code Optional<Challenge>}
      */
     Optional<Challenge> findChallengeByFlag(final Boolean flag);
-
 }

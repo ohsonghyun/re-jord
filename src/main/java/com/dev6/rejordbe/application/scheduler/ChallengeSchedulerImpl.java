@@ -21,19 +21,21 @@ public class ChallengeSchedulerImpl implements ChallengeScheduler {
     /**
      * {@inheritDoc}
      */
-    @Scheduled(cron = "0 53 16 * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     @Transactional
     @Override
-    public void setChallengeEveryMidnight() {
+    public void updateChallengeEveryday() {
         Challenge randomChallenge = readChallengeRepository.randomChallenge();
 
         Challenge targetChallenge = readChallengeRepository.findChallengeByFlag(true)
-                .orElse(randomChallenge.updateFlag(Challenge.builder().flag(randomChallenge.getFlag()).build()));
+                .orElse(randomChallenge.updateFlagToFalse());
 
-        targetChallenge.updateFlag(Challenge.builder().flag(targetChallenge.getFlag()).build());
+        if(targetChallenge != null) {
+            targetChallenge.updateFlagToFalse();
+        }
 
         if (!randomChallenge.getFlag()) {
-            randomChallenge.updateFlag(Challenge.builder().flag(randomChallenge.getFlag()).build());
+            randomChallenge.updateFlagToTrue();
         }
     }
 }

@@ -1,23 +1,17 @@
 package com.dev6.rejordbe.presentation.controller.challenge.info;
 
-import com.dev6.rejordbe.application.challenge.read.ReadChallengeService;
+import com.dev6.rejordbe.application.challenge.read.ChallengeInfoService;
 import com.dev6.rejordbe.domain.challenge.dto.ChallengeResult;
 import com.dev6.rejordbe.domain.exception.ExceptionCode;
 import com.dev6.rejordbe.exception.ChallengeNotFoundException;
-import com.dev6.rejordbe.exception.IllegalParameterException;
 import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * ChallengeInfoController
@@ -29,7 +23,7 @@ import java.util.Objects;
 @lombok.RequiredArgsConstructor
 public class ChallengeInfoController {
 
-    private final ReadChallengeService readChallengeService;
+    private final ChallengeInfoService readChallengeService;
 
     @ApiOperation(
             value = "오늘 챌린지 정보",
@@ -46,7 +40,7 @@ public class ChallengeInfoController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_PROBLEM_JSON_VALUE}
     )
     public ResponseEntity<ChallengeResult> todayChallengeInfo() {
-        ChallengeResult result = readChallengeService.findChallengeByFlag(true)
+        ChallengeResult result = readChallengeService.findChallengeByFlag()
                 .orElseThrow(() -> new ChallengeNotFoundException(ExceptionCode.CHALLENGE_NOT_FOUND.name()));
 
         return ResponseEntity.ok(result);

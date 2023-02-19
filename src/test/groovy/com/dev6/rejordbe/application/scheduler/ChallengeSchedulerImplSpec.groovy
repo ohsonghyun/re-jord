@@ -27,7 +27,7 @@ class ChallengeSchedulerImplSpec extends Specification {
         readChallengeRepository.findChallengeByFlag(_ as Boolean) >> Optional.of(targetChallenge)
 
         when:
-        challengeScheduler.setChallengeEveryMidnight()
+        challengeScheduler.updateChallengeEveryday()
 
         then:
         randomChallenge.getFlag() == true
@@ -44,7 +44,7 @@ class ChallengeSchedulerImplSpec extends Specification {
         readChallengeRepository.findChallengeByFlag(_ as Boolean) >> Optional.empty()
 
         when:
-        challengeScheduler.setChallengeEveryMidnight()
+        challengeScheduler.updateChallengeEveryday()
 
         then:
         randomChallenge.getFlag() == true
