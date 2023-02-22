@@ -40,7 +40,7 @@ public class ChallengeInfoController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_PROBLEM_JSON_VALUE}
     )
     public ResponseEntity<ChallengeResult> todayChallengeInfo() {
-        ChallengeResult result = readChallengeService.findChallengeByFlag()
+        ChallengeResult result = readChallengeService.findTodayChallengeInFlag()
                 .orElseThrow(() -> new ChallengeNotFoundException(ExceptionCode.CHALLENGE_NOT_FOUND.name()));
 
         return ResponseEntity.ok(result);

@@ -26,7 +26,7 @@ public class ChallengeInfoServiceImpl implements ChallengeInfoService {
      * {@inheritDoc}
      */
     @Override
-    public Optional<ChallengeResult> findChallengeByFlag() {
+    public Optional<ChallengeResult> findTodayChallengeInFlag() {
         Optional<Challenge> challengeOptional = readChallengeRepository.findChallengeByFlag(ChallengeFlagType.TODAY);
 
        if (challengeOptional.isEmpty()) {

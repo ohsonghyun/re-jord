@@ -46,7 +46,7 @@ class ChallengeInfoControllerSpec extends Specification {
                 .textColor(textColor)
                 .build()
 
-        when(readChallengeService.findChallengeByFlag())
+        when(readChallengeService.findTodayChallengeInFlag())
             .thenReturn(Optional.of(anChallenge))
 
         expect:
@@ -71,7 +71,7 @@ class ChallengeInfoControllerSpec extends Specification {
 
     def "챌린지가 없으면 404 반환"() {
         given:
-        when(readChallengeService.findChallengeByFlag())
+        when(readChallengeService.findTodayChallengeInFlag())
                 .thenReturn(Optional.empty())
 
         expect:

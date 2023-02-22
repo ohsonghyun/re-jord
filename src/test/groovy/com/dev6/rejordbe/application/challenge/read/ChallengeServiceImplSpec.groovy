@@ -1,6 +1,6 @@
 package com.dev6.rejordbe.application.challenge.read
 
-import com.dev6.rejordbe.application.scheduler.ChallengeScheduler
+
 import com.dev6.rejordbe.domain.challenge.Challenge
 import com.dev6.rejordbe.domain.challenge.ChallengeFlagType
 import com.dev6.rejordbe.infrastructure.challenge.read.ReadChallengeRepository
@@ -37,7 +37,7 @@ class ChallengeServiceImplSpec extends Specification {
         readChallengeRepository.findChallengeByFlag(_ as ChallengeFlagType) >> Optional.of(anChallenge)
 
         when:
-        def challengeResult = readChallengeService.findChallengeByFlag().orElseThrow()
+        def challengeResult = readChallengeService.findTodayChallengeInFlag().orElseThrow()
 
         then:
         anChallenge != null
@@ -76,7 +76,7 @@ class ChallengeServiceImplSpec extends Specification {
         readChallengeRepository.findChallengeByFlag(ChallengeFlagType.DEFAULT) >> Optional.of(anChallenge)
 
         when:
-        def challengeResult = readChallengeService.findChallengeByFlag().orElseThrow()
+        def challengeResult = readChallengeService.findTodayChallengeInFlag().orElseThrow()
 
         then:
         anChallenge != null

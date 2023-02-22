@@ -10,9 +10,10 @@ import java.util.Optional;
 public interface ChallengeInfoService {
 
     /**
-     * flag 가 true 인 챌린지 정보 획득
+     * flag 가 Today 인 챌린지 정보 획득
+     * Today 인 flag가 없을 시 DEFAULT로 출력
      *
      * @return {@code Optional<Challenge>}
      */
-    Optional<ChallengeResult> findChallengeByFlag();
+    Optional<ChallengeResult> findTodayChallengeInFlag();
 }
