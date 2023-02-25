@@ -8,9 +8,6 @@ public interface ChallengeScheduler {
 
     /**
      * 24시간 마다 새로운 챌린지 설정
-     *
-     * @param
-     * @return
      */
     void updateChallengeEveryday();
 }
