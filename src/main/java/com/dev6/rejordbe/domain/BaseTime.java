@@ -1,12 +1,13 @@
 package com.dev6.rejordbe.domain;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PostPersist;
+import javax.persistence.PrePersist;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 /**
  * BaseTime
@@ -15,8 +16,17 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseTime {
-    @CreatedDate
     private LocalDateTime createdDate;
-    @LastModifiedDate
     private LocalDateTime modifiedDate;
+
+    @PrePersist
+    public void prePersist() {
+        createdDate = ZonedDateTime.now().toLocalDateTime();
+        modifiedDate = ZonedDateTime.now().toLocalDateTime();
+    }
+
+    @PostPersist
+    public void postPersist() {
+        modifiedDate = ZonedDateTime.now().toLocalDateTime();
+    }
 }
