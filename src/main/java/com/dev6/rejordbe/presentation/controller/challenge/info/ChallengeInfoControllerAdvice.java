@@ -1,6 +1,6 @@
 package com.dev6.rejordbe.presentation.controller.challenge.info;
 
-import com.dev6.rejordbe.exception.IllegalParameterException;
+import com.dev6.rejordbe.exception.ChallengeNotFoundException;
 import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class ChallengeInfoControllerAdvice {
 
-    @ExceptionHandler(IllegalParameterException.class)
-    public ResponseEntity<ErrorResponse> exceptionHandler(IllegalParameterException exception) {
+    @ExceptionHandler(ChallengeNotFoundException.class)
+    public ResponseEntity<ErrorResponse> exceptionHandler(ChallengeNotFoundException exception) {
         return new ResponseEntity<>(
                 ErrorResponse.builder().message(exception.getMessage()).build(),
                 headers(),
-                HttpStatus.BAD_REQUEST);
+                HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)

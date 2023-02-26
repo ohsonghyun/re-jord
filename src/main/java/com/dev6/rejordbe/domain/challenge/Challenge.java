@@ -39,4 +39,17 @@ public class Challenge {
 
     @Column(name = "text_color")
     private String textColor;
+
+    @Column(name = "flag")
+    @Enumerated(value = EnumType.STRING)
+    private ChallengeFlagType flag;
+
+    public Challenge updateFlagToTheOtherDay() {
+        this.flag = ChallengeFlagType.NOT_TODAY;
+        return null;
+    }
+
+    public void updateFlagToToday() {
+        this.flag = ChallengeFlagType.TODAY;
+    }
 }

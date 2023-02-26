@@ -1,5 +1,7 @@
 package com.dev6.rejordbe.presentation.controller;
 
+import com.dev6.rejordbe.domain.challenge.Challenge;
+import com.dev6.rejordbe.domain.challenge.ChallengeFlagType;
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview;
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReviewType;
 import com.dev6.rejordbe.domain.post.Post;
@@ -29,6 +31,7 @@ public class InitData {
     private final InitUsers initUsers;
     private final InitPosts initPosts;
     private final InitChallengeReviews initChallengeReviews;
+    private final InitChallenge initChallenge;
 
     @PostConstruct
     public void init() {
@@ -36,6 +39,7 @@ public class InitData {
         initUsers.init();
         initPosts.init();
         initChallengeReviews.init();
+        initChallenge.init();
     }
 
     // ROLES ---------------------------------------------------
@@ -194,4 +198,61 @@ public class InitData {
         }
     }
 
+    @Component
+    static class InitChallenge {
+        @PersistenceContext
+        EntityManager em;
+
+        @Transactional
+        public void init() {
+            {
+                IntStream.range(0, 31).forEach(idx -> {
+                    if(idx == 0) {
+                        em.persist(
+                                Challenge.builder()
+                                        .challengeId("CH" + idx)
+                                        .title("title" + idx)
+                                        .contents("hello world" + idx)
+                                        .footprintAmount(15)
+                                        .badgeId("BG" + idx)
+                                        .badgeName("BGName" + idx)
+                                        .imgFront("imgFront" + idx)
+                                        .imgBack("imgBack" + idx)
+                                        .textColor("textColor" + idx)
+                                        .flag(ChallengeFlagType.TODAY)
+                                        .build()
+                        );
+                    } else {
+                        em.persist(
+                                Challenge.builder()
+                                        .challengeId("CH" + idx)
+                                        .title("title" + idx)
+                                        .contents("hello world" + idx)
+                                        .footprintAmount(15)
+                                        .badgeId("BG" + idx)
+                                        .badgeName("BGName" + idx)
+                                        .imgFront("imgFront" + idx)
+                                        .imgBack("imgBack" + idx)
+                                        .textColor("textColor" + idx)
+                                        .flag(ChallengeFlagType.NOT_TODAY)
+                                        .build()
+                        );
+                    }
+                });
+                em.persist(
+                        Challenge.builder()
+                                .challengeId("CHDefault")
+                                .title("title")
+                                .contents("hello world")
+                                .footprintAmount(15)
+                                .badgeId("BG")
+                                .badgeName("BGName")
+                                .imgFront("imgFront")
+                                .imgBack("imgBack")
+                                .textColor("textColor")
+                                .flag(ChallengeFlagType.DEFAULT)
+                                .build());
+            }
+        }
+    }
 }
