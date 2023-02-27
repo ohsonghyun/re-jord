@@ -7,6 +7,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.PostPersist;
 import javax.persistence.PrePersist;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 /**
@@ -18,15 +19,16 @@ import java.time.ZonedDateTime;
 public abstract class BaseTime {
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
+    private static final ZoneId ZONE_ID = ZoneId.of("Asia/Seoul");
 
     @PrePersist
     public void prePersist() {
-        createdDate = ZonedDateTime.now().toLocalDateTime();
-        modifiedDate = ZonedDateTime.now().toLocalDateTime();
+        createdDate = ZonedDateTime.now(ZONE_ID).toLocalDateTime();
+        modifiedDate = ZonedDateTime.now(ZONE_ID).toLocalDateTime();
     }
 
     @PostPersist
     public void postPersist() {
-        modifiedDate = ZonedDateTime.now().toLocalDateTime();
+        modifiedDate = ZonedDateTime.now(ZONE_ID).toLocalDateTime();
     }
 }
