@@ -1,5 +1,7 @@
 package com.dev6.rejordbe.domain.challenge;
 
+import com.dev6.rejordbe.domain.badge.BadgeCode;
+
 import javax.persistence.*;
 
 /**
@@ -28,8 +30,8 @@ public class Challenge {
     @Column(name = "badge_name")
     private String badgeName;
 
-    @Column(name = "badge_id")
-    private String badgeId;
+    @Column(name = "badge_code")
+    private BadgeCode badgeCode;
 
     @Column(name = "img_front")
     private String imgFront;

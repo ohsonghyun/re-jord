@@ -1,7 +1,8 @@
 package com.dev6.rejordbe.application.challengeReview.add
 
-
+import com.dev6.rejordbe.application.challenge.read.ChallengeInfoService
 import com.dev6.rejordbe.application.id.IdGenerator
+import com.dev6.rejordbe.domain.challenge.dto.ChallengeResult
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReviewType
 import com.dev6.rejordbe.domain.user.Users
@@ -24,6 +25,7 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
     AddFootprintRepository addFootprintRepository;
     UserInfoRepository userInfoRepository
     IdGenerator idGenerator
+    ChallengeInfoService challengeInfoService
 
     def setup() {
         writeChallengeReviewRepository = Mock(WriteChallengeReviewRepository.class)
@@ -31,7 +33,8 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
         addFootprintRepository = Mock(AddFootprintRepository)
         userInfoRepository = Mock(UserInfoRepository.class)
         idGenerator = Mock(IdGenerator.class)
-        writeChallengeReviewService = new WriteChallengeReviewServiceImpl(writeChallengeReviewRepository, addBadgeRepository, addFootprintRepository, userInfoRepository, idGenerator)
+        challengeInfoService = Mock(ChallengeInfoService.class)
+        writeChallengeReviewService = new WriteChallengeReviewServiceImpl(writeChallengeReviewRepository, addBadgeRepository, addFootprintRepository, userInfoRepository, idGenerator, challengeInfoService)
     }
 
     def "에러가 없는 경우 챌린지 리뷰를 등록할 수 있다"() {
@@ -47,6 +50,8 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
                 .challengeReviewType(challengeReviewType)
                 .user(anUser)
                 .build()
+
+        challengeInfoService.findTodayChallengeInFlag() >> Optional.of(ChallengeResult.builder().build())
 
         when:
         def saveResult = writeChallengeReviewService.writeChallengeReview(

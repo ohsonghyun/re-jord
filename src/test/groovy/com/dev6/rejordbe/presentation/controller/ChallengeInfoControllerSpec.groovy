@@ -2,6 +2,7 @@ package com.dev6.rejordbe.presentation.controller
 
 import com.dev6.rejordbe.TestSecurityConfig
 import com.dev6.rejordbe.application.challenge.read.ChallengeInfoService
+import com.dev6.rejordbe.domain.badge.BadgeCode
 import com.dev6.rejordbe.domain.challenge.dto.ChallengeResult
 import com.dev6.rejordbe.domain.exception.ExceptionCode
 import com.dev6.rejordbe.presentation.controller.challenge.info.ChallengeInfoController
@@ -39,7 +40,7 @@ class ChallengeInfoControllerSpec extends Specification {
                 .title(title)
                 .contents(contents)
                 .footprintAmount(footprintAmount)
-                .badgeId(badgeId)
+                .badgeCode(badgeCode)
                 .badgeName(badgeName)
                 .imgFront(imgFront)
                 .imgBack(imgBack)
@@ -57,7 +58,7 @@ class ChallengeInfoControllerSpec extends Specification {
                     .andExpect(jsonPath('\$.title').value(title))
                     .andExpect(jsonPath('\$.contents').value(contents))
                     .andExpect(jsonPath('\$.footprintAmount').value(footprintAmount))
-                    .andExpect(jsonPath('\$.badgeId').value(badgeId))
+                    .andExpect(jsonPath('\$.badgeCode').value(badgeCode.name()))
                     .andExpect(jsonPath('\$.badgeName').value(badgeName))
                     .andExpect(jsonPath('\$.imgFront').value(imgFront))
                     .andExpect(jsonPath('\$.imgBack').value(imgBack))
@@ -65,8 +66,8 @@ class ChallengeInfoControllerSpec extends Specification {
 
 
         where:
-        challengeId   | title   | contents   | footprintAmount | badgeId   | badgeName   | imgFront   | imgBack   | textColor
-        "challengeId" | "title" | "contents" | 15              | "badgeId" | "badgeName" | "imgFront" | "imgBack" | "textColor"
+        challengeId   | title   | contents   | footprintAmount | badgeCode            | badgeName   | imgFront   | imgBack   | textColor
+        "challengeId" | "title" | "contents" | 15              | BadgeCode.VEGETARIAN | "badgeName" | "imgFront" | "imgBack" | "textColor"
     }
 
     def "챌린지가 없으면 404 반환"() {

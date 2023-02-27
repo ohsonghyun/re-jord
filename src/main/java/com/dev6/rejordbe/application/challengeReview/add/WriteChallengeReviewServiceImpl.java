@@ -1,10 +1,12 @@
 package com.dev6.rejordbe.application.challengeReview.add;
 
 
+import com.dev6.rejordbe.application.challenge.read.ChallengeInfoService;
 import com.dev6.rejordbe.application.id.IdGenerator;
 import com.dev6.rejordbe.domain.badge.Badge;
 import com.dev6.rejordbe.domain.badge.BadgeAcquirementType;
 import com.dev6.rejordbe.domain.badge.BadgeCode;
+import com.dev6.rejordbe.domain.challenge.dto.ChallengeResult;
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview;
 import com.dev6.rejordbe.domain.challengeReview.dto.ChallengeReviewResult;
 import com.dev6.rejordbe.domain.exception.ExceptionCode;
@@ -39,7 +41,7 @@ public class WriteChallengeReviewServiceImpl implements WriteChallengeReviewServ
     private final AddFootprintRepository addFootprintRepository;
     private final UserInfoRepository userInfoRepository;
     private final IdGenerator idGenerator;
-
+    private final ChallengeInfoService challengeInfoService;
     /**
      * {@inheritDoc}
      */
@@ -67,16 +69,23 @@ public class WriteChallengeReviewServiceImpl implements WriteChallengeReviewServ
                         .build()
         );
 
+        ChallengeResult challenge = challengeInfoService.findTodayChallengeInFlag().orElse(
+                ChallengeResult.builder()
+                        .footprintAmount(15)
+                        .badgeCode(BadgeCode.DEFAULT)
+                        .build()
+        );
+
         addBadgeRepository.save(Badge.builder()
                 .badgeId(idGenerator.generate("BG"))
-                .badgeCode(BadgeCode.CHALLENGE_POST)
+                .badgeCode(challenge.getBadgeCode())
                 .parentId(challengeReviewResult.getChallengeReviewId())
                 .badgeAcquirementType(BadgeAcquirementType.CHALLENGE_REVIEW)
                 .build());
 
         addFootprintRepository.save(Footprint.builder()
                 .footprintId(idGenerator.generate("FP"))
-                .footprintAmount(1) // TODO flowertaekk 발자국 취득 개수는 1로 OK? -> 질문중
+                .footprintAmount(challenge.getFootprintAmount())
                 .parentId(challengeReviewResult.getChallengeReviewId())
                 .footprintAcquirementType(FootprintAcquirementType.CHALLENGE_REVIEW)
                 .build());
