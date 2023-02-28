@@ -44,7 +44,7 @@ class AddBadgeRepositorySpec extends Specification {
 
         def newBadge = Badge.builder()
                 .badgeId('badgeId')
-                .badgeCode(BadgeCode.UNDINE)
+                .badgeCode(BadgeCode.WATER_FAIRY)
                 .parentId(challengeReview.getChallengeReviewId())
                 .badgeAcquirementType(BadgeAcquirementType.CHALLENGE_REVIEW)
                 .build()

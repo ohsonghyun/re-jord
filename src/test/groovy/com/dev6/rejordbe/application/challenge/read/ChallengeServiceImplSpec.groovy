@@ -54,7 +54,7 @@ class ChallengeServiceImplSpec extends Specification {
 
         where:
         challengeId   | title   | contents   | footprintAmount | badgeCode        | badgeName   | imgFront   | imgBack   | textColor   | flag
-        "challengeId" | "title" | "contents" | 15              | BadgeCode.UNDINE | "badgeName" | "imgFront" | "imgBack" | "textColor" | ChallengeFlagType.TODAY
+        "challengeId" | "title" | "contents" | 15              | BadgeCode.WATER_FAIRY | "badgeName" | "imgFront" | "imgBack" | "textColor" | ChallengeFlagType.TODAY
     }
 
     def "flag가 true인 챌린지가 없을 경우 flag가 DEFAULT인 챌린지를 갖고온다"() {
