@@ -56,6 +56,7 @@ public class SecurityConfig {
         httpSecurity.authorizeRequests().antMatchers(HttpMethod.GET, NONE_AUTH_GET_API).permitAll();
         httpSecurity.authorizeRequests().antMatchers(HttpMethod.POST, NONE_AUTH_POST_API).permitAll();
         httpSecurity.authorizeRequests().antMatchers(HttpMethod.PATCH, NONE_AUTH_PATCH_API).permitAll();
+        httpSecurity.authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/**").permitAll();
 
         // swagger
         httpSecurity.authorizeRequests().antMatchers(SWAGGER).permitAll();
