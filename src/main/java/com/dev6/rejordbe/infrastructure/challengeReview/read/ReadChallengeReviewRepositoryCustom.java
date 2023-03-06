@@ -1,7 +1,6 @@
 package com.dev6.rejordbe.infrastructure.challengeReview.read;
 
 import com.dev6.rejordbe.domain.challengeReview.dto.ChallengeReviewResult;
-import com.dev6.rejordbe.domain.post.dto.PostResult;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -20,4 +19,15 @@ public interface ReadChallengeReviewRepositoryCustom {
      * @return {@code Page<ChallengeReviewResult>}
      */
     Page<ChallengeReviewResult> searchAll(final LocalDateTime offsetTime, final Pageable pageable);
+
+    /**
+     * uid가 동일한 모든 챌린지 리뷰 게시글을 반환 (페이지네이션)
+     *
+     * @param uid {@code String} 유저 UID
+     * @param pageable {@code Pageable}
+     * @return {@code Page<ChallengeReviewResult>}
+     */
+    Page<ChallengeReviewResult> searchChallengeReviewByUid(final String uid, final Pageable pageable);
+
+
 }

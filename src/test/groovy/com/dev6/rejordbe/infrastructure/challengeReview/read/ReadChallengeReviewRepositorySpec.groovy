@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Import
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
@@ -122,6 +123,46 @@ class ReadChallengeReviewRepositorySpec extends Specification {
 
         then:
         allPosts.getContent().size() == 0
+    }
+
+    @Unroll("#testCase")
+    def "uid가 일치하는 챌린지 리뷰 게시글을 취득할 수 있다"() {
+        given:
+        // 유저 생성
+        def user = Users.builder()
+                .uid('uid')
+                .nickname('nickname')
+                .build()
+        signUpRepository.save(user)
+
+        // 챌린지 게시글 추가
+        for (int i = 0; i < 10; i++) {
+            readChallengeReviewRepository.save(
+                    ChallengeReview.builder()
+                            .challengeReviewId('challengeReviewId' + i)
+                            .contents('contents')
+                            .challengeReviewType(ChallengeReviewType.HARDSHIP)
+                            .user(user)
+                            .build()
+            )
+        }
+
+        entityManager.flush()
+        entityManager.clear()
+
+        when:
+        def result = readChallengeReviewRepository.searchChallengeReviewByUid(uid, PageRequest.of(0, 10))
+
+        entityManager.flush()
+        entityManager.clear()
+
+        then:
+        result.getContent().size() == expectSize
+
+        where:
+        testCase               | uid    | expectSize
+        "일치하는 uid가 있는 경우" | 'uid'  | 10
+        "일치하는 uid가 없는 경우" | 'uid1' | 0
     }
 
 }
