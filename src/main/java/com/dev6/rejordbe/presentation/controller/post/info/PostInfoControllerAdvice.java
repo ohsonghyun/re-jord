@@ -1,6 +1,7 @@
 package com.dev6.rejordbe.presentation.controller.post.info;
 
 import com.dev6.rejordbe.exception.IllegalParameterException;
+import com.dev6.rejordbe.exception.UserNotFoundException;
 import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +24,14 @@ public class PostInfoControllerAdvice {
                 ErrorResponse.builder().message(exception.getMessage()).build(),
                 headers(),
                 HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> exceptionHandler(UserNotFoundException exception) {
+        return new ResponseEntity<>(
+                ErrorResponse.builder().message(exception.getMessage()).build(),
+                headers(),
+                HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)
