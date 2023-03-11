@@ -100,7 +100,7 @@ class ChallengeReviewInfoControllerSpec extends Specification {
                 )
 
         expect:
-        mvc.perform(get(BASE_URL + '/uid')
+        mvc.perform(get(BASE_URL + '/withUid')
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath('\$.content[0].challengeReviewId').value('challengeReviewId1'))
@@ -122,16 +122,14 @@ class ChallengeReviewInfoControllerSpec extends Specification {
         when(readChallengeReviewService.challengeReviewsWrittenByUid(isA(String.class), isA(Pageable.class))).thenThrow(exception)
 
         expect:
-        mvc.perform(get(BASE_URL + '/uid')
+        mvc.perform(get(BASE_URL + '/withUid')
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(resultStatus)
                 .andExpect(jsonPath('\$.message').value(message))
 
         where:
-        testCase                        | message                            | exception                              | resultStatus
-        "유저 uid가 지정되지 않은 경우: 400" | ExceptionCode.ILLEGAL_UID.name()   | new IllegalParameterException(message) | status().isBadRequest()
-        "존재하지 않는 유저인 경우: 404"     |ExceptionCode.USER_NOT_FOUND.name() | new UserNotFoundException(message)     | status().isNotFound()
+        testCase                   | message                            | exception                              | resultStatus
+        "지정한 uid가 없는 경우: 400" | ExceptionCode.ILLEGAL_UID.name()   | new IllegalParameterException(message) | status().isBadRequest()
     }
-
     // / 유저 uid와 일치하는 챌린지 게시글
 }

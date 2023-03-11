@@ -26,14 +26,6 @@ public class ChallengeReviewInfoControllerAdvice {
                 HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ErrorResponse> exceptionHandler(UserNotFoundException exception) {
-        return new ResponseEntity<>(
-                ErrorResponse.builder().message(exception.getMessage()).build(),
-                headers(),
-                HttpStatus.NOT_FOUND);
-    }
-
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> exceptionHandler(Exception exception) {
         exception.printStackTrace();

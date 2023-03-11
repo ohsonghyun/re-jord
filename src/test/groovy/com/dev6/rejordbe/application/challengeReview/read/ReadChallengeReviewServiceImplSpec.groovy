@@ -22,12 +22,10 @@ class ReadChallengeReviewServiceImplSpec extends Specification {
 
     private ReadChallengeReviewServiceImpl readChallengeReviewService
     private ReadChallengeReviewRepository readChallengeReviewRepository
-    private UserInfoRepository userInfoRepository
 
     def setup() {
         readChallengeReviewRepository = Mock(ReadChallengeReviewRepository)
-        userInfoRepository = Mock(UserInfoRepository)
-        readChallengeReviewService = new ReadChallengeReviewServiceImpl(readChallengeReviewRepository, userInfoRepository)
+        readChallengeReviewService = new ReadChallengeReviewServiceImpl(readChallengeReviewRepository)
     }
 
     def "기준 시각 이후의 모든 챌린지 게시글 정보를 획득할 수 있다"() {
@@ -70,7 +68,6 @@ class ReadChallengeReviewServiceImplSpec extends Specification {
 
     def "uid와 일치하는 모든 챌린지 게시글 정보를 획득할 수 있다"() {
         given:
-        userInfoRepository.findById(_) >> Optional.of(Users.builder().uid('uid').build())
         def pageRequest = PageRequest.of(0, 5)
         readChallengeReviewRepository.searchChallengeReviewByUid(_ as String, _ as Pageable)
                 >> new PageImpl<ChallengeReviewResult>(
@@ -102,16 +99,5 @@ class ReadChallengeReviewServiceImplSpec extends Specification {
 
         then:
         thrown(IllegalParameterException)
-    }
-
-    def "존재하지 않는 유저인 경우에는 에러: UserNotFoundException"() {
-        given:
-        userInfoRepository.findById(_) >> Optional.empty()
-
-        when:
-        readChallengeReviewService.challengeReviewsWrittenByUid('uid', PageRequest.of(0, 5))
-
-        then:
-        thrown(UserNotFoundException)
     }
 }

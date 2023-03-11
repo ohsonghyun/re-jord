@@ -3,9 +3,7 @@ package com.dev6.rejordbe.application.challengeReview.read;
 import com.dev6.rejordbe.domain.challengeReview.dto.ChallengeReviewResult;
 import com.dev6.rejordbe.domain.exception.ExceptionCode;
 import com.dev6.rejordbe.exception.IllegalParameterException;
-import com.dev6.rejordbe.exception.UserNotFoundException;
 import com.dev6.rejordbe.infrastructure.challengeReview.read.ReadChallengeReviewRepository;
-import com.dev6.rejordbe.infrastructure.user.UserInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -27,7 +25,6 @@ import java.util.Objects;
 public class ReadChallengeReviewServiceImpl implements ReadChallengeReviewService {
 
     private final ReadChallengeReviewRepository readChallengeReviewRepository;
-    private final UserInfoRepository userInfoRepository;
 
     /**
      * {@inheritDoc}
@@ -56,9 +53,6 @@ public class ReadChallengeReviewServiceImpl implements ReadChallengeReviewServic
             log.warn("ReadChallengeReviewServiceImpl.ChallengeReviewWrittenByUid: ILLEGAL_UID: {}", uid);
             throw new IllegalParameterException(ExceptionCode.ILLEGAL_UID.name());
         }
-
-        userInfoRepository.findById(uid).orElseThrow(() -> new UserNotFoundException(ExceptionCode.USER_NOT_FOUND.name()));
-
         return readChallengeReviewRepository.searchChallengeReviewByUid(uid, pageable);
     }
 }

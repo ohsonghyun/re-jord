@@ -30,7 +30,6 @@ public interface ReadChallengeReviewService {
      * @param pageable {@code Pageable} 페이지 정보
      * @return {@code Page<ChallengeReviewResult>}
      * @throws IllegalParameterException {@code uid} 이 존재하지 않은 경우
-     * @throws UserNotFoundException {@code uid} 존재하지 않는 유저인 경우
      */
     Page<ChallengeReviewResult> challengeReviewsWrittenByUid(final String uid, final Pageable pageable);
 }
