@@ -40,7 +40,8 @@ dependencies {
 	// querydsl
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
-	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1'
+	// 개발 환경 쿼리 확인용
+	//implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1'
 
 	// DB
 	implementation 'com.h2database:h2'
