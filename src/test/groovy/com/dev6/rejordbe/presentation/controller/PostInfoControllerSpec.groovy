@@ -96,7 +96,7 @@ class PostInfoControllerSpec extends Specification {
                 )
 
         expect:
-        mvc.perform(get(BASE_URL + '/uid')
+        mvc.perform(get(BASE_URL + '/withUid')
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath('\$.content[0].postId').value('postId1'))
@@ -118,14 +118,14 @@ class PostInfoControllerSpec extends Specification {
         when(readPostService.postsWrittenByUid(isA(String.class), isA(Pageable.class))).thenThrow(exception)
 
         expect:
-        mvc.perform(get(BASE_URL + '/uid')
+        mvc.perform(get(BASE_URL + '/withUid')
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(resultStatus)
                 .andExpect(jsonPath('\$.message').value(message))
 
         where:
-        testCase                        | message                            | exception                              | resultStatus
-        "유저 uid가 지정되지 않은 경우: 400" | ExceptionCode.ILLEGAL_UID.name()   | new IllegalParameterException(message) | status().isBadRequest()
+        testCase                   | message                            | exception                              | resultStatus
+        "지정한 uid가 없는 경우: 400" | ExceptionCode.ILLEGAL_UID.name()   | new IllegalParameterException(message) | status().isBadRequest()
     }
     // / uid가 일치하는 게시글 페이징 관련
 }
