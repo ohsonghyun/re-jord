@@ -28,7 +28,7 @@ public class AddChallengeReviewController {
             nickname = "addChallengeReview",
             notes = "챌린지 리뷰 작성 API. 세션쿠키 필요",
             response = AddChallengeReviewResponse.class,
-            authorizations = {@Authorization(value = "TBD")},
+            authorizations = {@Authorization(value = "JWT")},
             tags = "챌린지 리뷰 작성 컨트롤러"
     )
     @ApiResponses(value = {

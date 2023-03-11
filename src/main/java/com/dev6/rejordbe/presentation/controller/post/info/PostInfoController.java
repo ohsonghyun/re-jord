@@ -39,7 +39,7 @@ public class PostInfoController {
             nickname = "allPosts",
             notes = "모든 게시글 페이징 API.",
             response = Page.class,
-            authorizations = {@Authorization(value = "TBD")},
+            authorizations = {@Authorization(value = "JWT")},
             tags = "게시글 정보 컨트롤러")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "정상"),
@@ -65,11 +65,10 @@ public class PostInfoController {
             nickname = "postsWrittenByUid",
             notes = "유저 uid가 일치하는 게시글 페이징 API",
             response = Page.class,
-            authorizations = {@Authorization(value = "TBD")},
+            authorizations = {@Authorization(value = "JWT")},
             tags = "내가 쓴 게시글 정보 컨트롤러")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "정상"),
-            @ApiResponse(code = 404, message = "존재하지 않는 유저", response = ErrorResponse.class),
             @ApiResponse(code = 400, message = "유저 uid가 없는 경우", response = ErrorResponse.class)
     })
     @GetMapping(

@@ -3,9 +3,7 @@ package com.dev6.rejordbe.application.post.read;
 import com.dev6.rejordbe.domain.exception.ExceptionCode;
 import com.dev6.rejordbe.domain.post.dto.PostResult;
 import com.dev6.rejordbe.exception.IllegalParameterException;
-import com.dev6.rejordbe.exception.UserNotFoundException;
 import com.dev6.rejordbe.infrastructure.post.read.ReadPostRepository;
-import com.dev6.rejordbe.infrastructure.user.UserInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -27,7 +25,6 @@ import java.util.Objects;
 public class ReadPostServiceImpl implements ReadPostService {
 
     private final ReadPostRepository readPostRepository;
-    private final UserInfoRepository userInfoRepository;
 
     /**
      * {@inheritDoc}
@@ -56,9 +53,6 @@ public class ReadPostServiceImpl implements ReadPostService {
             log.warn("ReadPostServiceImpl.postsWrittenByUid: ILLEGAL_UID: {}", uid);
             throw new IllegalParameterException(ExceptionCode.ILLEGAL_UID.name());
         }
-
-        userInfoRepository.findById(uid).orElseThrow(() -> new UserNotFoundException(ExceptionCode.USER_NOT_FOUND.name()));
-
         return readPostRepository.searchPostByUid(uid, pageable);
     }
 }

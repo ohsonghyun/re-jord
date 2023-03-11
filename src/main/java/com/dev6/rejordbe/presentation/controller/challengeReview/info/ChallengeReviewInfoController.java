@@ -37,7 +37,7 @@ public class ChallengeReviewInfoController {
             nickname = "allChallengeReviews",
             notes = "모든 챌린지 게시글 페이징 API.",
             response = Page.class,
-            authorizations = {@Authorization(value = "TBD")},
+            authorizations = {@Authorization(value = "JWT")},
             tags = "챌린지 게시글 정보 컨트롤러")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "정상"),

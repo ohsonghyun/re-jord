@@ -6,7 +6,6 @@ import com.dev6.rejordbe.domain.exception.ExceptionCode
 import com.dev6.rejordbe.domain.post.PostType
 import com.dev6.rejordbe.domain.post.dto.PostResult
 import com.dev6.rejordbe.exception.IllegalParameterException
-import com.dev6.rejordbe.exception.UserNotFoundException
 import com.dev6.rejordbe.presentation.controller.post.info.PostInfoController
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
@@ -127,7 +126,6 @@ class PostInfoControllerSpec extends Specification {
         where:
         testCase                        | message                            | exception                              | resultStatus
         "유저 uid가 지정되지 않은 경우: 400" | ExceptionCode.ILLEGAL_UID.name()   | new IllegalParameterException(message) | status().isBadRequest()
-        "존재하지 않는 유저인 경우: 404"     |ExceptionCode.USER_NOT_FOUND.name() | new UserNotFoundException(message) | status().isNotFound()
     }
     // / uid가 일치하는 게시글 페이징 관련
 }

@@ -28,7 +28,7 @@ public class AddPostController {
             nickname = "addPost",
             notes = "게시물 작성 API. 세션쿠키 필요",
             response = AddPostResponse.class,
-            authorizations = {@Authorization(value = "TBD")},
+            authorizations = {@Authorization(value = "JWT")},
             tags = "게시글 작성 컨트롤러"
     )
     @ApiResponses(value = {
