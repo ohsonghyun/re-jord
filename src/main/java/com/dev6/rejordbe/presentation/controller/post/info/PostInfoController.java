@@ -4,6 +4,7 @@ import com.dev6.rejordbe.application.post.read.ReadPostService;
 import com.dev6.rejordbe.domain.exception.ExceptionCode;
 import com.dev6.rejordbe.domain.post.dto.PostResult;
 import com.dev6.rejordbe.exception.IllegalParameterException;
+import com.dev6.rejordbe.presentation.controller.argumentResolver.LoggedIn;
 import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
 import io.swagger.annotations.*;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -76,7 +77,7 @@ public class PostInfoController {
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_PROBLEM_JSON_VALUE}
     )
     public ResponseEntity<Page<PostResult>> postsWrittenByUid(
-            @Schema(description = "유저 uid", required = true) @NonNull @PathVariable String uid,
+            @ApiParam(hidden = true) @LoggedIn final String uid,
             final Pageable pageable
     ) {
         return ResponseEntity.ok(readPostService.postsWrittenByUid(uid, pageable));

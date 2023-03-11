@@ -85,10 +85,10 @@ public class ReadPostRepositoryCustomImpl implements ReadPostRepositoryCustom {
     }
 
     /**
-     *특정 uid 조건
+     * 특정 uid 조건
      *
-     *@param uid {@code String}
-     *@return {@code BooleanExpression}
+     * @param uid {@code String}
+     * @return {@code BooleanExpression}
      */
     private BooleanExpression eqUidWith(@Nullable final String uid) {
         return StringUtils.isBlank(uid) ? null :post.user.uid.eq(uid);
