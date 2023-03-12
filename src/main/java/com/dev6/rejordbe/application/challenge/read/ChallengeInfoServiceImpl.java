@@ -38,7 +38,6 @@ public class ChallengeInfoServiceImpl implements ChallengeInfoService {
                         .title(anChallenge.getTitle())
                         .contents(anChallenge.getContents())
                         .badgeCode(anChallenge.getBadgeCode())
-                        .badgeName(anChallenge.getBadgeName())
                         .footprintAmount(anChallenge.getFootprintAmount())
                         .imgFront(anChallenge.getImgFront())
                         .imgBack(anChallenge.getImgBack())

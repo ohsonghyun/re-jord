@@ -37,7 +37,6 @@ class ReadChallengeRepositorySpec extends Specification {
                             .contents("hello world" + i)
                             .footprintAmount(15)
                             .badgeCode(BadgeCode.FOREST_LOVER)
-                            .badgeName("BGName" + i)
                             .imgFront("imgFront" + i)
                             .imgBack("imgBack" + i)
                             .textColor("textColor" + i)
@@ -65,7 +64,6 @@ class ReadChallengeRepositorySpec extends Specification {
                         .contents(contents)
                         .footprintAmount(footprintAmount)
                         .badgeCode(badgeCode)
-                        .badgeName(badgeName)
                         .imgFront(imgFront)
                         .imgBack(imgBack)
                         .textColor(textColor)
@@ -86,15 +84,14 @@ class ReadChallengeRepositorySpec extends Specification {
         anChallenge.getContents() == contents
         anChallenge.getFootprintAmount() == footprintAmount
         anChallenge.getBadgeCode() == badgeCode
-        anChallenge.getBadgeName() == badgeName
         anChallenge.getImgFront() == imgFront
         anChallenge.getImgBack() == imgBack
         anChallenge.getTextColor() == textColor
         anChallenge.getFlag() == flag
 
         where:
-        challengeId   | title   | contents   | footprintAmount | badgeCode         | badgeName   | imgFront   | imgBack   | textColor   | flag
-        "CHDefault"   | "title" | "contents" | 15              | BadgeCode.DEFAULT | "badgeName" | "imgFront" | "imgBack" | "textColor" | ChallengeFlagType.TODAY
+        challengeId   | title   | contents   | footprintAmount | badgeCode         | imgFront   | imgBack   | textColor   | flag
+        "CHDefault"   | "title" | "contents" | 15              | BadgeCode.DEFAULT | "imgFront" | "imgBack" | "textColor" | ChallengeFlagType.TODAY
     }
 
     def "flag == true 인 챌린지 값을 갖고온다"() {
@@ -106,7 +103,6 @@ class ReadChallengeRepositorySpec extends Specification {
                         .contents(contents)
                         .footprintAmount(footprintAmount)
                         .badgeCode(badgeCode)
-                        .badgeName(badgeName)
                         .imgFront(imgFront)
                         .imgBack(imgBack)
                         .textColor(textColor)
@@ -127,15 +123,14 @@ class ReadChallengeRepositorySpec extends Specification {
         anChallenge.getContents() == contents
         anChallenge.getFootprintAmount() == footprintAmount
         anChallenge.getBadgeCode() == badgeCode
-        anChallenge.getBadgeName() == badgeName
         anChallenge.getImgFront() == imgFront
         anChallenge.getImgBack() == imgBack
         anChallenge.getTextColor() == textColor
         anChallenge.getFlag() == flag
 
         where:
-        challengeId   | title   | contents   | footprintAmount | badgeCode             | badgeName   | imgFront   | imgBack   | textColor   | flag
-        "challengeId" | "title" | "contents" | 15              | BadgeCode.PRO_SHOPPER | "badgeName" | "imgFront" | "imgBack" | "textColor" | ChallengeFlagType.TODAY
+        challengeId   | title   | contents   | footprintAmount | badgeCode             | imgFront   | imgBack   | textColor   | flag
+        "challengeId" | "title" | "contents" | 15              | BadgeCode.PRO_SHOPPER | "imgFront" | "imgBack" | "textColor" | ChallengeFlagType.TODAY
     }
 
     def "챌린지 flag를 수정할 수 있다"() {
@@ -148,7 +143,6 @@ class ReadChallengeRepositorySpec extends Specification {
                             .contents("hello world" + i)
                             .footprintAmount(15)
                             .badgeCode(BadgeCode.ENERGY_SAVER)
-                            .badgeName("BGName" + i)
                             .imgFront("imgFront" + i)
                             .imgBack("imgBack" + i)
                             .textColor("textColor" + i)
@@ -163,7 +157,6 @@ class ReadChallengeRepositorySpec extends Specification {
                         .contents(contents)
                         .footprintAmount(footprintAmount)
                         .badgeCode(BadgeCode.MEAL_PLANNER)
-                        .badgeName(badgeName)
                         .imgFront(imgFront)
                         .imgBack(imgBack)
                         .textColor(textColor)
@@ -188,15 +181,14 @@ class ReadChallengeRepositorySpec extends Specification {
         anChallenge.getContents() == contents
         anChallenge.getFootprintAmount() == footprintAmount
         anChallenge.getBadgeCode() == badgeCode
-        anChallenge.getBadgeName() == badgeName
         anChallenge.getImgFront() == imgFront
         anChallenge.getImgBack() == imgBack
         anChallenge.getTextColor() == textColor
         anChallenge.getFlag().equals(ChallengeFlagType.NOT_TODAY)
 
         where:
-        challengeId   | title   | contents   | footprintAmount | badgeCode              | badgeName   | imgFront   | imgBack   | textColor   | flag
-        "challengeId" | "title" | "contents" | 15              | BadgeCode.MEAL_PLANNER | "badgeName" | "imgFront" | "imgBack" | "textColor" | ChallengeFlagType.TODAY
+        challengeId   | title   | contents   | footprintAmount | badgeCode              | imgFront   | imgBack   | textColor   | flag
+        "challengeId" | "title" | "contents" | 15              | BadgeCode.MEAL_PLANNER | "imgFront" | "imgBack" | "textColor" | ChallengeFlagType.TODAY
 
     }
 }

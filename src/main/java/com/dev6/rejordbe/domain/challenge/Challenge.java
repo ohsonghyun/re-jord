@@ -27,10 +27,8 @@ public class Challenge {
     @Column(name = "footprint_amount")
     private Integer footprintAmount;
 
-    @Column(name = "badge_name")
-    private String badgeName;
-
     @Column(name = "badge_code")
+    @Enumerated(value = EnumType.STRING)
     private BadgeCode badgeCode;
 
     @Column(name = "img_front")

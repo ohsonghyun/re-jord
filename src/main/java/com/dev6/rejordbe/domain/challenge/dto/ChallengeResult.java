@@ -15,7 +15,6 @@ public class ChallengeResult {
     private final String title;
     private final String contents;
     private final BadgeCode badgeCode;
-    private final String badgeName;
     private final Integer footprintAmount;
     private final String imgFront;
     private final String imgBack;
