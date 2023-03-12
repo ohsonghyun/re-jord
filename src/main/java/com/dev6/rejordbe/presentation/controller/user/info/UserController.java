@@ -103,6 +103,7 @@ public class UserController {
     public ResponseEntity<CheckDuplicatedUserIdResponse> isNotDuplicatedUserId(
             @Schema(description = "유저 ID", required = true) @NonNull @PathVariable String userId
     ) {
+        log.info("UserController.isNotDuplicatedUserId: userId: {}", userId);
         return ResponseEntity.status(HttpStatus.OK).body(
                 CheckDuplicatedUserIdResponse.builder()
                         .userId(signUpService.isNotDuplicatedUserId(userId))
