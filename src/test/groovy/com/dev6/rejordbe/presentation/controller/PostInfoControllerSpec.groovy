@@ -124,8 +124,8 @@ class PostInfoControllerSpec extends Specification {
                 .andExpect(jsonPath('\$.message').value(message))
 
         where:
-        testCase                   | message                            | exception                              | resultStatus
-        "지정한 uid가 없는 경우: 400" | ExceptionCode.ILLEGAL_UID.name()   | new IllegalParameterException(message) | status().isBadRequest()
+        testCase                        | message                            | exception                              | resultStatus
+        "유저 uid가 지정이 안 된 경우: 400" | ExceptionCode.ILLEGAL_UID.name()   | new IllegalParameterException(message) | status().isBadRequest()
     }
     // / uid가 일치하는 게시글 페이징 관련
 }
