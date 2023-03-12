@@ -13,6 +13,7 @@ import com.dev6.rejordbe.presentation.controller.dto.userInfo.UpdateUserInfoRequ
 import com.dev6.rejordbe.presentation.controller.dto.userInfo.UpdateUserInfoResponse;
 import io.swagger.annotations.*;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
  * UserController
  */
 @Api(tags = "유저 컨트롤러")
+@Slf4j
 @RestController
 @RequestMapping("/v1/users")
 @lombok.RequiredArgsConstructor
@@ -49,6 +51,7 @@ public class UserController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<SignUpResponse> signUp(@ApiParam(value = "회원가입 정보", required = true) @RequestBody final SignUpRequest signUpUserRequest) {
+        log.info("UserController.signUp: signUpUserRequest: userId: {}", signUpUserRequest.getUserId());
         UserResult savedResult = signUpService.signUp(signUpUserRequest.toUser(), signUpUserRequest.getRoles());
 
         // 에러. 회원가입 실패
