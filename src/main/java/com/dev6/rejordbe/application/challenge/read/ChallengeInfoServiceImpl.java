@@ -1,6 +1,5 @@
 package com.dev6.rejordbe.application.challenge.read;
 
-import com.dev6.rejordbe.application.scheduler.ChallengeScheduler;
 import com.dev6.rejordbe.domain.challenge.Challenge;
 import com.dev6.rejordbe.domain.challenge.ChallengeFlagType;
 import com.dev6.rejordbe.domain.challenge.dto.ChallengeResult;
@@ -38,8 +37,7 @@ public class ChallengeInfoServiceImpl implements ChallengeInfoService {
                         .challengeId(anChallenge.getChallengeId())
                         .title(anChallenge.getTitle())
                         .contents(anChallenge.getContents())
-                        .badgeId(anChallenge.getBadgeId())
-                        .badgeName(anChallenge.getBadgeName())
+                        .badgeCode(anChallenge.getBadgeCode())
                         .footprintAmount(anChallenge.getFootprintAmount())
                         .imgFront(anChallenge.getImgFront())
                         .imgBack(anChallenge.getImgBack())

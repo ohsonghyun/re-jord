@@ -1,7 +1,7 @@
 package com.dev6.rejordbe.application.challengeReview.add
 
-
 import com.dev6.rejordbe.application.id.IdGenerator
+import com.dev6.rejordbe.domain.challenge.dto.ChallengeResult
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReviewType
 import com.dev6.rejordbe.domain.user.Users

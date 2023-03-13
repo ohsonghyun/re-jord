@@ -1,6 +1,6 @@
 package com.dev6.rejordbe.application.challenge.read
 
-
+import com.dev6.rejordbe.domain.badge.BadgeCode
 import com.dev6.rejordbe.domain.challenge.Challenge
 import com.dev6.rejordbe.domain.challenge.ChallengeFlagType
 import com.dev6.rejordbe.infrastructure.challenge.read.ReadChallengeRepository
@@ -26,8 +26,7 @@ class ChallengeServiceImplSpec extends Specification {
                 .title(title)
                 .contents(contents)
                 .footprintAmount(footprintAmount)
-                .badgeId(badgeId)
-                .badgeName(badgeName)
+                .badgeCode(badgeCode)
                 .imgFront(imgFront)
                 .imgBack(imgBack)
                 .textColor(textColor)
@@ -45,16 +44,15 @@ class ChallengeServiceImplSpec extends Specification {
         anChallenge.getTitle() == title
         anChallenge.getContents() == contents
         anChallenge.getFootprintAmount() == footprintAmount
-        anChallenge.getBadgeId() == badgeId
-        anChallenge.getBadgeName() == badgeName
+        anChallenge.getBadgeCode() == badgeCode
         anChallenge.getImgFront() == imgFront
         anChallenge.getImgBack() == imgBack
         anChallenge.getTextColor() == textColor
         anChallenge.getFlag() == flag
 
         where:
-        challengeId   | title   | contents   | footprintAmount | badgeId   | badgeName   | imgFront   | imgBack   | textColor   | flag
-        "challengeId" | "title" | "contents" | 15              | "badgeId" | "badgeName" | "imgFront" | "imgBack" | "textColor" | ChallengeFlagType.TODAY
+        challengeId   | title   | contents   | footprintAmount | badgeCode             | imgFront   | imgBack   | textColor   | flag
+        "challengeId" | "title" | "contents" | 15              | BadgeCode.WATER_FAIRY | "imgFront" | "imgBack" | "textColor" | ChallengeFlagType.TODAY
     }
 
     def "flag가 true인 챌린지가 없을 경우 flag가 DEFAULT인 챌린지를 갖고온다"() {
@@ -64,8 +62,7 @@ class ChallengeServiceImplSpec extends Specification {
                 .title(title)
                 .contents(contents)
                 .footprintAmount(footprintAmount)
-                .badgeId(badgeId)
-                .badgeName(badgeName)
+                .badgeCode(badgeCode)
                 .imgFront(imgFront)
                 .imgBack(imgBack)
                 .textColor(textColor)
@@ -84,15 +81,14 @@ class ChallengeServiceImplSpec extends Specification {
         anChallenge.getTitle() == title
         anChallenge.getContents() == contents
         anChallenge.getFootprintAmount() == footprintAmount
-        anChallenge.getBadgeId() == badgeId
-        anChallenge.getBadgeName() == badgeName
+        anChallenge.getBadgeCode() == badgeCode
         anChallenge.getImgFront() == imgFront
         anChallenge.getImgBack() == imgBack
         anChallenge.getTextColor() == textColor
         anChallenge.getFlag() == flag
 
         where:
-        challengeId   | title   | contents   | footprintAmount | badgeId   | badgeName   | imgFront   | imgBack   | textColor   | flag
-        "CHDefault"   | "title" | "contents" | 15              | "badgeId" | "badgeName" | "imgFront" | "imgBack" | "textColor" | ChallengeFlagType.DEFAULT
+        challengeId   | title   | contents   | footprintAmount | badgeCode         | imgFront   | imgBack   | textColor   | flag
+        "CHDefault"   | "title" | "contents" | 15              | BadgeCode.DEFAULT | "imgFront" | "imgBack" | "textColor" | ChallengeFlagType.DEFAULT
     }
 }
