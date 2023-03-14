@@ -51,7 +51,17 @@ public class WriteChallengeReviewServiceImpl implements WriteChallengeReviewServ
         }
 
         if (Objects.isNull(newChallengeReview.getChallengeReviewType())) {
-            log.warn("ChallengeReviewServiceImpl.writeChallengeReview: ILLEGAL_PARAM: {}", newChallengeReview.getContents());
+            log.warn("ChallengeReviewServiceImpl.writeChallengeReview: ILLEGAL_PARAM: {}", newChallengeReview.getChallengeReviewType());
+            throw new IllegalParameterException(ExceptionCode.ILLEGAL_PARAM.name());
+        }
+
+        if (Objects.isNull(newChallengeReview.getBadgeCode())) {
+            log.warn("ChallengeReviewServiceImpl.writeChallengeReview: ILLEGAL_PARAM: {}", newChallengeReview.getBadgeCode());
+            throw new IllegalParameterException(ExceptionCode.ILLEGAL_PARAM.name());
+        }
+
+        if (Objects.isNull(newChallengeReview.getFootprintAmount())) {
+            log.warn("ChallengeReviewServiceImpl.writeChallengeReview: ILLEGAL_PARAM: {}", newChallengeReview.getFootprintAmount());
             throw new IllegalParameterException(ExceptionCode.ILLEGAL_PARAM.name());
         }
 
@@ -60,6 +70,8 @@ public class WriteChallengeReviewServiceImpl implements WriteChallengeReviewServ
                         .challengeReviewId(idGenerator.generate("CR"))
                         .contents(newChallengeReview.getContents())
                         .challengeReviewType(newChallengeReview.getChallengeReviewType())
+                        .footprintAmount(newChallengeReview.getFootprintAmount())
+                        .badgeCode(newChallengeReview.getBadgeCode())
                         .user(user)
                         .build()
         );

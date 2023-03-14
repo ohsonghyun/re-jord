@@ -1,6 +1,7 @@
 package com.dev6.rejordbe.infrastructure.challengeReview.add
 
 import com.dev6.rejordbe.TestConfig
+import com.dev6.rejordbe.domain.badge.BadgeCode
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReviewType
 import com.dev6.rejordbe.domain.user.Users
@@ -45,6 +46,8 @@ class WriteChallengeReviewRepositorySpec extends Specification {
                     .challengeReviewId('challengeReviewId')
                     .contents('contents')
                     .challengeReviewType(ChallengeReviewType.FEELING)
+                    .footprintAmount(15)
+                    .badgeCode(BadgeCode.PRO_ACTIVATE)
                     .user(user)
                     .build()
 
@@ -61,6 +64,8 @@ class WriteChallengeReviewRepositorySpec extends Specification {
         aChallengeReview.getChallengeReviewId() == newChallengeReview.getChallengeReviewId()
         aChallengeReview.getContents() == newChallengeReview.getContents()
         aChallengeReview.getChallengeReviewType() == newChallengeReview.getChallengeReviewType()
+        aChallengeReview.getFootprintAmount() == newChallengeReview.getFootprintAmount()
+        aChallengeReview.getBadgeCode() == newChallengeReview.getBadgeCode()
         aChallengeReview.getCreatedDate().isAfter(now)
         aChallengeReview.getModifiedDate().isAfter(now)
 
