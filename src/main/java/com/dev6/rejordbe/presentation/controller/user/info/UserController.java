@@ -131,6 +131,7 @@ public class UserController {
             @Schema(description = "유저 uid", required = true) @NonNull @PathVariable String uid,
             @ApiParam(value = "수정할 회원 정보", required = true) @RequestBody UpdateUserInfoRequest request
     ) {
+        log.info("UserController.updateUserNickname: nickname: {}", request.getNickname());
         UserResult updatedUser = userInfoService.updateUserInfo(
                 Users.builder().uid(uid).nickname(request.getNickname()).build());
         return ResponseEntity.ok(UpdateUserInfoResponse.builder()

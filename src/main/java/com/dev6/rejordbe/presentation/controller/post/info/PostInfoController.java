@@ -51,6 +51,7 @@ public class PostInfoController {
             final LocalDateTime requestTime,
             final Pageable pageable
     ) {
+        log.info("PostInfoController.allPosts: requestTime: {}", requestTime);
         if (Objects.isNull(requestTime)) {
             log.warn("PostInfoController.allPosts: ILLEGAL_DATE_TIME: {}", requestTime);
             throw new IllegalParameterException(ExceptionCode.ILLEGAL_DATE_TIME.name());

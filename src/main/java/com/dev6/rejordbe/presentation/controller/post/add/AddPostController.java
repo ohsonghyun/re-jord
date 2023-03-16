@@ -7,6 +7,7 @@ import com.dev6.rejordbe.presentation.controller.dto.addPost.AddPostRequest;
 import com.dev6.rejordbe.presentation.controller.dto.addPost.AddPostResponse;
 import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
 import io.swagger.annotations.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * AddPostController
  */
 @Api(tags = "게시글 작성 컨트롤러")
+@Slf4j
 @RestController
 @RequestMapping("/v1/posts")
 @lombok.RequiredArgsConstructor
@@ -46,6 +48,7 @@ public class AddPostController {
             @ApiParam(value = "게시글 작성 정보", required = true) @RequestBody final AddPostRequest addPostRequest,
             @ApiParam(hidden = true) @LoggedIn final String uid
     ) {
+        log.info("AddPostController.addPost: postType: {}", addPostRequest.getPostType());
         PostResult postResult = writePostService.writePost(addPostRequest.toPost(), uid);
 
         return ResponseEntity.status(HttpStatus.CREATED)

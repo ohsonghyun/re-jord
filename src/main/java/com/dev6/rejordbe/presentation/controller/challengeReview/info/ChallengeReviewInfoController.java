@@ -51,6 +51,7 @@ public class ChallengeReviewInfoController {
             final LocalDateTime requestTime,
             final Pageable pageable
     ) {
+        log.info("ChallengeReviewInfoController.allChallengeReviews: requestTime: {}", requestTime);
         if (Objects.isNull(requestTime)) {
             log.warn("ChallengeReviewInfoController.allChallengeReviews: ILLEGAL_DATE_TIME: {}", requestTime);
             throw new IllegalParameterException(ExceptionCode.ILLEGAL_DATE_TIME.name());

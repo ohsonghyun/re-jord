@@ -7,6 +7,7 @@ import com.dev6.rejordbe.presentation.controller.dto.addChallengeReview.AddChall
 import com.dev6.rejordbe.presentation.controller.dto.addChallengeReview.AddChallengeReviewResponse;
 import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
 import io.swagger.annotations.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * AddChallengeReviewController
  */
 @Api(tags = "챌린지 리뷰 작성 컨트롤러")
+@Slf4j
 @RestController
 @RequestMapping("/v1/challengeReviews")
 @lombok.RequiredArgsConstructor
@@ -45,6 +47,10 @@ public class AddChallengeReviewController {
             @ApiParam(value = "챌린지 리뷰 작성 정보", required = true) @RequestBody final AddChallengeReviewRequest addChallengeReviewRequest,
             @ApiParam(hidden = true) @LoggedIn String uid
     ) {
+        log.info("AddChallengeReviewController.addChallengeReview: reviewType: {}, badgeCode: {}, footpringAmount: {}",
+                addChallengeReviewRequest.getChallengeReviewType(),
+                addChallengeReviewRequest.getBadgeCode(),
+                addChallengeReviewRequest.getFootprintAmount());
         ChallengeReviewResult challengeReviewResult = writeChallengeReviewService.writeChallengeReview(addChallengeReviewRequest.toChallengeReview(), uid);
 
         return ResponseEntity.status(HttpStatus.CREATED)
