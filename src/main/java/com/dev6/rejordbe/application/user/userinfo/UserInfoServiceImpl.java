@@ -4,9 +4,11 @@ import com.dev6.rejordbe.application.user.validate.UserInfoValidateService;
 import com.dev6.rejordbe.domain.exception.ExceptionCode;
 import com.dev6.rejordbe.domain.role.Role;
 import com.dev6.rejordbe.domain.user.Users;
+import com.dev6.rejordbe.domain.user.dto.UserInfoForMyPage;
 import com.dev6.rejordbe.domain.user.dto.UserResult;
 import com.dev6.rejordbe.exception.DuplicatedNicknameException;
 import com.dev6.rejordbe.exception.IllegalParameterException;
+import com.dev6.rejordbe.exception.MyPageInfoNotFoundException;
 import com.dev6.rejordbe.exception.UserNotFoundException;
 import com.dev6.rejordbe.infrastructure.user.UserInfoRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -113,5 +117,30 @@ public class UserInfoServiceImpl implements UserInfoService, UserDetailsService 
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         });
         return new User(anUser.getUid(), anUser.getPassword(), authorities);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public UserInfoForMyPage findUserInfoByUid(String uid) {
+        userInfoRepository.findById(uid).orElseThrow(() -> {
+            log.info("MyPageServiceImpl.findUserInfoByUid: USER_NOT_FOUND: {}", uid);
+            return new UserNotFoundException(ExceptionCode.USER_NOT_FOUND.name());
+        });
+
+        UserInfoForMyPage userInfo =  userInfoRepository.searchUserInfoByUid(uid).orElseThrow(() -> {
+            log.info("MyPageServiceImpl.findUserInfoByUid: MY_PAGE_INFO_NOT_FOUND: 마이페이지 정보 null 또는 EmptyString");
+            return new MyPageInfoNotFoundException(ExceptionCode.MY_PAGE_INFO_NOT_FOUND.name());
+        });
+
+        Long dDay = ChronoUnit.DAYS.between(userInfo.getCreatedDate(), LocalDateTime.now());
+
+        return UserInfoForMyPage.builder()
+                .totalFootprintAmount(userInfo.getTotalFootprintAmount())
+                .badgeAmount(userInfo.getBadgeAmount())
+                .nickname(userInfo.getNickname())
+                .dDay(Long.valueOf(dDay).intValue())
+                .build();
     }
 }

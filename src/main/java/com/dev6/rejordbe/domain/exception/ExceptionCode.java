@@ -20,6 +20,7 @@ public enum ExceptionCode {
     USER_NOT_FOUND,
     CHALLENGE_REVIEW_NOT_FOUND,
     CHALLENGE_NOT_FOUND,
+    MY_PAGE_INFO_NOT_FOUND,
 
     // INTERNAL_SERVER_ERROR -------------------------------------
     INTERNAL_ILLEGAL_PARAM;

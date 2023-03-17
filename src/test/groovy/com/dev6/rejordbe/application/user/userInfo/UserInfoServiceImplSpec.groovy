@@ -7,12 +7,17 @@ import com.dev6.rejordbe.application.user.validate.UserInfoValidateService
 import com.dev6.rejordbe.domain.role.Role
 import com.dev6.rejordbe.domain.role.RoleType
 import com.dev6.rejordbe.domain.user.Users
+import com.dev6.rejordbe.domain.user.dto.UserInfoForMyPage
 import com.dev6.rejordbe.domain.user.dto.UserResult
 import com.dev6.rejordbe.exception.DuplicatedNicknameException
 import com.dev6.rejordbe.exception.IllegalParameterException
+import com.dev6.rejordbe.exception.MyPageInfoNotFoundException
 import com.dev6.rejordbe.exception.UserNotFoundException
 import com.dev6.rejordbe.infrastructure.user.UserInfoRepository
 import spock.lang.Specification
+
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
 /**
  * UserInfoServiceImplSpec
@@ -116,5 +121,68 @@ class UserInfoServiceImplSpec extends Specification {
 
         then:
         thrown(DuplicatedNicknameException)
+    }
+
+    // ----------------------------------------------------
+    // 마이페이지 관련
+    // ----------------------------------------------------
+
+    def "에러가 없으면 마이페이지 정보를 취득할 수 있다."() {
+        def anUser = Users.builder()
+                .uid('uid')
+                .userId('userId')
+                .nickname(nickname)
+                .password('password')
+                .roles(Collections.singletonList(new Role(RoleType.ROLE_USER)))
+                .build()
+        userInfoRepository.findById(_ as String) >> Optional.of(anUser)
+        userInfoRepository.searchUserInfoByUid(_ as String) >> Optional.of(UserInfoForMyPage.builder()
+                .badgeAmount(badgeAmount)
+                .totalFootprintAmount(totalFootprintAmount)
+                .nickname(nickname)
+                .createdDate(createdDate)
+                .build())
+
+        when:
+        def result = userInfoService.findUserInfoByUid(uid)
+
+        then:
+        result.getNickname() == nickname
+        result.getTotalFootprintAmount() == totalFootprintAmount
+        result.getBadgeAmount() == badgeAmount
+        result.getDDay() == ChronoUnit.DAYS.between(createdDate, LocalDateTime.now())
+
+        where:
+        nickname   | badgeAmount | totalFootprintAmount | uid   | createdDate
+        'nickname' | 3           | 45                   | 'uid' | LocalDateTime.of(2022, 3, 15, 9, 30, 30)
+    }
+
+    def "마이페이지 정보를 검색할 유저가 존재하지 않으면 에러: UserNotFoundException"() {
+        given:
+        // mock
+        userInfoRepository.findById(_ as String) >> Optional.empty()
+
+        when:
+        userInfoService.findUserInfoByUid('uid')
+
+        then:
+        thrown(UserNotFoundException)
+    }
+
+    def "마이페이지 정보가 존재하지 않으면 에러: MyPageInfoNotFoundException"() {
+        given:
+        def anUser = Users.builder()
+                .uid('uid')
+                .build()
+
+        // mock
+        userInfoRepository.findById(_ as String) >> Optional.of(anUser)
+        userInfoRepository.searchUserInfoByUid(_ as String) >> Optional.empty()
+
+        when:
+        userInfoService.findUserInfoByUid('uid')
+
+        then:
+        thrown(MyPageInfoNotFoundException)
     }
 }

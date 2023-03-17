@@ -1,9 +1,13 @@
 package com.dev6.rejordbe.infrastructure.user
 
 import com.dev6.rejordbe.TestConfig
+import com.dev6.rejordbe.domain.badge.BadgeCode
+import com.dev6.rejordbe.domain.challengeReview.ChallengeReview
+import com.dev6.rejordbe.domain.challengeReview.ChallengeReviewType
 import com.dev6.rejordbe.domain.role.Role
 import com.dev6.rejordbe.domain.role.RoleType
 import com.dev6.rejordbe.domain.user.Users
+import com.dev6.rejordbe.infrastructure.challengeReview.add.WriteChallengeReviewRepository
 import com.dev6.rejordbe.infrastructure.role.RoleInfoRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -29,6 +33,8 @@ class UserInfoRepositorySpec extends Specification {
     RoleInfoRepository roleInfoRepository
     @Autowired
     UserInfoRepository userInfoRepository
+    @Autowired
+    WriteChallengeReviewRepository writeChallengeReviewRepository
 
     // ----------------------------------------------------
     // 유저 정보 관련
@@ -162,4 +168,58 @@ class UserInfoRepositorySpec extends Specification {
         "uid" | "userId" | "nickname" | "password" | RoleType.ROLE_USER | "newNickname"
     }
 
+    // ----------------------------------------------------
+    // 마이페이지 관련
+    // ----------------------------------------------------
+
+    def "uid로 마이페이지 유저 정보를 검색할 수 있다"() {
+        given: "유저 생성"
+        def role = roleInfoRepository.save(new Role(roleType))
+        def saveUser = Users.builder()
+                .uid(uid)
+                .userId(userId)
+                .nickname(nickname)
+                .password(password)
+                .roles(Collections.singletonList(role))
+                .build()
+        userInfoRepository.save(saveUser)
+
+        // 게시글 추가
+        for (int i = 0; i < 10; i++) {
+            writeChallengeReviewRepository.save(
+                    ChallengeReview.builder()
+                            .challengeReviewId('challengeReviewId' + i)
+                            .contents('contents')
+                            .challengeReviewType(ChallengeReviewType.HARDSHIP)
+                            .footprintAmount(15)
+                            .badgeCode(BadgeCode.VEGETARIAN)
+                            .user(saveUser)
+                            .build()
+            )
+        }
+        writeChallengeReviewRepository.save(
+                ChallengeReview.builder()
+                        .challengeReviewId('challengeReviewId67')
+                        .contents('contents')
+                        .challengeReviewType(ChallengeReviewType.HARDSHIP)
+                        .footprintAmount(15)
+                        .badgeCode(BadgeCode.PRO_ACTIVATE)
+                        .user(saveUser)
+                        .build()
+        )
+        entityManager.flush()
+        entityManager.clear()
+
+        when:
+        def resultUserInfo = userInfoRepository.searchUserInfoByUid(uid).orElseThrow()
+
+        then:
+        resultUserInfo.getBadgeAmount() == 2
+        resultUserInfo.getTotalFootprintAmount() == 165
+        resultUserInfo.getNickname() == nickname
+
+        where:
+        uid   | userId   | nickname   | password   | roleType           | newNickname
+        "uid" | "userId" | "nickname" | "password" | RoleType.ROLE_USER | "newNickname"
+    }
 }

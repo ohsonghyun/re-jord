@@ -1,6 +1,7 @@
 package com.dev6.rejordbe.application.user.userinfo;
 
 import com.dev6.rejordbe.domain.user.Users;
+import com.dev6.rejordbe.domain.user.dto.UserInfoForMyPage;
 import com.dev6.rejordbe.domain.user.dto.UserResult;
 import org.springframework.lang.NonNull;
 
@@ -27,4 +28,14 @@ public interface UserInfoService {
      * @return {@code Optional<UserResult>}
      */
     Optional<UserResult> findUserByUid(@NonNull final String uid);
+
+
+    /**
+     * 마이페이지 유저 정보
+     *
+     * @param uid {@code String} 마이페이지 조회 대상 uid
+     * @return {@code UserInfoForMyPage} 마이페이지 유저 정보
+     */
+    UserInfoForMyPage findUserInfoByUid(final String uid);
+
 }

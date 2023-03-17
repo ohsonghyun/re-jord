@@ -116,7 +116,7 @@ class AddChallengeReviewControllerSpec extends Specification {
         testCase                      | message                                         | exception                              | resultStatus
         'contents 정책 위반 데이터: 400' | ExceptionCode.ILLEGAL_CONTENTS.name()           | new IllegalParameterException(message) | status().isBadRequest()
         '존재하지 않는 유저: 404'        | ExceptionCode.USER_NOT_FOUND.name()             | new UserNotFoundException(message)     | status().isNotFound()
-        '존재하지 않는 유저: 404'        | ExceptionCode.CHALLENGE_REVIEW_NOT_FOUND.name() | new ParentIdNotFoundException(message) | status().isNotFound()
+        '존재하지 않는 챌린지 리뷰: 404'  | ExceptionCode.CHALLENGE_REVIEW_NOT_FOUND.name() | new ParentIdNotFoundException(message) | status().isNotFound()
     }
 
     @Unroll
