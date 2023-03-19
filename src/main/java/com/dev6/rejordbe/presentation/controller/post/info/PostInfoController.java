@@ -4,6 +4,7 @@ import com.dev6.rejordbe.application.post.read.ReadPostService;
 import com.dev6.rejordbe.domain.exception.ExceptionCode;
 import com.dev6.rejordbe.domain.post.dto.PostResult;
 import com.dev6.rejordbe.exception.IllegalParameterException;
+import com.dev6.rejordbe.presentation.controller.argumentResolver.LoggedIn;
 import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,7 @@ public class PostInfoController {
             nickname = "allPosts",
             notes = "모든 게시글 페이징 API.",
             response = Page.class,
-            authorizations = {@Authorization(value = "TBD")},
+            authorizations = {@Authorization(value = "JWT")},
             tags = "게시글 정보 컨트롤러")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "정상"),
@@ -57,5 +58,27 @@ public class PostInfoController {
             throw new IllegalParameterException(ExceptionCode.ILLEGAL_DATE_TIME.name());
         }
         return ResponseEntity.ok(readPostService.allPosts(requestTime, pageable));
+    }
+
+    @ApiOperation(
+            value = "유저 uid가 일치하는 게시글 페이징",
+            nickname = "postsWrittenByUid",
+            notes = "유저 uid가 일치하는 게시글 페이징 API",
+            response = Page.class,
+            authorizations = {@Authorization(value = "JWT")},
+            tags = "내가 쓴 게시글 정보 컨트롤러")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "정상"),
+            @ApiResponse(code = 400, message = "유저 uid가 없는 경우", response = ErrorResponse.class)
+    })
+    @GetMapping(
+            value = "/withUid",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_PROBLEM_JSON_VALUE}
+    )
+    public ResponseEntity<Page<PostResult>> postsWrittenByUid(
+            @ApiParam(hidden = true) @LoggedIn final String uid,
+            final Pageable pageable
+    ) {
+        return ResponseEntity.ok(readPostService.postsWrittenByUid(uid, pageable));
     }
 }

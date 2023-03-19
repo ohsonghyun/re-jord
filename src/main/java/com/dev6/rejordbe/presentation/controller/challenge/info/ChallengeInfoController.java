@@ -30,7 +30,7 @@ public class ChallengeInfoController {
             nickname = "todayChallengeInfos",
             notes = "오늘 챌린지 정보 API.",
             response = ChallengeResult.class,
-            authorizations = {@Authorization(value = "TBD")},
+            authorizations = {@Authorization(value = "JWT")},
             tags = "오늘 챌린지 정보 컨트롤러")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "정상"),

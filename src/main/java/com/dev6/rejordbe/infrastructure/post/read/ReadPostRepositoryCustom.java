@@ -19,4 +19,13 @@ public interface ReadPostRepositoryCustom {
      * @return {@code Page<PostResult>}
      */
     Page<PostResult> searchAll(final LocalDateTime offsetTime, final Pageable pageable);
+
+    /**
+     * uid가 동일한 모든 일반 피드를 반환 (페이지네이션)
+     *
+     * @param uid {@code String} 유저 UID
+     * @param pageable {@code Pageable}
+     * @return {@code Page<PostResult>}
+     */
+    Page<PostResult> searchPostByUid(final String uid, final Pageable pageable);
 }

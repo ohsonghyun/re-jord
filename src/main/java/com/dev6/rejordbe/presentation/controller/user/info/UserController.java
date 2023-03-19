@@ -38,7 +38,7 @@ public class UserController {
             nickname = "signUp",
             notes = "회원가입API. 에러인 경우에는 errors 필드에만 값 설정 후 리스폰스",
             response = SignUpResponse.class,
-            authorizations = {@Authorization(value = "TBD")},
+            authorizations = {@Authorization(value = "JWT")},
             tags = "유저 컨트롤러")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "정상"),
@@ -89,7 +89,7 @@ public class UserController {
             nickname = "checkDuplicatedUserId",
             notes = "아이디 중복 체크 API. ",
             response = CheckDuplicatedUserIdResponse.class,
-            authorizations = {@Authorization(value = "TBD")},
+            authorizations = {@Authorization(value = "JWT")},
             tags = "유저 컨트롤러")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "정상"),
