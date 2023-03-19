@@ -35,6 +35,10 @@ class ReadPostRepositorySpec extends Specification {
     @Autowired
     ReadPostRepository readPostRepository
 
+    // ----------------------------------------------------
+    // 모든 피드 페이징 관련
+    // ----------------------------------------------------
+
     def "특정시간 이전의 게시글을 최신글 순으로 취득할 수 있다: 데이터가 있는 경우"() {
         given:
         // 유저 생성
@@ -124,4 +128,46 @@ class ReadPostRepositorySpec extends Specification {
         allPosts.getContent().size() == 0
     }
 
+    // ----------------------------------------------------
+    // uid가 일치하는 게시글 페이징 관련
+    // ----------------------------------------------------
+
+    def "uid가 일치하는 게시글을 취득할 수 있다: 데이터가 있는 경우"() {
+        given:
+        // 유저 생성
+        def user = Users.builder()
+                .uid('uid')
+                .nickname('nickname')
+                .build()
+        signUpRepository.save(user)
+
+        // 게시글 추가
+        for (int i = 0; i < 10; i++) {
+            readPostRepository.save(
+                    Post.builder()
+                            .postId('postId' + i)
+                            .contents('contents')
+                            .postType(PostType.SHARE)
+                            .user(user)
+                            .build()
+            )
+        }
+
+        entityManager.flush()
+        entityManager.clear()
+
+        when:
+        def allPosts = readPostRepository.searchPostByUid(uid, PageRequest.of(0, 10))
+
+        entityManager.flush()
+        entityManager.clear()
+
+        then:
+        allPosts.getContent().size() == expectSize
+
+        where:
+        testCase               | uid    | expectSize
+        "일치하는 uid가 있는 경우" | 'uid'  | 10
+        "일치하는 uid가 없는 경우" | 'uid1' | 0
+    }
 }

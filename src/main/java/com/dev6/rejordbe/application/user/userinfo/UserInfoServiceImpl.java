@@ -49,6 +49,7 @@ public class UserInfoServiceImpl implements UserInfoService, UserDetailsService 
     public Optional<UserResult> findUserByUid(@NonNull final String uid) {
         Optional<Users> userOptional = userInfoRepository.findUserByUid(uid);
         if (userOptional.isEmpty()) {
+            log.info("UserInfoServiceImpl.findUserByUid: USER_NOT_FOUND: {}", uid);
             return Optional.empty();
         }
         return userOptional.map(anUser ->
@@ -75,12 +76,15 @@ public class UserInfoServiceImpl implements UserInfoService, UserDetailsService 
         }
         userInfoRepository.findUserByNickname(newUserInfo.getNickname())
                 .ifPresent(existingUser -> {
-                    log.info("UserInfoServiceImpl.updateNickname: DUPLICATED_NICKNAME: {}", newUserInfo.getNickname());
+                    log.info("UserInfoServiceImpl.updateUserInfo: DUPLICATED_NICKNAME: {}", newUserInfo.getNickname());
                     throw new DuplicatedNicknameException(ExceptionCode.DUPLICATED_NICKNAME.name());
                 });
 
         Users targetUser = userInfoRepository.findById(newUserInfo.getUid())
-                .orElseThrow(() -> new UserNotFoundException(ExceptionCode.USER_NOT_FOUND.name()));
+                .orElseThrow(() -> {
+                    log.info("UserInfoServiceImpl.updateUserInfo: USER_NOT_FOUND: {}", newUserInfo.getNickname());
+                    return new UserNotFoundException(ExceptionCode.USER_NOT_FOUND.name());
+                });
 
         targetUser.update(Users.builder().nickname(newUserInfo.getNickname()).build());
         return UserResult.builder()

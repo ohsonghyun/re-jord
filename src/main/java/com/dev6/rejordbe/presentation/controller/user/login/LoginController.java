@@ -11,6 +11,7 @@ import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
 import com.dev6.rejordbe.presentation.controller.dto.login.LoginRequest;
 import com.dev6.rejordbe.presentation.controller.dto.login.LoginResponse;
 import io.swagger.annotations.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -34,6 +35,7 @@ import static com.dev6.rejordbe.domain.jwt.Jwt.*;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Api(tags = "로그인 컨트롤러")
+@Slf4j
 @RestController
 @RequestMapping("/v1/login")
 @lombok.RequiredArgsConstructor
@@ -47,7 +49,7 @@ public class LoginController {
             nickname = "login",
             notes = "로그인 API.",
             response = LoginResponse.class,
-            authorizations = {@Authorization(value = "TBD")},
+            authorizations = {@Authorization(value = "JWT")},
             tags = "로그인 컨트롤러"
     )
     @ApiResponses(value = {
@@ -66,6 +68,7 @@ public class LoginController {
             @ApiParam(value = "로그인 대상 정보", required = true) @RequestBody LoginRequest request,
             HttpServletRequest httpServletRequest
     ) {
+        log.info("LoginController.login: LoginRequest: userId: {}", request.getUserId());
         UserResult loginResult = loginService.findUserByUserId(request.getUserId());
 
         UsernamePasswordAuthenticationToken authenticationToken =

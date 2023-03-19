@@ -51,6 +51,9 @@ dependencies {
 	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 	compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
 
+	// trace
+	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth:3.1.5'
+
 	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.spockframework:spock-core:2.3-groovy-3.0'
