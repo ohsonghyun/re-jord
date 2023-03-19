@@ -50,9 +50,15 @@ public class SignUpServiceImpl implements SignUpService {
         }
 
         signUpRepository.findUserByUserId(newUser.getUserId())
-                .ifPresent(user -> errors.add(new DuplicatedUserIdException(ExceptionCode.DUPLICATED_USERID.name())));
+                .ifPresent(user -> {
+                    log.info("SignUpServiceImpl.signUp: DUPLICATED_USERID {}", user.getUserId());
+                    errors.add(new DuplicatedUserIdException(ExceptionCode.DUPLICATED_USERID.name()));
+                });
         signUpRepository.findUserByNickname(newUser.getNickname())
-                .ifPresent(user -> errors.add(new DuplicatedNicknameException(ExceptionCode.DUPLICATED_NICKNAME.name())));
+                .ifPresent(user -> {
+                    log.info("SignUpServiceImpl.signUp: DUPLICATED_NICKNAME {}", user.getNickname());
+                    errors.add(new DuplicatedNicknameException(ExceptionCode.DUPLICATED_NICKNAME.name()));
+                });
         if (!errors.isEmpty()) {
             return UserResult.builder()
                     .errors(errors)
@@ -102,6 +108,7 @@ public class SignUpServiceImpl implements SignUpService {
     @Override
     public String isNotDuplicatedUserId(String userId) {
         if (!userInfoValidateService.validateUserId(userId, new ArrayList<>())) {
+            log.info("SignUpServiceImpl.checkDuplicatedUserId: ILLEGAL_USERID: {}", userId);
             throw new IllegalParameterException((ExceptionCode.ILLEGAL_USERID.name()));
         }
         signUpRepository.findUserByUserId(userId).ifPresent(existingUserId -> {
