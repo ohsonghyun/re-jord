@@ -36,7 +36,10 @@ public class WritePostServiceImpl implements WritePostService {
     @Transactional
     @Override
     public PostResult writePost(@NonNull Post newPost, @NonNull String uid) {
-        Users user = userInfoRepository.findById(uid).orElseThrow(() -> new UserNotFoundException(ExceptionCode.USER_NOT_FOUND.name()));
+        Users user = userInfoRepository.findById(uid).orElseThrow(() -> {
+            log.warn("WritePostServiceImpl.writePost: USER_NOT_FOUND: uid: {}", uid);
+            return new UserNotFoundException(ExceptionCode.USER_NOT_FOUND.name());
+        });
 
         if (!StringUtils.hasText(newPost.getContents())) {
             log.info("WritePostServiceImpl.writePost: ILLEGAL_CONTENTS: {}", newPost.getContents());

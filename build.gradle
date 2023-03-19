@@ -40,7 +40,8 @@ dependencies {
 	// querydsl
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
-	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1'
+	// 개발 환경 쿼리 확인용
+	//implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1'
 
 	// DB
 	implementation 'com.h2database:h2'
@@ -49,6 +50,9 @@ dependencies {
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
 	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 	compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
+
+	// trace
+	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth:3.1.5'
 
 	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

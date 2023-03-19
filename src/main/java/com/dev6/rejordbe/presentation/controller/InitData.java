@@ -1,5 +1,7 @@
 package com.dev6.rejordbe.presentation.controller;
 
+import com.dev6.rejordbe.domain.badge.BadgeAcquirementType;
+import com.dev6.rejordbe.domain.badge.BadgeCode;
 import com.dev6.rejordbe.domain.challenge.Challenge;
 import com.dev6.rejordbe.domain.challenge.ChallengeFlagType;
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview;
@@ -214,8 +216,7 @@ public class InitData {
                                         .title("title" + idx)
                                         .contents("hello world" + idx)
                                         .footprintAmount(15)
-                                        .badgeId("BG" + idx)
-                                        .badgeName("BGName" + idx)
+                                        .badgeCode(BadgeCode.ENERGY_SAVER)
                                         .imgFront("imgFront" + idx)
                                         .imgBack("imgBack" + idx)
                                         .textColor("textColor" + idx)
@@ -229,8 +230,7 @@ public class InitData {
                                         .title("title" + idx)
                                         .contents("hello world" + idx)
                                         .footprintAmount(15)
-                                        .badgeId("BG" + idx)
-                                        .badgeName("BGName" + idx)
+                                        .badgeCode(BadgeCode.DIGITAL_FAIRY)
                                         .imgFront("imgFront" + idx)
                                         .imgBack("imgBack" + idx)
                                         .textColor("textColor" + idx)
@@ -245,8 +245,7 @@ public class InitData {
                                 .title("title")
                                 .contents("hello world")
                                 .footprintAmount(15)
-                                .badgeId("BG")
-                                .badgeName("BGName")
+                                .badgeCode(BadgeCode.DEFAULT)
                                 .imgFront("imgFront")
                                 .imgBack("imgBack")
                                 .textColor("textColor")

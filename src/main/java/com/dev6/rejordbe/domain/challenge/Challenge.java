@@ -1,5 +1,7 @@
 package com.dev6.rejordbe.domain.challenge;
 
+import com.dev6.rejordbe.domain.badge.BadgeCode;
+
 import javax.persistence.*;
 
 /**
@@ -25,11 +27,9 @@ public class Challenge {
     @Column(name = "footprint_amount")
     private Integer footprintAmount;
 
-    @Column(name = "badge_name")
-    private String badgeName;
-
-    @Column(name = "badge_id")
-    private String badgeId;
+    @Column(name = "badge_code")
+    @Enumerated(value = EnumType.STRING)
+    private BadgeCode badgeCode;
 
     @Column(name = "img_front")
     private String imgFront;

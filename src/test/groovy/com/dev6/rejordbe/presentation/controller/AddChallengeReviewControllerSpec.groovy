@@ -2,6 +2,7 @@ package com.dev6.rejordbe.presentation.controller
 
 
 import com.dev6.rejordbe.application.challengeReview.add.WriteChallengeReviewService
+import com.dev6.rejordbe.domain.badge.BadgeCode
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReviewType
 import com.dev6.rejordbe.domain.challengeReview.dto.ChallengeReviewResult
@@ -75,6 +76,8 @@ class AddChallengeReviewControllerSpec extends Specification {
                                     AddChallengeReviewRequest.builder()
                                     .contents(contents)
                                     .challengeReviewType(challengeReviewType)
+                                    .badgeCode(badgeCode)
+                                    .footprintAmount(footprintAmount)
                                     .build()
                             )))
                 .andExpect(status().isCreated())
@@ -84,8 +87,8 @@ class AddChallengeReviewControllerSpec extends Specification {
                 .andExpect(jsonPath('\$.uid').value(uid))
 
         where:
-        challengeReviewId   | contents   | challengeReviewType         | uid
-        'challengeReviewId' | 'contents' | ChallengeReviewType.FEELING | 'uid'
+        challengeReviewId   | contents   | challengeReviewType         | badgeCode              | footprintAmount | uid
+        'challengeReviewId' | 'contents' | ChallengeReviewType.FEELING | BadgeCode.PRO_ACTIVATE | 15              |'uid'
     }
 
     @Unroll
@@ -102,6 +105,8 @@ class AddChallengeReviewControllerSpec extends Specification {
                                         AddChallengeReviewRequest.builder()
                                                 .contents('contents')
                                                 .challengeReviewType(ChallengeReviewType.FEELING)
+                                                .badgeCode(BadgeCode.ENVIRONMENTAL_EXPERT)
+                                                .footprintAmount(15)
                                                 .build()
                                 )))
                 .andExpect(resultStatus)
@@ -129,6 +134,8 @@ class AddChallengeReviewControllerSpec extends Specification {
                                         AddChallengeReviewRequest.builder()
                                                 .contents('contents')
                                                 .challengeReviewType(ChallengeReviewType.FEELING)
+                                                .badgeCode(BadgeCode.ENVIRONMENTAL_EXPERT)
+                                                .footprintAmount(15)
                                                 .build()
                                 )))
                 .andExpect(resultStatus)
