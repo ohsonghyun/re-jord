@@ -37,5 +37,5 @@ flowertaekk/teamdev6   v0.0.1    26bf4921cdae   16 minutes ago   378MB
 [ec2-user@ip-172-31-38-180 ~]$ docker pull flowertaekk/teamdev6:v0.0.1
 
 # 도커 이미지로 컨테이너 생성
-[ec2-user@ip-172-31-38-180 ~]$ docker run -d -p 80:8080 --name=leadpet flowertaekk/teamdev6:v0.0.1
+[ec2-user@ip-172-31-38-180 ~]$ docker run -d -p 8080:8080 -v /etc/localtime:/etc/localtime:ro -e TZ=Asia/Seoul --name=leadpet flowertaekk/teamdev6:v0.0.1 
 ```
