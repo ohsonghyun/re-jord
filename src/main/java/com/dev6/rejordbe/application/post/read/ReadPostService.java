@@ -1,6 +1,7 @@
 package com.dev6.rejordbe.application.post.read;
 
 import com.dev6.rejordbe.domain.post.dto.PostResult;
+import com.dev6.rejordbe.domain.post.dto.SearchPostCond;
 import com.dev6.rejordbe.exception.IllegalParameterException;
 import com.dev6.rejordbe.exception.UserNotFoundException;
 import org.springframework.data.domain.Page;
@@ -21,7 +22,7 @@ public interface ReadPostService {
      * @return {@code Page<PostResult>}
      * @throws IllegalParameterException {@code offsetTime} 이 존재하지 않은 경우
      */
-    Page<PostResult> allPosts(final LocalDateTime offsetTime, final Pageable pageable);
+    Page<PostResult> allPosts(final LocalDateTime offsetTime, final SearchPostCond cond, final Pageable pageable);
 
     /**
      * uid가 작성한 게시글 정보 획득
