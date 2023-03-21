@@ -10,7 +10,7 @@ import java.util.Optional;
  * UserInfoRepository
  */
 @Repository
-public interface UserInfoRepository extends JpaRepository<Users, String>, UserInfoRepositoryCustom {
+public interface UserInfoRepository extends JpaRepository<Users, String> {
 
     /**
      * 유저ID로 유저 찾기

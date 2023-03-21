@@ -11,7 +11,7 @@ import com.dev6.rejordbe.domain.user.dto.UserResult
 import com.dev6.rejordbe.exception.DuplicatedNicknameException
 import com.dev6.rejordbe.exception.DuplicatedUserIdException
 import com.dev6.rejordbe.exception.IllegalParameterException
-import com.dev6.rejordbe.exception.MyPageInfoNotFoundException
+
 import com.dev6.rejordbe.exception.UserNotFoundException
 import com.dev6.rejordbe.presentation.controller.dto.signup.SignUpRequest
 import com.dev6.rejordbe.presentation.controller.dto.userInfo.UpdateUserInfoRequest
@@ -25,8 +25,6 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import spock.lang.Specification
 import spock.lang.Unroll
-
-import java.time.LocalDateTime
 
 import static org.mockito.ArgumentMatchers.isA
 import static org.mockito.Mockito.when
@@ -272,7 +270,6 @@ class UserControllerSpec extends Specification {
         where:
         testCase                    | message                  | exception                                | resultStatus
         '존재하지 않는 유저: 404'      | "USER_NOT_FOUND"         | new UserNotFoundException(message)       | status().isNotFound()
-        '존재하지 마이페이지 정보: 404' | "MY_PAGE_INFO_NOT_FOUND" | new MyPageInfoNotFoundException(message) | status().isNotFound()
     }
     // / 마이페이지
 }

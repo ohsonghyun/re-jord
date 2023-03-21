@@ -1,6 +1,7 @@
 package com.dev6.rejordbe.infrastructure.challengeReview.read;
 
 import com.dev6.rejordbe.domain.challengeReview.dto.ChallengeReviewResult;
+import com.dev6.rejordbe.domain.user.dto.UserInfoForMyPage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -29,5 +30,12 @@ public interface ReadChallengeReviewRepositoryCustom {
      */
     Page<ChallengeReviewResult> searchChallengeReviewByUid(final String uid, final Pageable pageable);
 
+    /**
+     * uid가 일치하는 마이페이지 관련 정보 반환
+     *
+     * @param uid {@code String} 유저 UID
+     * @return {@code Optional<UserInfoForMyPage>}
+     */
+    UserInfoForMyPage searchChallengeInfoByUid(final String uid);
 
 }

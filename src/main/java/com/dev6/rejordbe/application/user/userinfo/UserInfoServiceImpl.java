@@ -8,8 +8,8 @@ import com.dev6.rejordbe.domain.user.dto.UserInfoForMyPage;
 import com.dev6.rejordbe.domain.user.dto.UserResult;
 import com.dev6.rejordbe.exception.DuplicatedNicknameException;
 import com.dev6.rejordbe.exception.IllegalParameterException;
-import com.dev6.rejordbe.exception.MyPageInfoNotFoundException;
 import com.dev6.rejordbe.exception.UserNotFoundException;
+import com.dev6.rejordbe.infrastructure.challengeReview.read.ReadChallengeReviewRepository;
 import com.dev6.rejordbe.infrastructure.user.UserInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 public class UserInfoServiceImpl implements UserInfoService, UserDetailsService {
 
     private final UserInfoRepository userInfoRepository;
+    private final ReadChallengeReviewRepository readChallengeReviewRepository;
     private final UserInfoValidateService userInfoValidateService;
 
     /**
@@ -128,22 +129,19 @@ public class UserInfoServiceImpl implements UserInfoService, UserDetailsService 
      */
     @Override
     public UserInfoForMyPage findUserInfoByUid(@NonNull final String uid) {
-        userInfoRepository.findById(uid).orElseThrow(() -> {
+        Users user = userInfoRepository.findUserByUid(uid).orElseThrow(() -> {
             log.info("MyPageServiceImpl.findUserInfoByUid: USER_NOT_FOUND: {}", uid);
             return new UserNotFoundException(ExceptionCode.USER_NOT_FOUND.name());
         });
 
-        UserInfoForMyPage userInfo =  userInfoRepository.searchUserInfoByUid(uid).orElseThrow(() -> {
-            log.info("MyPageServiceImpl.findUserInfoByUid: MY_PAGE_INFO_NOT_FOUND: 마이페이지 정보 null 또는 EmptyString");
-            return new MyPageInfoNotFoundException(ExceptionCode.MY_PAGE_INFO_NOT_FOUND.name());
-        });
+        UserInfoForMyPage userInfo = readChallengeReviewRepository.searchChallengeInfoByUid(uid);
 
-        Long dDay = ChronoUnit.DAYS.between(userInfo.getCreatedDate(), LocalDateTime.now());
+        Long dDay = ChronoUnit.DAYS.between(user.getCreatedDate(), LocalDateTime.now());
 
         return UserInfoForMyPage.builder()
                 .totalFootprintAmount(userInfo.getTotalFootprintAmount())
                 .badgeAmount(userInfo.getBadgeAmount())
-                .nickname(userInfo.getNickname())
+                .nickname(user.getNickname())
                 .dDay(Long.valueOf(dDay).intValue())
                 .build();
     }

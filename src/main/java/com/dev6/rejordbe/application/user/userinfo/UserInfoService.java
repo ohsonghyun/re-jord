@@ -3,7 +3,6 @@ package com.dev6.rejordbe.application.user.userinfo;
 import com.dev6.rejordbe.domain.user.Users;
 import com.dev6.rejordbe.domain.user.dto.UserInfoForMyPage;
 import com.dev6.rejordbe.domain.user.dto.UserResult;
-import com.dev6.rejordbe.exception.MyPageInfoNotFoundException;
 import com.dev6.rejordbe.exception.UserNotFoundException;
 import org.springframework.lang.NonNull;
 
@@ -38,7 +37,6 @@ public interface UserInfoService {
      * @param uid {@code String} 마이페이지 조회 대상 uid
      * @return {@code UserInfoForMyPage} 마이페이지 유저 정보
      * @throws UserNotFoundException {@code uid} 가 존재하지 않는 유저일 경우
-     * @throws MyPageInfoNotFoundException {@code UserInfoForMyPage} 가 존재하지 않는 경우
      */
     UserInfoForMyPage findUserInfoByUid(@NonNull final String uid);
 

@@ -4,15 +4,16 @@ package com.dev6.rejordbe.application.user.userInfo
 import com.dev6.rejordbe.application.user.userinfo.UserInfoService
 import com.dev6.rejordbe.application.user.userinfo.UserInfoServiceImpl
 import com.dev6.rejordbe.application.user.validate.UserInfoValidateService
+import com.dev6.rejordbe.domain.BaseTime
 import com.dev6.rejordbe.domain.role.Role
 import com.dev6.rejordbe.domain.role.RoleType
 import com.dev6.rejordbe.domain.user.Users
 import com.dev6.rejordbe.domain.user.dto.UserInfoForMyPage
-import com.dev6.rejordbe.domain.user.dto.UserResult
 import com.dev6.rejordbe.exception.DuplicatedNicknameException
 import com.dev6.rejordbe.exception.IllegalParameterException
-import com.dev6.rejordbe.exception.MyPageInfoNotFoundException
+
 import com.dev6.rejordbe.exception.UserNotFoundException
+import com.dev6.rejordbe.infrastructure.challengeReview.read.ReadChallengeReviewRepository
 import com.dev6.rejordbe.infrastructure.user.UserInfoRepository
 import spock.lang.Specification
 
@@ -25,13 +26,15 @@ import java.time.temporal.ChronoUnit
 class UserInfoServiceImplSpec extends Specification {
 
     UserInfoRepository userInfoRepository
+    ReadChallengeReviewRepository readChallengeReviewRepository
     UserInfoValidateService userInfoValidateService
     UserInfoService userInfoService
 
     def setup() {
         userInfoRepository = Mock(UserInfoRepository.class)
+        readChallengeReviewRepository = Mock(ReadChallengeReviewRepository.class)
         userInfoValidateService = Mock(UserInfoValidateService.class)
-        userInfoService = new UserInfoServiceImpl(userInfoRepository, userInfoValidateService)
+        userInfoService = new UserInfoServiceImpl(userInfoRepository, readChallengeReviewRepository, userInfoValidateService)
     }
 
     def "UID로 유저 검색이 가능하다"() {
@@ -134,14 +137,13 @@ class UserInfoServiceImplSpec extends Specification {
                 .nickname(nickname)
                 .password('password')
                 .roles(Collections.singletonList(new Role(RoleType.ROLE_USER)))
+                .createdDate(createdDate)
                 .build()
-        userInfoRepository.findById(_ as String) >> Optional.of(anUser)
-        userInfoRepository.searchUserInfoByUid(_ as String) >> Optional.of(UserInfoForMyPage.builder()
+        userInfoRepository.findUserByUid(_ as String) >> Optional.of(anUser)
+        readChallengeReviewRepository.searchChallengeInfoByUid(_ as String) >> UserInfoForMyPage.builder()
                 .badgeAmount(badgeAmount)
                 .totalFootprintAmount(totalFootprintAmount)
-                .nickname(nickname)
-                .createdDate(createdDate)
-                .build())
+                .build()
 
         when:
         def result = userInfoService.findUserInfoByUid(uid)
@@ -150,7 +152,7 @@ class UserInfoServiceImplSpec extends Specification {
         result.getNickname() == nickname
         result.getTotalFootprintAmount() == totalFootprintAmount
         result.getBadgeAmount() == badgeAmount
-        result.getDDay() == ChronoUnit.DAYS.between(createdDate, LocalDateTime.now())
+        result.getDDay() == ChronoUnit.DAYS.between(anUser.getCreatedDate(), LocalDateTime.now());
 
         where:
         nickname   | badgeAmount | totalFootprintAmount | uid   | createdDate
@@ -160,29 +162,12 @@ class UserInfoServiceImplSpec extends Specification {
     def "마이페이지 정보를 검색할 유저가 존재하지 않으면 에러: UserNotFoundException"() {
         given:
         // mock
-        userInfoRepository.findById(_ as String) >> Optional.empty()
+        userInfoRepository.findUserByUid(_ as String) >> Optional.empty()
 
         when:
         userInfoService.findUserInfoByUid('uid')
 
         then:
         thrown(UserNotFoundException)
-    }
-
-    def "마이페이지 정보가 존재하지 않으면 에러: MyPageInfoNotFoundException"() {
-        given:
-        def anUser = Users.builder()
-                .uid('uid')
-                .build()
-
-        // mock
-        userInfoRepository.findById(_ as String) >> Optional.of(anUser)
-        userInfoRepository.searchUserInfoByUid(_ as String) >> Optional.empty()
-
-        when:
-        userInfoService.findUserInfoByUid('uid')
-
-        then:
-        thrown(MyPageInfoNotFoundException)
     }
 }

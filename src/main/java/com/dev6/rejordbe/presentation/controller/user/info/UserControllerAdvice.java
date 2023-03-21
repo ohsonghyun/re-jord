@@ -49,15 +49,6 @@ public class UserControllerAdvice {
                 HttpStatus.CONFLICT);
     }
 
-
-    @ExceptionHandler(MyPageInfoNotFoundException.class)
-    public ResponseEntity<ErrorResponse> exceptionHandler(MyPageInfoNotFoundException exception) {
-        return new ResponseEntity<>(
-                ErrorResponse.builder().message(exception.getMessage()).build(),
-                headers(),
-                HttpStatus.NOT_FOUND);
-    }
-
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> exceptionHandler(Exception exception) {
         exception.printStackTrace();
