@@ -5,6 +5,7 @@ import com.dev6.rejordbe.application.post.read.ReadPostService
 import com.dev6.rejordbe.domain.exception.ExceptionCode
 import com.dev6.rejordbe.domain.post.PostType
 import com.dev6.rejordbe.domain.post.dto.PostResult
+import com.dev6.rejordbe.domain.post.dto.SearchPostCond
 import com.dev6.rejordbe.exception.IllegalParameterException
 import com.dev6.rejordbe.presentation.controller.post.info.PostInfoController
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -44,7 +45,7 @@ class PostInfoControllerSpec extends Specification {
     def "기준 시간 이전의 리스트 획득"() {
         given:
         def now = LocalDateTime.now()
-        when(readPostService.allPosts(isA(LocalDateTime.class), isA(Pageable.class)))
+        when(readPostService.allPosts(isA(LocalDateTime.class), isA(SearchPostCond), isA(Pageable.class)))
                 .thenReturn(new PageImpl<PostResult>(
                         List.of(
                                 new PostResult('postId1', 'content', PostType.OTHERS, 'uid1', 'nickname1', LocalDateTime.now()),

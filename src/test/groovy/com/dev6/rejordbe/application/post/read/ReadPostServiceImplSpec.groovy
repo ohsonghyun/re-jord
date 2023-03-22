@@ -2,6 +2,7 @@ package com.dev6.rejordbe.application.post.read
 
 import com.dev6.rejordbe.domain.post.PostType
 import com.dev6.rejordbe.domain.post.dto.PostResult
+import com.dev6.rejordbe.domain.post.dto.SearchPostCond
 import com.dev6.rejordbe.exception.IllegalParameterException
 import com.dev6.rejordbe.infrastructure.post.read.ReadPostRepository
 import org.assertj.core.api.Assertions
@@ -29,8 +30,9 @@ class ReadPostServiceImplSpec extends Specification {
     def "기준 시각 이후의 모든 게시글 정보를 획득할 수 있다"() {
         given:
         def now = LocalDateTime.now()
+        def searchPostCond = new SearchPostCond(null)
         def pageRequest = PageRequest.of(0, 5)
-        readPostRepository.searchAll(_ as LocalDateTime, _ as Pageable)
+        readPostRepository.searchAll(_ as LocalDateTime, _ as SearchPostCond, _ as Pageable)
                 >> new PageImpl<PostResult>(
                 List.of(
                         new PostResult('postId1', 'content', PostType.OTHERS, 'uid1', 'nickname1', LocalDateTime.now()),
@@ -40,7 +42,7 @@ class ReadPostServiceImplSpec extends Specification {
                 1)
 
         when:
-        def posts = readPostService.allPosts(now, pageRequest)
+        def posts = readPostService.allPosts(now, searchPostCond, pageRequest)
 
         then:
         posts.getTotalPages() == 1
@@ -56,7 +58,7 @@ class ReadPostServiceImplSpec extends Specification {
 
     def "기준 시각이 지정되지 않은 경우에는 에러: 400"() {
         when:
-        readPostService.allPosts(null, PageRequest.of(0, 5))
+        readPostService.allPosts(null, new SearchPostCond(null), PageRequest.of(0, 5))
 
         then:
         thrown(IllegalParameterException)

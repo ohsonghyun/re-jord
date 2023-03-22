@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -21,6 +22,14 @@ public class PostInfoControllerAdvice {
     public ResponseEntity<ErrorResponse> exceptionHandler(IllegalParameterException exception) {
         return new ResponseEntity<>(
                 ErrorResponse.builder().message(exception.getMessage()).build(),
+                headers(),
+                HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(BindException.class)
+    public ResponseEntity<ErrorResponse> exceptionHandler(BindException exception) {
+        exception.printStackTrace();
+        return new ResponseEntity<>(
+                ErrorResponse.builder().message("BAD_REQUEST").build(),
                 headers(),
                 HttpStatus.BAD_REQUEST);
     }
