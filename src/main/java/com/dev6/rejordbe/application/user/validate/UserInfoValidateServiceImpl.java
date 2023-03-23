@@ -32,13 +32,13 @@ public class UserInfoValidateServiceImpl implements UserInfoValidateService {
         boolean errorFree = true;
         if (StringUtils.isBlank(userId)) {
             log.info("UserInfoValidateServiceImpl.validateUserId: UserId is empty or null: {}", userId);
-            errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_USERID.name()));
+            errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_USERID));
             errorFree = false;
         } else {
             // 영문, 숫자 조합으로 5~20자 이내
             if (userId.length() < 5 || userId.length() > 20) {
                 log.info("UserInfoValidateServiceImpl.validateUserId: Wrong userId's length: {}", userId);
-                errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_USERID.name()));
+                errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_USERID));
                 errorFree = false;
             }
 
@@ -47,7 +47,7 @@ public class UserInfoValidateServiceImpl implements UserInfoValidateService {
             final Pattern pattern = Pattern.compile("(^\\d+$|\\W|[A-Z])");
             if (pattern.matcher(userId).find()) {
                 log.info("UserInfoValidateServiceImpl.validateUserId: Violation against UserId rule: {}", userId);
-                errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_USERID.name()));
+                errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_USERID));
                 return false;
             }
         }
@@ -66,13 +66,13 @@ public class UserInfoValidateServiceImpl implements UserInfoValidateService {
         boolean errorFree = true;
         if (StringUtils.isBlank(nickname)) {
             log.info("UserInfoValidateServiceImpl.validateNickname: Nickname is empty or null: {}", nickname);
-            errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_NICKNAME.name()));
+            errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_NICKNAME));
             errorFree = false;
         } else {
             // 한글, 영문, 숫자, 특수문자 조합으로 2~10자 이내
             if (nickname.length() < 2 || nickname.length() > 10) {
                 log.info("UserInfoValidateServiceImpl.validateNickname: Wrong nickname's length: {}", nickname);
-                errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_NICKNAME.name()));
+                errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_NICKNAME));
                 errorFree = false;
             }
 
@@ -80,7 +80,7 @@ public class UserInfoValidateServiceImpl implements UserInfoValidateService {
             Pattern pattern = Pattern.compile("[^\\w|가-힣]");
             if (pattern.matcher(nickname).find()) {
                 log.info("UserInfoValidateServiceImpl.validateNickname: Violation against Nickname rule: {}", nickname);
-                errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_NICKNAME.name()));
+                errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_NICKNAME));
                 errorFree = false;
             }
         }
@@ -95,7 +95,7 @@ public class UserInfoValidateServiceImpl implements UserInfoValidateService {
         boolean errorFree = true;
         if (StringUtils.isBlank(password)) {
             log.info("UserInfoValidateServiceImpl.validatePassword: Password is empty: {}", password);
-            errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_PASSWORD.name()));
+            errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_PASSWORD));
             errorFree = false;
         }
         return errorFree;
@@ -108,14 +108,14 @@ public class UserInfoValidateServiceImpl implements UserInfoValidateService {
     public boolean validateRoleTypes(List<String> roleNames, List<RuntimeException> errors) {
         if (CollectionUtils.isEmpty(roleNames)) {
             log.info("UserInfoValidateServiceImpl.validateRoleTypes: roleNames is empty: {}", roleNames);
-            errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_ROLE.name()));
+            errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_ROLE));
             return false;
         }
         List<String> roleTypes = List.of(RoleType.ROLE_ADMIN, RoleType.ROLE_USER);
         for (String roleName : roleNames) {
             if (!roleTypes.contains(roleName)) {
                 log.info("UserInfoValidateServiceImpl.validateRoleTypes: Unknown roleNames: {}", roleNames);
-                errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_ROLE.name()));
+                errors.add(new IllegalParameterException(ExceptionCode.ILLEGAL_ROLE));
                 return false;
             }
         }

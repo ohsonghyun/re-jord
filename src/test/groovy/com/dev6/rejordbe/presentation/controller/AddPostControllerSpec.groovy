@@ -85,8 +85,8 @@ class AddPostControllerSpec extends Specification {
                 .andExpect(jsonPath('\$.uid').value(uid))
 
         where:
-        postId   | contents   | postType           | uid
-        'postId' | 'contents' | PostType.SHARE     | 'uid'
+        postId   | contents   | postType       | uid
+        'postId' | 'contents' | PostType.SHARE | 'uid'
     }
 
     @Unroll
@@ -108,9 +108,9 @@ class AddPostControllerSpec extends Specification {
                 .andExpect(jsonPath("\$.message").value(message))
 
         where:
-        testCase                      | message                               | exception                               | resultStatus
-        'contents 정책 위반 데이터: 400' | ExceptionCode.ILLEGAL_CONTENTS.name() | new IllegalParameterException(message)  | status().isBadRequest()
-        '존재하지 않는 유저: 404'        | ExceptionCode.USER_NOT_FOUND.name()   | new UserNotFoundException(message)      | status().isNotFound()
+        testCase                  | message                        | exception                              | resultStatus
+        'contents 정책 위반 데이터: 400' | ExceptionCode.ILLEGAL_CONTENTS | new IllegalParameterException(message) | status().isBadRequest()
+        '존재하지 않는 유저: 404'         | ExceptionCode.USER_NOT_FOUND   | new UserNotFoundException(message)     | status().isNotFound()
 
     }
 

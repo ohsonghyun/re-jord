@@ -41,7 +41,7 @@ public class ChallengeInfoController {
     )
     public ResponseEntity<ChallengeResult> todayChallengeInfo() {
         ChallengeResult result = readChallengeService.findTodayChallengeInFlag()
-                .orElseThrow(() -> new ChallengeNotFoundException(ExceptionCode.CHALLENGE_NOT_FOUND.name()));
+                .orElseThrow(() -> new ChallengeNotFoundException(ExceptionCode.CHALLENGE_NOT_FOUND));
 
         return ResponseEntity.ok(result);
     }

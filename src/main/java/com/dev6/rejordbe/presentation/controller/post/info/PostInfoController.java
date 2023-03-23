@@ -57,7 +57,7 @@ public class PostInfoController {
         log.info("PostInfoController.allPosts: requestTime: {}", requestTime);
         if (Objects.isNull(requestTime)) {
             log.warn("PostInfoController.allPosts: ILLEGAL_DATE_TIME: {}", requestTime);
-            throw new IllegalParameterException(ExceptionCode.ILLEGAL_DATE_TIME.name());
+            throw new IllegalParameterException(ExceptionCode.ILLEGAL_DATE_TIME);
         }
         return ResponseEntity.ok(readPostService.allPosts(requestTime, cond, pageable));
     }
