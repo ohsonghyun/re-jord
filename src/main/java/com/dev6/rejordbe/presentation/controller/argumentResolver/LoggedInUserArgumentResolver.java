@@ -38,7 +38,7 @@ public class LoggedInUserArgumentResolver implements HandlerMethodArgumentResolv
     {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (Objects.isNull(authentication) || Objects.isNull(authentication.getPrincipal())) {
-            throw new IllegalAccessException(ExceptionCode.ILLEGAL_ACCESS.name());
+            throw new IllegalAccessException(ExceptionCode.ILLEGAL_ACCESS);
         }
         return authentication.getPrincipal();
     }

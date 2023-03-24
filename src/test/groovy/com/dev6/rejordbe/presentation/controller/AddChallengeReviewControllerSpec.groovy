@@ -70,16 +70,16 @@ class AddChallengeReviewControllerSpec extends Specification {
         expect:
         mvc.perform(
                 post(baseUrl)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(
-                            objectMapper.writeValueAsString(
-                                    AddChallengeReviewRequest.builder()
-                                    .contents(contents)
-                                    .challengeReviewType(challengeReviewType)
-                                    .badgeCode(badgeCode)
-                                    .footprintAmount(footprintAmount)
-                                    .build()
-                            )))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                objectMapper.writeValueAsString(
+                                        AddChallengeReviewRequest.builder()
+                                                .contents(contents)
+                                                .challengeReviewType(challengeReviewType)
+                                                .badgeCode(badgeCode)
+                                                .footprintAmount(footprintAmount)
+                                                .build()
+                                )))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath('\$.challengeReviewId').value(challengeReviewId))
                 .andExpect(jsonPath('\$.contents').value(contents))
@@ -88,7 +88,7 @@ class AddChallengeReviewControllerSpec extends Specification {
 
         where:
         challengeReviewId   | contents   | challengeReviewType         | badgeCode              | footprintAmount | uid
-        'challengeReviewId' | 'contents' | ChallengeReviewType.FEELING | BadgeCode.PRO_ACTIVATE | 15              |'uid'
+        'challengeReviewId' | 'contents' | ChallengeReviewType.FEELING | BadgeCode.PRO_ACTIVATE | 15              | 'uid'
     }
 
     @Unroll
@@ -113,10 +113,10 @@ class AddChallengeReviewControllerSpec extends Specification {
                 .andExpect(jsonPath("\$.message").value(message))
 
         where:
-        testCase                      | message                                         | exception                              | resultStatus
-        'contents 정책 위반 데이터: 400' | ExceptionCode.ILLEGAL_CONTENTS.name()           | new IllegalParameterException(message) | status().isBadRequest()
-        '존재하지 않는 유저: 404'        | ExceptionCode.USER_NOT_FOUND.name()             | new UserNotFoundException(message)     | status().isNotFound()
-        '존재하지 않는 챌린지 리뷰: 404'  | ExceptionCode.CHALLENGE_REVIEW_NOT_FOUND.name() | new ParentIdNotFoundException(message) | status().isNotFound()
+        testCase                  | message                                  | exception                              | resultStatus
+        'contents 정책 위반 데이터: 400' | ExceptionCode.ILLEGAL_CONTENTS           | new IllegalParameterException(message) | status().isBadRequest()
+        '존재하지 않는 유저: 404'         | ExceptionCode.USER_NOT_FOUND             | new UserNotFoundException(message)     | status().isNotFound()
+        '존재하지 않는 유저: 404'         | ExceptionCode.CHALLENGE_REVIEW_NOT_FOUND | new ParentIdNotFoundException(message) | status().isNotFound()
     }
 
     @Unroll
@@ -142,8 +142,8 @@ class AddChallengeReviewControllerSpec extends Specification {
                 .andExpect(jsonPath("\$.message").value(message))
 
         where:
-        message                                         | exception                                     | resultStatus
-        ExceptionCode.CHALLENGE_REVIEW_NOT_FOUND.name() | new ParentIdNotFoundException(message)        | status().isNotFound()
+        message                                  | exception                              | resultStatus
+        ExceptionCode.CHALLENGE_REVIEW_NOT_FOUND | new ParentIdNotFoundException(message) | status().isNotFound()
     }
 
     private class MockLoggedInUserArgumentResolver extends LoggedInUserArgumentResolver {

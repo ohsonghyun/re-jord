@@ -111,7 +111,11 @@ public class InitData {
                             Post.builder()
                                     .postId("PS_webclient" + idx)
                                     .contents("hello world web" + idx)
-                                    .postType(PostType.OTHERS)
+                                    .postType(
+                                            idx % 2 == 0
+                                                    ? PostType.OTHERS
+                                                    : PostType.SHARE
+                                    )
                                     .user(user)
                                     .build()
                     );
@@ -125,7 +129,11 @@ public class InitData {
                             Post.builder()
                                     .postId("PS_androidclient" + idx)
                                     .contents("hello world android" + idx)
-                                    .postType(PostType.OTHERS)
+                                    .postType(
+                                            idx % 2 == 0
+                                                    ? PostType.OTHERS
+                                                    : PostType.SHARE
+                                    )
                                     .user(user)
                                     .build()
                     );
@@ -139,7 +147,11 @@ public class InitData {
                             Post.builder()
                                     .postId("PS_iosclient" + idx)
                                     .contents("hello world ios" + idx)
-                                    .postType(PostType.OTHERS)
+                                    .postType(
+                                            idx % 2 == 0
+                                                    ? PostType.OTHERS
+                                                    : PostType.SHARE
+                                    )
                                     .user(user)
                                     .build()
                     );
@@ -215,7 +227,7 @@ public class InitData {
         public void init() {
             {
                 IntStream.range(0, 31).forEach(idx -> {
-                    if(idx == 0) {
+                    if (idx == 0) {
                         em.persist(
                                 Challenge.builder()
                                         .challengeId("CH" + idx)

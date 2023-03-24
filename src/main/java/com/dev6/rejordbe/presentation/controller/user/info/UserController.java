@@ -150,7 +150,7 @@ public class UserController {
             value = "마이페이지 유저 정보",
             nickname = "myPageUserInfo",
             notes = "마이페이지 유저 정보 API. ",
-            response = UserInfoForMyPage.class,
+            response = MyPageUserInfoResponse.class,
             authorizations = {@Authorization(value = "TBD")},
             tags = "유저 컨트롤러")
     @ApiResponses(value = {

@@ -42,7 +42,7 @@ public class LoginServiceImpl implements LoginService {
                         .build())
                 .orElseThrow(() -> {
                     log.info("LoginServiceImpl.findUserByUserId: USER_NOT_FOUND: {}", userId);
-                    return new UserNotFoundException(ExceptionCode.USER_NOT_FOUND.name());
+                    return new UserNotFoundException(ExceptionCode.USER_NOT_FOUND);
                 });
     }
 }

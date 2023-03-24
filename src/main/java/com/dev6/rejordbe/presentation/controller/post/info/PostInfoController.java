@@ -3,6 +3,7 @@ package com.dev6.rejordbe.presentation.controller.post.info;
 import com.dev6.rejordbe.application.post.read.ReadPostService;
 import com.dev6.rejordbe.domain.exception.ExceptionCode;
 import com.dev6.rejordbe.domain.post.dto.PostResult;
+import com.dev6.rejordbe.domain.post.dto.SearchPostCond;
 import com.dev6.rejordbe.exception.IllegalParameterException;
 import com.dev6.rejordbe.presentation.controller.argumentResolver.LoggedIn;
 import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
@@ -50,14 +51,15 @@ public class PostInfoController {
     public ResponseEntity<Page<PostResult>> allPosts(
             @NonNull @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @ApiParam(value = "취득기준시각", example = "2023-01-23T23:16:59", required = true)
             final LocalDateTime requestTime,
+            final SearchPostCond cond,
             final Pageable pageable
     ) {
         log.info("PostInfoController.allPosts: requestTime: {}", requestTime);
         if (Objects.isNull(requestTime)) {
             log.warn("PostInfoController.allPosts: ILLEGAL_DATE_TIME: {}", requestTime);
-            throw new IllegalParameterException(ExceptionCode.ILLEGAL_DATE_TIME.name());
+            throw new IllegalParameterException(ExceptionCode.ILLEGAL_DATE_TIME);
         }
-        return ResponseEntity.ok(readPostService.allPosts(requestTime, pageable));
+        return ResponseEntity.ok(readPostService.allPosts(requestTime, cond, pageable));
     }
 
     @ApiOperation(

@@ -57,7 +57,7 @@ public class TokenController {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
 
         if (authorizationHeader == null || !authorizationHeader.startsWith(BEARER_WITH_SPACE)) {
-            throw new IllegalAccessException(ExceptionCode.ILLEGAL_ACCESS.name());
+            throw new IllegalAccessException(ExceptionCode.ILLEGAL_ACCESS);
         }
 
         String refreshToken = authorizationHeader.substring(BEARER_WITH_SPACE.length());
@@ -74,7 +74,7 @@ public class TokenController {
 
         String uid = decodedJWT.getSubject();
         UserResult userResult = userInfoService.findUserByUid(uid)
-                .orElseThrow(() -> new IllegalAccessException(ExceptionCode.ILLEGAL_ACCESS.name()));
+                .orElseThrow(() -> new IllegalAccessException(ExceptionCode.ILLEGAL_ACCESS));
 
         String accessToken = JWT.create()
                 .withSubject(userResult.getUid())

@@ -73,18 +73,18 @@ public class UserInfoServiceImpl implements UserInfoService, UserDetailsService 
     @Override
     public UserResult updateUserInfo(@NonNull final Users newUserInfo) {
         if (!userInfoValidateService.validateNickname(newUserInfo.getNickname(), new ArrayList<>())) {
-            throw new IllegalParameterException(ExceptionCode.ILLEGAL_NICKNAME.name());
+            throw new IllegalParameterException(ExceptionCode.ILLEGAL_NICKNAME);
         }
         userInfoRepository.findUserByNickname(newUserInfo.getNickname())
                 .ifPresent(existingUser -> {
                     log.info("UserInfoServiceImpl.updateUserInfo: DUPLICATED_NICKNAME: {}", newUserInfo.getNickname());
-                    throw new DuplicatedNicknameException(ExceptionCode.DUPLICATED_NICKNAME.name());
+                    throw new DuplicatedNicknameException(ExceptionCode.DUPLICATED_NICKNAME);
                 });
 
         Users targetUser = userInfoRepository.findById(newUserInfo.getUid())
                 .orElseThrow(() -> {
                     log.info("UserInfoServiceImpl.updateUserInfo: USER_NOT_FOUND: {}", newUserInfo.getNickname());
-                    return new UserNotFoundException(ExceptionCode.USER_NOT_FOUND.name());
+                    return new UserNotFoundException(ExceptionCode.USER_NOT_FOUND);
                 });
 
         targetUser.update(Users.builder().nickname(newUserInfo.getNickname()).build());
@@ -131,7 +131,7 @@ public class UserInfoServiceImpl implements UserInfoService, UserDetailsService 
     public UserInfoForMyPage findUserInfoByUid(@NonNull final String uid) {
         UserInfoForMyPage user = userInfoRepository.searchUserInfoByUid(uid).orElseThrow(() -> {
             log.info("MyPageServiceImpl.findUserInfoByUid: USER_NOT_FOUND: {}", uid);
-            return new UserNotFoundException(ExceptionCode.USER_NOT_FOUND.name());
+            return new UserNotFoundException(ExceptionCode.USER_NOT_FOUND);
         });
 
         UserInfoForMyPage userInfo = readChallengeReviewRepository.searchChallengeInfoByUid(uid);

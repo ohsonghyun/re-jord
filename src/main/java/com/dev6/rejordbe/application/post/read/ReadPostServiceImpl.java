@@ -1,7 +1,9 @@
 package com.dev6.rejordbe.application.post.read;
 
 import com.dev6.rejordbe.domain.exception.ExceptionCode;
+import com.dev6.rejordbe.domain.post.PostType;
 import com.dev6.rejordbe.domain.post.dto.PostResult;
+import com.dev6.rejordbe.domain.post.dto.SearchPostCond;
 import com.dev6.rejordbe.exception.IllegalParameterException;
 import com.dev6.rejordbe.infrastructure.post.read.ReadPostRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,13 +35,14 @@ public class ReadPostServiceImpl implements ReadPostService {
     @Override
     public Page<PostResult> allPosts(
             @NonNull final LocalDateTime offsetTime,
+            @Nullable final SearchPostCond cond,
             @NonNull final Pageable pageable
     ) {
         if (Objects.isNull(offsetTime)) {
             log.warn("ReadPostServiceImpl.allPosts: ILLEGAL_DATE_TIME: {}", offsetTime);
-            throw new IllegalParameterException(ExceptionCode.ILLEGAL_DATE_TIME.name());
+            throw new IllegalParameterException(ExceptionCode.ILLEGAL_DATE_TIME);
         }
-        return readPostRepository.searchAll(offsetTime, pageable);
+        return readPostRepository.searchAll(offsetTime, cond, pageable);
     }
 
     /**
@@ -51,7 +55,7 @@ public class ReadPostServiceImpl implements ReadPostService {
     ) {
         if(StringUtils.isBlank(uid)) {
             log.warn("ReadPostServiceImpl.postsWrittenByUid: ILLEGAL_UID: {}", uid);
-            throw new IllegalParameterException(ExceptionCode.ILLEGAL_UID.name());
+            throw new IllegalParameterException(ExceptionCode.ILLEGAL_UID);
         }
         return readPostRepository.searchPostByUid(uid, pageable);
     }

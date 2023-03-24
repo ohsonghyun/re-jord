@@ -77,7 +77,7 @@ class ChallengeInfoControllerSpec extends Specification {
         mvc.perform(get(baseUrl)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath('\$.message').value(ExceptionCode.CHALLENGE_NOT_FOUND.name()))
+                .andExpect(jsonPath('\$.message').value(ExceptionCode.CHALLENGE_NOT_FOUND))
 
     }
 }

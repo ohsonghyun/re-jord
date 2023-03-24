@@ -52,12 +52,12 @@ public class SignUpServiceImpl implements SignUpService {
         signUpRepository.findUserByUserId(newUser.getUserId())
                 .ifPresent(user -> {
                     log.info("SignUpServiceImpl.signUp: DUPLICATED_USERID {}", user.getUserId());
-                    errors.add(new DuplicatedUserIdException(ExceptionCode.DUPLICATED_USERID.name()));
+                    errors.add(new DuplicatedUserIdException(ExceptionCode.DUPLICATED_USERID));
                 });
         signUpRepository.findUserByNickname(newUser.getNickname())
                 .ifPresent(user -> {
                     log.info("SignUpServiceImpl.signUp: DUPLICATED_NICKNAME {}", user.getNickname());
-                    errors.add(new DuplicatedNicknameException(ExceptionCode.DUPLICATED_NICKNAME.name()));
+                    errors.add(new DuplicatedNicknameException(ExceptionCode.DUPLICATED_NICKNAME));
                 });
         if (!errors.isEmpty()) {
             return UserResult.builder()
@@ -109,11 +109,11 @@ public class SignUpServiceImpl implements SignUpService {
     public String isNotDuplicatedUserId(String userId) {
         if (!userInfoValidateService.validateUserId(userId, new ArrayList<>())) {
             log.info("SignUpServiceImpl.checkDuplicatedUserId: ILLEGAL_USERID: {}", userId);
-            throw new IllegalParameterException((ExceptionCode.ILLEGAL_USERID.name()));
+            throw new IllegalParameterException((ExceptionCode.ILLEGAL_USERID));
         }
         signUpRepository.findUserByUserId(userId).ifPresent(existingUserId -> {
             log.info("SignUpServiceImpl.checkDuplicatedUserId: DUPLICATED_USERID: {}", userId);
-            throw new DuplicatedUserIdException(ExceptionCode.DUPLICATED_USERID.name());
+            throw new DuplicatedUserIdException(ExceptionCode.DUPLICATED_USERID);
         });
         return userId;
     }

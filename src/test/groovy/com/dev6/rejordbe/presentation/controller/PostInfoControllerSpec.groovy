@@ -5,6 +5,7 @@ import com.dev6.rejordbe.application.post.read.ReadPostService
 import com.dev6.rejordbe.domain.exception.ExceptionCode
 import com.dev6.rejordbe.domain.post.PostType
 import com.dev6.rejordbe.domain.post.dto.PostResult
+import com.dev6.rejordbe.domain.post.dto.SearchPostCond
 import com.dev6.rejordbe.exception.IllegalParameterException
 import com.dev6.rejordbe.presentation.controller.post.info.PostInfoController
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -44,7 +45,7 @@ class PostInfoControllerSpec extends Specification {
     def "기준 시간 이전의 리스트 획득"() {
         given:
         def now = LocalDateTime.now()
-        when(readPostService.allPosts(isA(LocalDateTime.class), isA(Pageable.class)))
+        when(readPostService.allPosts(isA(LocalDateTime.class), isA(SearchPostCond), isA(Pageable.class)))
                 .thenReturn(new PageImpl<PostResult>(
                         List.of(
                                 new PostResult('postId1', 'content', PostType.OTHERS, 'uid1', 'nickname1', LocalDateTime.now()),
@@ -78,7 +79,7 @@ class PostInfoControllerSpec extends Specification {
         mvc.perform(get(BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath('\$.message').value(ExceptionCode.ILLEGAL_DATE_TIME.name()))
+                .andExpect(jsonPath('\$.message').value(ExceptionCode.ILLEGAL_DATE_TIME))
     }
     // / 모든 게시글 페이징 관련
 
@@ -124,8 +125,8 @@ class PostInfoControllerSpec extends Specification {
                 .andExpect(jsonPath('\$.message').value(message))
 
         where:
-        testCase                        | message                            | exception                              | resultStatus
-        "유저 uid가 지정이 안 된 경우: 400" | ExceptionCode.ILLEGAL_UID.name()   | new IllegalParameterException(message) | status().isBadRequest()
+        testCase                  | message                   | exception                              | resultStatus
+        "유저 uid가 지정이 안 된 경우: 400" | ExceptionCode.ILLEGAL_UID | new IllegalParameterException(message) | status().isBadRequest()
     }
     // / uid가 일치하는 게시글 페이징 관련
 }

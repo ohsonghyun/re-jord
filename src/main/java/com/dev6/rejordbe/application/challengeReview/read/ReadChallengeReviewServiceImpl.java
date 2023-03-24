@@ -36,7 +36,7 @@ public class ReadChallengeReviewServiceImpl implements ReadChallengeReviewServic
     ) {
         if (Objects.isNull(offsetTime)) {
             log.warn("ReadChallengeReviewServiceImpl.allChallengeReviews: ILLEGAL_DATE_TIME: {}", offsetTime);
-            throw new IllegalParameterException(ExceptionCode.ILLEGAL_DATE_TIME.name());
+            throw new IllegalParameterException(ExceptionCode.ILLEGAL_DATE_TIME);
         }
         return readChallengeReviewRepository.searchAll(offsetTime, pageable);
     }
@@ -51,7 +51,7 @@ public class ReadChallengeReviewServiceImpl implements ReadChallengeReviewServic
     ) {
         if (StringUtils.isBlank(uid)) {
             log.warn("ReadChallengeReviewServiceImpl.ChallengeReviewWrittenByUid: ILLEGAL_UID: {}", uid);
-            throw new IllegalParameterException(ExceptionCode.ILLEGAL_UID.name());
+            throw new IllegalParameterException(ExceptionCode.ILLEGAL_UID);
         }
         return readChallengeReviewRepository.searchChallengeReviewByUid(uid, pageable);
     }
