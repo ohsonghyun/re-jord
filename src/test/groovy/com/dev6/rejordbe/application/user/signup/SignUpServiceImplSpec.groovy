@@ -179,12 +179,12 @@ class SignUpServiceImplSpec extends Specification {
         given:
         userInfoValidateService.validateUserId(null, _ as List<RuntimeException>) >> {
             String userIds, List<RuntimeException> list ->
-                list.add(new IllegalParameterException(ExceptionCode.ILLEGAL_USERID.name()))
+                list.add(new IllegalParameterException(ExceptionCode.ILLEGAL_USERID))
                 return false
         }
         userInfoValidateService.validatePassword(null, _ as List<RuntimeException>) >> {
             String passwords, List<RuntimeException> list ->
-                list.add(new IllegalParameterException(ExceptionCode.ILLEGAL_PASSWORD.name()))
+                list.add(new IllegalParameterException(ExceptionCode.ILLEGAL_PASSWORD))
                 return false
         }
         signUpRepository.findUserByUserId(_ as String) >> Optional.empty()

@@ -57,7 +57,7 @@ public class ChallengeReviewInfoController {
         log.info("ChallengeReviewInfoController.allChallengeReviews: requestTime: {}", requestTime);
         if (Objects.isNull(requestTime)) {
             log.warn("ChallengeReviewInfoController.allChallengeReviews: ILLEGAL_DATE_TIME: {}", requestTime);
-            throw new IllegalParameterException(ExceptionCode.ILLEGAL_DATE_TIME.name());
+            throw new IllegalParameterException(ExceptionCode.ILLEGAL_DATE_TIME);
         }
         return ResponseEntity.ok(readChallengeReviewService.allChallengeReviews(requestTime, pageable));
     }

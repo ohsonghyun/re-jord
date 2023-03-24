@@ -38,12 +38,12 @@ public class WritePostServiceImpl implements WritePostService {
     public PostResult writePost(@NonNull Post newPost, @NonNull String uid) {
         Users user = userInfoRepository.findById(uid).orElseThrow(() -> {
             log.warn("WritePostServiceImpl.writePost: USER_NOT_FOUND: uid: {}", uid);
-            return new UserNotFoundException(ExceptionCode.USER_NOT_FOUND.name());
+            return new UserNotFoundException(ExceptionCode.USER_NOT_FOUND);
         });
 
         if (!StringUtils.hasText(newPost.getContents())) {
             log.info("WritePostServiceImpl.writePost: ILLEGAL_CONTENTS: {}", newPost.getContents());
-            throw new IllegalParameterException(ExceptionCode.ILLEGAL_CONTENTS.name());
+            throw new IllegalParameterException(ExceptionCode.ILLEGAL_CONTENTS);
         }
 
         Post postResult = writePostRepository.save(

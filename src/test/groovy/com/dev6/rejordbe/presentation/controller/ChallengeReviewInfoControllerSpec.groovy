@@ -82,7 +82,7 @@ class ChallengeReviewInfoControllerSpec extends Specification {
         mvc.perform(get(BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath('\$.message').value(ExceptionCode.ILLEGAL_DATE_TIME.name()))
+                .andExpect(jsonPath('\$.message').value(ExceptionCode.ILLEGAL_DATE_TIME))
     }
     // / 모든 챌린지 게시글
 
@@ -128,8 +128,8 @@ class ChallengeReviewInfoControllerSpec extends Specification {
                 .andExpect(jsonPath('\$.message').value(message))
 
         where:
-        testCase                        | message                            | exception                              | resultStatus
-        "유저 uid가 지정이 안 된 경우: 400" | ExceptionCode.ILLEGAL_UID.name()   | new IllegalParameterException(message) | status().isBadRequest()
+        testCase                  | message                   | exception                              | resultStatus
+        "유저 uid가 지정이 안 된 경우: 400" | ExceptionCode.ILLEGAL_UID | new IllegalParameterException(message) | status().isBadRequest()
     }
     // / 유저 uid와 일치하는 챌린지 게시글
 }

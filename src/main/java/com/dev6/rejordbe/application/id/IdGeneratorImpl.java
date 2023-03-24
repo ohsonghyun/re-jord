@@ -19,7 +19,7 @@ public final class IdGeneratorImpl implements IdGenerator {
     public String generate(@NonNull final String prefix) {
         if (StringUtils.isBlank(prefix)) {
             log.error("IdGeneratorImpl.generate: INTERNAL_ILLEGAL_PARAM: prefix: {}", prefix);
-            throw new IllegalArgumentException(ExceptionCode.INTERNAL_ILLEGAL_PARAM.name());
+            throw new IllegalArgumentException(ExceptionCode.INTERNAL_ILLEGAL_PARAM);
         }
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(prefix);

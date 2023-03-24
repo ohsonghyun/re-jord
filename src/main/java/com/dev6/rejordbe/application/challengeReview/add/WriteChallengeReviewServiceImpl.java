@@ -43,16 +43,16 @@ public class WriteChallengeReviewServiceImpl implements WriteChallengeReviewServ
     @Transactional
     @Override
     public ChallengeReviewResult writeChallengeReview(@NonNull ChallengeReview newChallengeReview, @NonNull String uid) {
-        Users user = userInfoRepository.findById(uid).orElseThrow(() -> new UserNotFoundException(ExceptionCode.USER_NOT_FOUND.name()));
+        Users user = userInfoRepository.findById(uid).orElseThrow(() -> new UserNotFoundException(ExceptionCode.USER_NOT_FOUND));
 
         if (!StringUtils.hasText(newChallengeReview.getContents())) {
             log.warn("ChallengeReviewServiceImpl.writeChallengeReview: ILLEGAL_CONTENTS: {}", newChallengeReview.getContents());
-            throw new IllegalParameterException(ExceptionCode.ILLEGAL_CONTENTS.name());
+            throw new IllegalParameterException(ExceptionCode.ILLEGAL_CONTENTS);
         }
 
         if (Objects.isNull(newChallengeReview.getChallengeReviewType())) {
             log.warn("ChallengeReviewServiceImpl.writeChallengeReview: ILLEGAL_PARAM: {}", newChallengeReview.getContents());
-            throw new IllegalParameterException(ExceptionCode.ILLEGAL_PARAM.name());
+            throw new IllegalParameterException(ExceptionCode.ILLEGAL_PARAM);
         }
 
         ChallengeReview challengeReviewResult = writeChallengeReviewRepository.save(

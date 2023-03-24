@@ -92,7 +92,7 @@ class LoginControllerSpec extends Specification {
     def "잘못된 유저ID와 패스워드라면 로그인 실패: 404"() {
         given:
         when(loginService.findUserByUserId(isA(String.class)))
-                .thenThrow(new UserNotFoundException(ExceptionCode.USER_NOT_FOUND.name()))
+                .thenThrow(new UserNotFoundException(ExceptionCode.USER_NOT_FOUND))
 
         expect:
         mvc.perform(
@@ -106,7 +106,7 @@ class LoginControllerSpec extends Specification {
                                                 .build()
                                 )))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath('\$.message').value(ExceptionCode.USER_NOT_FOUND.name()))
+                .andExpect(jsonPath('\$.message').value(ExceptionCode.USER_NOT_FOUND))
     }
 
 }
