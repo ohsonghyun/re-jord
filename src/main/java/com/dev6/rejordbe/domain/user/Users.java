@@ -3,14 +3,12 @@ package com.dev6.rejordbe.domain.user;
 import com.dev6.rejordbe.domain.BaseTime;
 import com.dev6.rejordbe.domain.role.Role;
 import com.dev6.rejordbe.exception.IllegalParameterException;
-import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -18,10 +16,10 @@ import java.util.List;
  */
 @Entity
 @Slf4j
-@SuperBuilder
 @lombok.Getter
 @lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
+@lombok.Builder
 public class Users extends BaseTime {
 
     @Id

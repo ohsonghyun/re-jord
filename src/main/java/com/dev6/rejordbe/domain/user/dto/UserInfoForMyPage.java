@@ -14,4 +14,5 @@ public class UserInfoForMyPage {
     private final Integer dDay;
     private final Integer badgeAmount;
     private final Integer totalFootprintAmount;
+    private final LocalDateTime createdDate;
 }

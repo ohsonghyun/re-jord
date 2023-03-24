@@ -1,13 +1,9 @@
 package com.dev6.rejordbe.infrastructure.user
 
 import com.dev6.rejordbe.TestConfig
-import com.dev6.rejordbe.domain.badge.BadgeCode
-import com.dev6.rejordbe.domain.challengeReview.ChallengeReview
-import com.dev6.rejordbe.domain.challengeReview.ChallengeReviewType
 import com.dev6.rejordbe.domain.role.Role
 import com.dev6.rejordbe.domain.role.RoleType
 import com.dev6.rejordbe.domain.user.Users
-import com.dev6.rejordbe.infrastructure.challengeReview.add.WriteChallengeReviewRepository
 import com.dev6.rejordbe.infrastructure.role.RoleInfoRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -33,8 +29,6 @@ class UserInfoRepositorySpec extends Specification {
     RoleInfoRepository roleInfoRepository
     @Autowired
     UserInfoRepository userInfoRepository
-    @Autowired
-    WriteChallengeReviewRepository writeChallengeReviewRepository
 
     // ----------------------------------------------------
     // 유저 정보 관련
@@ -166,5 +160,35 @@ class UserInfoRepositorySpec extends Specification {
         where:
         uid   | userId   | nickname   | password   | roleType           | newNickname
         "uid" | "userId" | "nickname" | "password" | RoleType.ROLE_USER | "newNickname"
+    }
+
+    // ----------------------------------------------------
+    // 마이페이지 관련
+    // ----------------------------------------------------
+
+    def "uid가 일치하는 마이페이지 유저 정보를 반환한다"() {
+        given: "유저 생성"
+        def role = roleInfoRepository.save(new Role(roleType))
+        userInfoRepository.save(
+                Users.builder()
+                        .uid(uid)
+                        .userId(userId)
+                        .nickname(nickname)
+                        .password(password)
+                        .roles(Collections.singletonList(role))
+                        .build())
+        entityManager.flush()
+        entityManager.clear()
+
+        when:
+        def userInfo = userInfoRepository.searchUserInfoByUid(uid).orElseThrow()
+
+        then:
+        userInfo.getNickname() == nickname
+        userInfo.getCreatedDate() != null
+
+        where:
+        uid   | userId   | nickname   | password   | roleType
+        "uid" | "userId" | "nickname" | "password" | RoleType.ROLE_USER
     }
 }

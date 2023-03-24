@@ -9,6 +9,7 @@ import com.dev6.rejordbe.exception.IllegalParameterException;
 import com.dev6.rejordbe.presentation.controller.argumentResolver.LoggedIn;
 import com.dev6.rejordbe.presentation.controller.dto.checkDuplicate.CheckDuplicatedUserIdResponse;
 import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
+import com.dev6.rejordbe.presentation.controller.dto.mypage.MyPageUserInfoResponse;
 import com.dev6.rejordbe.presentation.controller.dto.signup.SignUpRequest;
 import com.dev6.rejordbe.presentation.controller.dto.signup.SignUpResponse;
 import com.dev6.rejordbe.presentation.controller.dto.userInfo.UpdateUserInfoRequest;
@@ -161,9 +162,17 @@ public class UserController {
             value = "/mypage",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_PROBLEM_JSON_VALUE}
     )
-    public ResponseEntity<UserInfoForMyPage> myPageUserInfo(
+    public ResponseEntity<MyPageUserInfoResponse> myPageUserInfo(
             @ApiParam(hidden = true) @LoggedIn final String uid
     ) {
-        return ResponseEntity.status(HttpStatus.OK).body(userInfoService.findUserInfoByUid(uid));
+        UserInfoForMyPage userInfo = userInfoService.findUserInfoByUid(uid);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                MyPageUserInfoResponse.builder()
+                        .nickname(userInfo.getNickname())
+                        .dDay(userInfo.getDDay())
+                        .badgeAmount(userInfo.getBadgeAmount())
+                        .totalFootprintAmount(userInfo.getTotalFootprintAmount())
+                        .build()
+        );
     }
 }

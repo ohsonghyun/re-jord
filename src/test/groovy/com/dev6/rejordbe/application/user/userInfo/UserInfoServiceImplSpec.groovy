@@ -4,7 +4,6 @@ package com.dev6.rejordbe.application.user.userInfo
 import com.dev6.rejordbe.application.user.userinfo.UserInfoService
 import com.dev6.rejordbe.application.user.userinfo.UserInfoServiceImpl
 import com.dev6.rejordbe.application.user.validate.UserInfoValidateService
-import com.dev6.rejordbe.domain.BaseTime
 import com.dev6.rejordbe.domain.role.Role
 import com.dev6.rejordbe.domain.role.RoleType
 import com.dev6.rejordbe.domain.user.Users
@@ -131,15 +130,11 @@ class UserInfoServiceImplSpec extends Specification {
     // ----------------------------------------------------
 
     def "에러가 없으면 마이페이지 정보를 취득할 수 있다."() {
-        def anUser = Users.builder()
-                .uid('uid')
-                .userId('userId')
+        def anUser = UserInfoForMyPage.builder()
                 .nickname(nickname)
-                .password('password')
-                .roles(Collections.singletonList(new Role(RoleType.ROLE_USER)))
                 .createdDate(createdDate)
                 .build()
-        userInfoRepository.findUserByUid(_ as String) >> Optional.of(anUser)
+        userInfoRepository.searchUserInfoByUid(_ as String) >> Optional.of(anUser)
         readChallengeReviewRepository.searchChallengeInfoByUid(_ as String) >> UserInfoForMyPage.builder()
                 .badgeAmount(badgeAmount)
                 .totalFootprintAmount(totalFootprintAmount)
@@ -152,7 +147,7 @@ class UserInfoServiceImplSpec extends Specification {
         result.getNickname() == nickname
         result.getTotalFootprintAmount() == totalFootprintAmount
         result.getBadgeAmount() == badgeAmount
-        result.getDDay() == ChronoUnit.DAYS.between(anUser.getCreatedDate(), LocalDateTime.now());
+        result.getDDay() == Long.valueOf(ChronoUnit.DAYS.between(anUser.getCreatedDate(), LocalDateTime.now())).intValue()
 
         where:
         nickname   | badgeAmount | totalFootprintAmount | uid   | createdDate
@@ -162,7 +157,7 @@ class UserInfoServiceImplSpec extends Specification {
     def "마이페이지 정보를 검색할 유저가 존재하지 않으면 에러: UserNotFoundException"() {
         given:
         // mock
-        userInfoRepository.findUserByUid(_ as String) >> Optional.empty()
+        userInfoRepository.searchUserInfoByUid(_ as String) >> Optional.empty()
 
         when:
         userInfoService.findUserInfoByUid('uid')
