@@ -8,6 +8,7 @@ import com.dev6.rejordbe.infrastructure.role.RoleInfoRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.context.annotation.Import
+import org.springframework.dao.InvalidDataAccessApiUsageException
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 import spock.lang.Specification
 
@@ -190,5 +191,30 @@ class UserInfoRepositorySpec extends Specification {
         where:
         uid   | userId   | nickname   | password   | roleType
         "uid" | "userId" | "nickname" | "password" | RoleType.ROLE_USER
+    }
+
+    def "유저uid가 null인 경우에 에러를 반환한다"() {
+        given:
+        def role = roleInfoRepository.save(new Role(roleType))
+        userInfoRepository.save(
+                Users.builder()
+                        .uid('uid')
+                        .userId('userId')
+                        .nickname('nickname')
+                        .password('password')
+                        .roles(Collections.singletonList(role))
+                        .build())
+        entityManager.flush()
+        entityManager.clear()
+
+        when:
+        def userOptional = userInfoRepository.searchUserInfoByUid(uid)
+
+        then:
+        NullPointerException
+
+        where:
+        testCase          | uid  | userId   | nickname   | password   | roleType
+        "uid가 null인 경우" | null | 'userId' | "nickname" | "password" | RoleType.ROLE_USER
     }
 }

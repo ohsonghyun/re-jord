@@ -130,7 +130,7 @@ public class UserInfoServiceImpl implements UserInfoService, UserDetailsService 
     @Override
     public UserInfoForMyPage findUserInfoByUid(@NonNull final String uid) {
         UserInfoForMyPage user = userInfoRepository.searchUserInfoByUid(uid).orElseThrow(() -> {
-            log.info("MyPageServiceImpl.findUserInfoByUid: USER_NOT_FOUND: {}", uid);
+            log.error("MyPageServiceImpl.findUserInfoByUid: USER_NOT_FOUND: {}", uid);
             return new UserNotFoundException(ExceptionCode.USER_NOT_FOUND);
         });
 
