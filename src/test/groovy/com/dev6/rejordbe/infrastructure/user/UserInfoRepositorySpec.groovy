@@ -4,11 +4,11 @@ import com.dev6.rejordbe.TestConfig
 import com.dev6.rejordbe.domain.role.Role
 import com.dev6.rejordbe.domain.role.RoleType
 import com.dev6.rejordbe.domain.user.Users
+import com.dev6.rejordbe.exception.IllegalParameterException
 import com.dev6.rejordbe.infrastructure.role.RoleInfoRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.context.annotation.Import
-import org.springframework.dao.InvalidDataAccessApiUsageException
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 import spock.lang.Specification
 
@@ -208,10 +208,10 @@ class UserInfoRepositorySpec extends Specification {
         entityManager.clear()
 
         when:
-        def userOptional = userInfoRepository.searchUserInfoByUid(uid)
+        userInfoRepository.searchUserInfoByUid(uid)
 
         then:
-        NullPointerException
+        thrown(IllegalParameterException)
 
         where:
         testCase          | uid  | userId   | nickname   | password   | roleType
