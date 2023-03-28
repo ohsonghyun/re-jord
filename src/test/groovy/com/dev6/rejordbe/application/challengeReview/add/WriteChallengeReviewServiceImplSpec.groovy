@@ -1,6 +1,7 @@
 package com.dev6.rejordbe.application.challengeReview.add
 
 import com.dev6.rejordbe.application.id.IdGenerator
+import com.dev6.rejordbe.domain.badge.BadgeCode
 import com.dev6.rejordbe.domain.challenge.dto.ChallengeResult
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReviewType
@@ -12,6 +13,7 @@ import com.dev6.rejordbe.infrastructure.challengeReview.add.WriteChallengeReview
 import com.dev6.rejordbe.infrastructure.footprint.add.AddFootprintRepository
 import com.dev6.rejordbe.infrastructure.user.UserInfoRepository
 import spock.lang.Specification
+import spock.lang.Unroll
 
 /**
  * WriteChallengeReviewServiceImplSpec
@@ -45,6 +47,8 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
                 .challengeReviewId(challengeReviewId)
                 .contents(contents)
                 .challengeReviewType(challengeReviewType)
+                .footprintAmount(footprintAmount)
+                .badgeCode(badgeCode)
                 .user(anUser)
                 .build()
 
@@ -54,6 +58,8 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
                         .challengeReviewId(challengeReviewId)
                         .contents(contents)
                         .challengeReviewType(challengeReviewType)
+                        .footprintAmount(footprintAmount)
+                        .badgeCode(badgeCode)
                         .user(anUser)
                         .build(), uid)
 
@@ -64,8 +70,8 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
         saveResult.getUid() == uid
 
         where:
-        challengeReviewId   | contents   | challengeReviewType          | uid
-        'challengeReviewId' | 'contents' | ChallengeReviewType.HARDSHIP | 'uid'
+        challengeReviewId   | contents   | challengeReviewType          | footprintAmount | badgeCode             | uid
+        'challengeReviewId' | 'contents' | ChallengeReviewType.HARDSHIP | 15              | BadgeCode.WATER_FAIRY | 'uid'
     }
 
     def "존재하지 않는 유저면 에러"() {
@@ -79,6 +85,8 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
                 .challengeReviewId(challengeReviewId)
                 .contents(contents)
                 .challengeReviewType(challengeReviewType)
+                .footprintAmount(footprintAmount)
+                .badgeCode(badgeCode)
                 .user(anUser)
                 .build()
 
@@ -88,6 +96,8 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
                         .challengeReviewId(challengeReviewId)
                         .contents(contents)
                         .challengeReviewType(challengeReviewType)
+                        .footprintAmount(footprintAmount)
+                        .badgeCode(badgeCode)
                         .user(anUser)
                         .build(), uid)
 
@@ -95,9 +105,9 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
         thrown(UserNotFoundException)
 
         where:
-        challengeReviewId   | contents   | challengeReviewType         | uid
-        'challengeReviewId' | 'contents' | ChallengeReviewType.FEELING | 'uid'
-        'challengeReviewId' | 'contents' | ChallengeReviewType.FEELING | null
+        challengeReviewId   | contents   | challengeReviewType         | footprintAmount | badgeCode             | uid
+        'challengeReviewId' | 'contents' | ChallengeReviewType.FEELING | 15              | BadgeCode.WATER_FAIRY | 'uid'
+        'challengeReviewId' | 'contents' | ChallengeReviewType.FEELING | 15              | BadgeCode.WATER_FAIRY | null
 
     }
 
@@ -114,6 +124,8 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
                         .challengeReviewId(challengeReviewId)
                         .contents(contents)
                         .challengeReviewType(challengeReviewType)
+                        .footprintAmount(footprintAmount)
+                        .badgeCode(badgeCode)
                         .user(anUser)
                         .build(), uid)
 
@@ -121,13 +133,14 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
         thrown(IllegalParameterException)
 
         where:
-        challengeReviewId   | contents | challengeReviewType         | uid
-        'challengeReviewId' | ''       | ChallengeReviewType.FEELING | 'uid'
-        'challengeReviewId' | '  '     | ChallengeReviewType.FEELING | 'uid'
-        'challengeReviewId' | null     | ChallengeReviewType.FEELING | 'uid'
+        challengeReviewId   | contents | challengeReviewType         | footprintAmount | badgeCode             | uid
+        'challengeReviewId' | ''       | ChallengeReviewType.FEELING | 15              | BadgeCode.WATER_FAIRY | 'uid'
+        'challengeReviewId' | '  '     | ChallengeReviewType.FEELING | 15              | BadgeCode.WATER_FAIRY | 'uid'
+        'challengeReviewId' | null     | ChallengeReviewType.FEELING | 15              | BadgeCode.WATER_FAIRY | 'uid'
     }
 
-    def "필수 입력값 challengeReviewType가 비어있으면 에러"() {
+    @Unroll("#testCase")
+    def "필수 입력값 #testCase가 비어있으면 에러"() {
         given:
         def anUser = Users.builder()
                 .uid(uid)
@@ -141,6 +154,8 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
                         .challengeReviewId(challengeReviewId)
                         .contents(contents)
                         .challengeReviewType(challengeReviewType)
+                        .footprintAmount(footprintAmount)
+                        .badgeCode(badgeCode)
                         .user(anUser)
                         .build(), uid)
 
@@ -148,7 +163,9 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
         thrown(IllegalParameterException)
 
         where:
-        challengeReviewId   | contents   | challengeReviewType | uid
-        'challengeReviewId' | 'contents' | null                | 'uid'
+        testCase              | challengeReviewId   | contents   | challengeReviewType         | footprintAmount | badgeCode             | uid
+        'challengeReviewType' | 'challengeReviewId' | 'contents' | null                        | 15              | BadgeCode.WATER_FAIRY | 'uid'
+        'badgeCode'           | 'challengeReviewId' | 'contents' | ChallengeReviewType.FEELING | 15              | null                  | 'uid'
+        'footprintAmount'     | 'challengeReviewId' | 'contents' | ChallengeReviewType.FEELING | null            | BadgeCode.WATER_FAIRY | 'uid'
     }
 }

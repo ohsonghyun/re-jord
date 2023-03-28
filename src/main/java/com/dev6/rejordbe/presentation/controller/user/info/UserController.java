@@ -3,10 +3,13 @@ package com.dev6.rejordbe.presentation.controller.user.info;
 import com.dev6.rejordbe.application.user.signup.SignUpService;
 import com.dev6.rejordbe.application.user.userinfo.UserInfoService;
 import com.dev6.rejordbe.domain.user.Users;
+import com.dev6.rejordbe.domain.user.dto.UserInfoForMyPage;
 import com.dev6.rejordbe.domain.user.dto.UserResult;
 import com.dev6.rejordbe.exception.IllegalParameterException;
+import com.dev6.rejordbe.presentation.controller.argumentResolver.LoggedIn;
 import com.dev6.rejordbe.presentation.controller.dto.checkDuplicate.CheckDuplicatedUserIdResponse;
 import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
+import com.dev6.rejordbe.presentation.controller.dto.mypage.MyPageUserInfoResponse;
 import com.dev6.rejordbe.presentation.controller.dto.signup.SignUpRequest;
 import com.dev6.rejordbe.presentation.controller.dto.signup.SignUpResponse;
 import com.dev6.rejordbe.presentation.controller.dto.userInfo.UpdateUserInfoRequest;
@@ -140,5 +143,36 @@ public class UserController {
                 .nickname(updatedUser.getNickname())
                 .roles(updatedUser.getRoles())
                 .build());
+    }
+
+
+    @ApiOperation(
+            value = "마이페이지 유저 정보",
+            nickname = "myPageUserInfo",
+            notes = "마이페이지 유저 정보 API. ",
+            response = MyPageUserInfoResponse.class,
+            authorizations = {@Authorization(value = "TBD")},
+            tags = "유저 컨트롤러")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "정상"),
+            @ApiResponse(code = 404, message = "존재하지 않는 유저", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "존재하지 마이페이지 정보", response = ErrorResponse.class)
+    })
+    @GetMapping(
+            value = "/mypage",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_PROBLEM_JSON_VALUE}
+    )
+    public ResponseEntity<MyPageUserInfoResponse> myPageUserInfo(
+            @ApiParam(hidden = true) @LoggedIn final String uid
+    ) {
+        UserInfoForMyPage userInfo = userInfoService.findUserInfoByUid(uid);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                MyPageUserInfoResponse.builder()
+                        .nickname(userInfo.getNickname())
+                        .dDay(userInfo.getDDay())
+                        .badgeAmount(userInfo.getBadgeAmount())
+                        .totalFootprintAmount(userInfo.getTotalFootprintAmount())
+                        .build()
+        );
     }
 }

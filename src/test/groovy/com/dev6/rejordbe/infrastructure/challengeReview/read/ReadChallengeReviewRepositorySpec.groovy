@@ -1,6 +1,7 @@
 package com.dev6.rejordbe.infrastructure.challengeReview.read
 
 import com.dev6.rejordbe.TestConfig
+import com.dev6.rejordbe.domain.badge.BadgeCode
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReviewType
 import com.dev6.rejordbe.domain.challengeReview.dto.ChallengeReviewResult
@@ -164,5 +165,50 @@ class ReadChallengeReviewRepositorySpec extends Specification {
         "일치하는 uid가 있는 경우" | 'uid'  | 10
         "일치하는 uid가 없는 경우" | 'uid1' | 0
     }
+
+    // 마이페이지 정보 관련
+    @Unroll('#testCase')
+    def "uid가 일치하는 마이페이지 정보를 취득할 수 있다"() {
+        given:
+        // 유저 생성
+        def user = Users.builder()
+                .uid('uid')
+                .nickname('nickname')
+                .build()
+        signUpRepository.save(user)
+
+        // 챌린지 리뷰 게시글 생성
+        for (int i = 0; i < 10; i++) {
+            readChallengeReviewRepository.save(
+                    ChallengeReview.builder()
+                            .challengeReviewId('challengeReviewId' + i)
+                            .contents('contents')
+                            .challengeReviewType(ChallengeReviewType.HARDSHIP)
+                            .footprintAmount(15)
+                            .badgeCode(BadgeCode.MEAL_PLANNER)
+                            .user(user)
+                            .build()
+            )
+        }
+
+        entityManager.flush()
+        entityManager.clear()
+
+        when:
+        def result = readChallengeReviewRepository.searchChallengeInfoByUid(uid)
+
+        entityManager.flush()
+        entityManager.clear()
+
+        then:
+        result.getTotalFootprintAmount() == totalfootprintAmount
+        result.getBadgeAmount() == badgeAmount
+
+        where:
+        testCase               | uid    | totalfootprintAmount | badgeAmount
+        '일치하는 uid가 있는 경우' | 'uid'  | 150                  | 1
+        '일치하는 uid가 없는 경우' | 'uid1' | 0                    | 0
+    }
+    // / 마이페이지 정보 관련
 
 }

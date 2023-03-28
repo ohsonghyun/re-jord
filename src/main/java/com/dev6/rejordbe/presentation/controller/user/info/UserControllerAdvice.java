@@ -1,9 +1,6 @@
 package com.dev6.rejordbe.presentation.controller.user.info;
 
-import com.dev6.rejordbe.exception.DuplicatedNicknameException;
-import com.dev6.rejordbe.exception.DuplicatedUserIdException;
-import com.dev6.rejordbe.exception.IllegalParameterException;
-import com.dev6.rejordbe.exception.UserNotFoundException;
+import com.dev6.rejordbe.exception.*;
 import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;

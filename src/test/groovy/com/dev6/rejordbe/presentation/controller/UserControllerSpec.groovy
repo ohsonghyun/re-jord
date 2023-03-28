@@ -6,10 +6,12 @@ import com.dev6.rejordbe.application.user.userinfo.UserInfoService
 import com.dev6.rejordbe.domain.exception.ExceptionCode
 import com.dev6.rejordbe.domain.role.RoleType
 import com.dev6.rejordbe.domain.user.Users
+import com.dev6.rejordbe.domain.user.dto.UserInfoForMyPage
 import com.dev6.rejordbe.domain.user.dto.UserResult
 import com.dev6.rejordbe.exception.DuplicatedNicknameException
 import com.dev6.rejordbe.exception.DuplicatedUserIdException
 import com.dev6.rejordbe.exception.IllegalParameterException
+
 import com.dev6.rejordbe.exception.UserNotFoundException
 import com.dev6.rejordbe.presentation.controller.dto.signup.SignUpRequest
 import com.dev6.rejordbe.presentation.controller.dto.userInfo.UpdateUserInfoRequest
@@ -229,4 +231,45 @@ class UserControllerSpec extends Specification {
         '이미 존재하는 아이디: 409'   | "DUPLICATED_USERID" | new DuplicatedUserIdException(message) | status().isConflict()
     }
     // /아이디 중복 체크
+
+    // 마이페이지
+    def "마이페이지 정보 획득 시 200을 반환한다"() {
+        given:
+        when(userInfoService.findUserInfoByUid(isA(String.class)))
+                .thenReturn(UserInfoForMyPage.builder()
+                        .badgeAmount(badgeAmount)
+                        .totalFootprintAmount(totalFootprintAmount)
+                        .nickname(nickname)
+                        .dDay(dDay)
+                        .build())
+
+        expect:
+        mvc.perform(get(baseUrl + '/mypage')
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath('\$.nickname').value(nickname))
+                .andExpect(jsonPath('\$.dday').value(dDay))
+                .andExpect(jsonPath('\$.badgeAmount').value(badgeAmount))
+                .andExpect(jsonPath('\$.totalFootprintAmount').value(totalFootprintAmount))
+
+        where:
+        nickname   | badgeAmount | totalFootprintAmount | uid   | dDay
+        'nickname' | 3           | 45                   | 'uid' | 3
+    }
+
+    def "마이페이지 정보 획득 실패 케이스: #testCase 반환"() {
+        given:
+        when(userInfoService.findUserInfoByUid(isA(String.class))).thenThrow(exception)
+
+        expect:
+        mvc.perform(get(baseUrl + '/mypage')
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(resultStatus)
+                .andExpect(jsonPath("\$.message").value(message))
+
+        where:
+        testCase                    | message                  | exception                                | resultStatus
+        '존재하지 않는 유저: 404'      | "USER_NOT_FOUND"         | new UserNotFoundException(message)       | status().isNotFound()
+    }
+    // / 마이페이지
 }

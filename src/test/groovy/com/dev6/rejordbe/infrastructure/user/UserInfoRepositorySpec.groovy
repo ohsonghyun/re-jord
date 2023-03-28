@@ -4,6 +4,7 @@ import com.dev6.rejordbe.TestConfig
 import com.dev6.rejordbe.domain.role.Role
 import com.dev6.rejordbe.domain.role.RoleType
 import com.dev6.rejordbe.domain.user.Users
+import com.dev6.rejordbe.exception.IllegalParameterException
 import com.dev6.rejordbe.infrastructure.role.RoleInfoRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -162,4 +163,58 @@ class UserInfoRepositorySpec extends Specification {
         "uid" | "userId" | "nickname" | "password" | RoleType.ROLE_USER | "newNickname"
     }
 
+    // ----------------------------------------------------
+    // 마이페이지 관련
+    // ----------------------------------------------------
+
+    def "uid가 일치하는 마이페이지 유저 정보를 반환한다"() {
+        given: "유저 생성"
+        def role = roleInfoRepository.save(new Role(roleType))
+        userInfoRepository.save(
+                Users.builder()
+                        .uid(uid)
+                        .userId(userId)
+                        .nickname(nickname)
+                        .password(password)
+                        .roles(Collections.singletonList(role))
+                        .build())
+        entityManager.flush()
+        entityManager.clear()
+
+        when:
+        def userInfo = userInfoRepository.searchUserInfoByUid(uid).orElseThrow()
+
+        then:
+        userInfo.getNickname() == nickname
+        userInfo.getCreatedDate() != null
+
+        where:
+        uid   | userId   | nickname   | password   | roleType
+        "uid" | "userId" | "nickname" | "password" | RoleType.ROLE_USER
+    }
+
+    def "유저uid가 null인 경우에 에러를 반환한다"() {
+        given:
+        def role = roleInfoRepository.save(new Role(roleType))
+        userInfoRepository.save(
+                Users.builder()
+                        .uid('uid')
+                        .userId('userId')
+                        .nickname('nickname')
+                        .password('password')
+                        .roles(Collections.singletonList(role))
+                        .build())
+        entityManager.flush()
+        entityManager.clear()
+
+        when:
+        userInfoRepository.searchUserInfoByUid(uid)
+
+        then:
+        thrown(IllegalParameterException)
+
+        where:
+        testCase          | uid  | userId   | nickname   | password   | roleType
+        "uid가 null인 경우" | null | 'userId' | "nickname" | "password" | RoleType.ROLE_USER
+    }
 }

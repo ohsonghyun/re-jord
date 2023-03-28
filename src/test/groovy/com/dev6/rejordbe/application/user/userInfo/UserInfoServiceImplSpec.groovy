@@ -7,12 +7,17 @@ import com.dev6.rejordbe.application.user.validate.UserInfoValidateService
 import com.dev6.rejordbe.domain.role.Role
 import com.dev6.rejordbe.domain.role.RoleType
 import com.dev6.rejordbe.domain.user.Users
-import com.dev6.rejordbe.domain.user.dto.UserResult
+import com.dev6.rejordbe.domain.user.dto.UserInfoForMyPage
 import com.dev6.rejordbe.exception.DuplicatedNicknameException
 import com.dev6.rejordbe.exception.IllegalParameterException
+
 import com.dev6.rejordbe.exception.UserNotFoundException
+import com.dev6.rejordbe.infrastructure.challengeReview.read.ReadChallengeReviewRepository
 import com.dev6.rejordbe.infrastructure.user.UserInfoRepository
 import spock.lang.Specification
+
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
 /**
  * UserInfoServiceImplSpec
@@ -20,13 +25,15 @@ import spock.lang.Specification
 class UserInfoServiceImplSpec extends Specification {
 
     UserInfoRepository userInfoRepository
+    ReadChallengeReviewRepository readChallengeReviewRepository
     UserInfoValidateService userInfoValidateService
     UserInfoService userInfoService
 
     def setup() {
         userInfoRepository = Mock(UserInfoRepository.class)
+        readChallengeReviewRepository = Mock(ReadChallengeReviewRepository.class)
         userInfoValidateService = Mock(UserInfoValidateService.class)
-        userInfoService = new UserInfoServiceImpl(userInfoRepository, userInfoValidateService)
+        userInfoService = new UserInfoServiceImpl(userInfoRepository, readChallengeReviewRepository, userInfoValidateService)
     }
 
     def "UID로 유저 검색이 가능하다"() {
@@ -116,5 +123,46 @@ class UserInfoServiceImplSpec extends Specification {
 
         then:
         thrown(DuplicatedNicknameException)
+    }
+
+    // ----------------------------------------------------
+    // 마이페이지 관련
+    // ----------------------------------------------------
+
+    def "에러가 없으면 마이페이지 정보를 취득할 수 있다."() {
+        def anUser = UserInfoForMyPage.builder()
+                .nickname(nickname)
+                .createdDate(createdDate)
+                .build()
+        userInfoRepository.searchUserInfoByUid(_ as String) >> Optional.of(anUser)
+        readChallengeReviewRepository.searchChallengeInfoByUid(_ as String) >> UserInfoForMyPage.builder()
+                .badgeAmount(badgeAmount)
+                .totalFootprintAmount(totalFootprintAmount)
+                .build()
+
+        when:
+        def result = userInfoService.findUserInfoByUid(uid)
+
+        then:
+        result.getNickname() == nickname
+        result.getTotalFootprintAmount() == totalFootprintAmount
+        result.getBadgeAmount() == badgeAmount
+        result.getDDay() == Long.valueOf(ChronoUnit.DAYS.between(anUser.getCreatedDate(), LocalDateTime.now())).intValue()
+
+        where:
+        nickname   | badgeAmount | totalFootprintAmount | uid   | createdDate
+        'nickname' | 3           | 45                   | 'uid' | LocalDateTime.of(2022, 3, 15, 9, 30, 30)
+    }
+
+    def "마이페이지 정보를 검색할 유저가 존재하지 않으면 에러: UserNotFoundException"() {
+        given:
+        // mock
+        userInfoRepository.searchUserInfoByUid(_ as String) >> Optional.empty()
+
+        when:
+        userInfoService.findUserInfoByUid('uid')
+
+        then:
+        thrown(UserNotFoundException)
     }
 }

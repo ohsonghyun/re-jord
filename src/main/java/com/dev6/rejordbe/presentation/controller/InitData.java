@@ -176,6 +176,8 @@ public class InitData {
                                     .challengeReviewId("CR_webclient" + idx)
                                     .contents("hello world web" + idx)
                                     .challengeReviewType(ChallengeReviewType.HARDSHIP)
+                                    .footprintAmount(15)
+                                    .badgeCode(BadgeCode.DIGITAL_FAIRY)
                                     .user(user)
                                     .build()
                     );
@@ -190,6 +192,8 @@ public class InitData {
                                     .challengeReviewId("CR_androidclient" + idx)
                                     .contents("hello world android" + idx)
                                     .challengeReviewType(ChallengeReviewType.HARDSHIP)
+                                    .footprintAmount(15)
+                                    .badgeCode(BadgeCode.DIGITAL_FAIRY)
                                     .user(user)
                                     .build()
                     );
@@ -204,6 +208,8 @@ public class InitData {
                                     .challengeReviewId("CR_iosclient" + idx)
                                     .contents("hello world ios" + idx)
                                     .challengeReviewType(ChallengeReviewType.HARDSHIP)
+                                    .footprintAmount(15)
+                                    .badgeCode(BadgeCode.DIGITAL_FAIRY)
                                     .user(user)
                                     .build()
                     );
