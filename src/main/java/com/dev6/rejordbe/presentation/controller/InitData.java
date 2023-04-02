@@ -1,11 +1,14 @@
 package com.dev6.rejordbe.presentation.controller;
 
+import com.dev6.rejordbe.domain.badge.Badge;
 import com.dev6.rejordbe.domain.badge.BadgeAcquirementType;
 import com.dev6.rejordbe.domain.badge.BadgeCode;
 import com.dev6.rejordbe.domain.challenge.Challenge;
 import com.dev6.rejordbe.domain.challenge.ChallengeFlagType;
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview;
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReviewType;
+import com.dev6.rejordbe.domain.footprint.Footprint;
+import com.dev6.rejordbe.domain.footprint.FootprintAcquirementType;
 import com.dev6.rejordbe.domain.post.Post;
 import com.dev6.rejordbe.domain.post.PostType;
 import com.dev6.rejordbe.domain.user.Users;
@@ -40,8 +43,8 @@ public class InitData {
         initRoles.init();
         initUsers.init();
         initPosts.init();
-        initChallengeReviews.init();
         initChallenge.init();
+        initChallengeReviews.init();
     }
 
     // ROLES ---------------------------------------------------
@@ -170,14 +173,15 @@ public class InitData {
             // WEB 유저 게시글
             {
                 Users user = (Users) em.createQuery("select u from Users u where u.uid='web-uid'").getSingleResult();
+                Challenge challenge = (Challenge) em.createQuery("select c from Challenge c where c.challengeId='CH0'").getSingleResult();
                 IntStream.range(0, 7).forEach(idx -> {
+                    String challengeReviewId = "CR_webclient" + idx;
                     em.persist(
                             ChallengeReview.builder()
-                                    .challengeReviewId("CR_webclient" + idx)
+                                    .challengeReviewId(challengeReviewId)
                                     .contents("hello world web" + idx)
                                     .challengeReviewType(ChallengeReviewType.HARDSHIP)
-                                    .footprintAmount(15)
-                                    .badgeCode(BadgeCode.DIGITAL_FAIRY)
+                                    .challenge(challenge)
                                     .user(user)
                                     .build()
                     );
@@ -186,14 +190,15 @@ public class InitData {
             // 안드로이드 유저 게시글
             {
                 Users user = (Users) em.createQuery("select u from Users u where u.uid='android-uid'").getSingleResult();
+                Challenge challenge = (Challenge) em.createQuery("select c from Challenge c where c.challengeId='CH1'").getSingleResult();
                 IntStream.range(0, 10).forEach(idx -> {
+                    String challengeReviewId = "CR_androidclient" + idx;
                     em.persist(
                             ChallengeReview.builder()
-                                    .challengeReviewId("CR_androidclient" + idx)
+                                    .challengeReviewId(challengeReviewId)
                                     .contents("hello world android" + idx)
                                     .challengeReviewType(ChallengeReviewType.HARDSHIP)
-                                    .footprintAmount(15)
-                                    .badgeCode(BadgeCode.DIGITAL_FAIRY)
+                                    .challenge(challenge)
                                     .user(user)
                                     .build()
                     );
@@ -202,14 +207,15 @@ public class InitData {
             // iOS 유저 게시글
             {
                 Users user = (Users) em.createQuery("select u from Users u where u.uid='ios-uid'").getSingleResult();
+                Challenge challenge = (Challenge) em.createQuery("select c from Challenge c where c.challengeId='CH2'").getSingleResult();
                 IntStream.range(0, 9).forEach(idx -> {
+                    String challengeReviewId = "CR_iosclient" + idx;
                     em.persist(
                             ChallengeReview.builder()
-                                    .challengeReviewId("CR_iosclient" + idx)
+                                    .challengeReviewId(challengeReviewId)
                                     .contents("hello world ios" + idx)
                                     .challengeReviewType(ChallengeReviewType.HARDSHIP)
-                                    .footprintAmount(15)
-                                    .badgeCode(BadgeCode.DIGITAL_FAIRY)
+                                    .challenge(challenge)
                                     .user(user)
                                     .build()
                     );

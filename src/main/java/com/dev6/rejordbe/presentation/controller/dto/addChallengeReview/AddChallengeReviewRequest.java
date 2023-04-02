@@ -32,8 +32,9 @@ public class AddChallengeReviewRequest implements Serializable {
         return ChallengeReview.builder()
                 .contents(this.contents)
                 .challengeReviewType(this.challengeReviewType)
-                .badgeCode(this.badgeCode)
-                .footprintAmount(this.footprintAmount)
+                // TODO flowertaekk refactor
+//                .badgeCode(this.badgeCode)
+//                .footprintAmount(this.footprintAmount)
                 .build();
     }
 }

@@ -1,7 +1,9 @@
 package com.dev6.rejordbe.domain.challengeReview;
 
 import com.dev6.rejordbe.domain.BaseTime;
-import com.dev6.rejordbe.domain.badge.BadgeCode;
+import com.dev6.rejordbe.domain.badge.Badge;
+import com.dev6.rejordbe.domain.challenge.Challenge;
+import com.dev6.rejordbe.domain.footprint.Footprint;
 import com.dev6.rejordbe.domain.user.Users;
 
 import javax.persistence.*;
@@ -31,10 +33,8 @@ public class ChallengeReview extends BaseTime {
     @JoinColumn(name = "uid")
     private Users user;
 
-    @Column(name = "badge_code")
-    @Enumerated(value = EnumType.STRING)
-    private BadgeCode badgeCode;
+    @ManyToOne
+    @JoinColumn(name = "challenge_id")
+    private Challenge challenge;
 
-    @Column(name = "footprint_amount")
-    private Integer footprintAmount;
 }

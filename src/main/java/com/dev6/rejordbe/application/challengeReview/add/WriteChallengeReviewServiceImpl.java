@@ -55,37 +55,41 @@ public class WriteChallengeReviewServiceImpl implements WriteChallengeReviewServ
             throw new IllegalParameterException(ExceptionCode.ILLEGAL_PARAM);
         }
 
-        if (Objects.isNull(newChallengeReview.getBadgeCode())) {
-            log.warn("ChallengeReviewServiceImpl.writeChallengeReview: ILLEGAL_PARAM: {}", newChallengeReview.getBadgeCode());
-            throw new IllegalParameterException(ExceptionCode.ILLEGAL_PARAM);
-        }
-
-        if (Objects.isNull(newChallengeReview.getFootprintAmount())) {
-            log.warn("ChallengeReviewServiceImpl.writeChallengeReview: ILLEGAL_PARAM: {}", newChallengeReview.getFootprintAmount());
-            throw new IllegalParameterException(ExceptionCode.ILLEGAL_PARAM);
-        }
+        // TODO flowertaekk refactor
+//        if (Objects.isNull(newChallengeReview.getBadgeCode())) {
+//            log.warn("ChallengeReviewServiceImpl.writeChallengeReview: ILLEGAL_PARAM: {}", newChallengeReview.getBadgeCode());
+//            throw new IllegalParameterException(ExceptionCode.ILLEGAL_PARAM);
+//        }
+//
+//        if (Objects.isNull(newChallengeReview.getFootprintAmount())) {
+//            log.warn("ChallengeReviewServiceImpl.writeChallengeReview: ILLEGAL_PARAM: {}", newChallengeReview.getFootprintAmount());
+//            throw new IllegalParameterException(ExceptionCode.ILLEGAL_PARAM);
+//        }
 
         ChallengeReview challengeReviewResult = writeChallengeReviewRepository.save(
                 ChallengeReview.builder()
                         .challengeReviewId(idGenerator.generate("CR"))
                         .contents(newChallengeReview.getContents())
                         .challengeReviewType(newChallengeReview.getChallengeReviewType())
-                        .footprintAmount(newChallengeReview.getFootprintAmount())
-                        .badgeCode(newChallengeReview.getBadgeCode())
+                        // TODO flowertaekk refactor
+//                        .footprintAmount(newChallengeReview.getFootprintAmount())
+//                        .badgeCode(newChallengeReview.getBadgeCode())
                         .user(user)
                         .build()
         );
 
         addBadgeRepository.save(Badge.builder()
                 .badgeId(idGenerator.generate("BG"))
-                .badgeCode(newChallengeReview.getBadgeCode())
+                // TODO flowertaekk refactor
+//                .badgeCode(newChallengeReview.getBadgeCode())
                 .parentId(challengeReviewResult.getChallengeReviewId())
                 .badgeAcquirementType(BadgeAcquirementType.CHALLENGE_REVIEW)
                 .build());
 
         addFootprintRepository.save(Footprint.builder()
                 .footprintId(idGenerator.generate("FP"))
-                .footprintAmount(newChallengeReview.getFootprintAmount())
+                // TODO flowertaekk refactor
+//                .footprintAmount(newChallengeReview.getFootprintAmount())
                 .parentId(challengeReviewResult.getChallengeReviewId())
                 .footprintAcquirementType(FootprintAcquirementType.CHALLENGE_REVIEW)
                 .build());

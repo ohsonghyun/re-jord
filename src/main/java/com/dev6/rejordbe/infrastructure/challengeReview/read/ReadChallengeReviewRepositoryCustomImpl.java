@@ -1,6 +1,8 @@
 package com.dev6.rejordbe.infrastructure.challengeReview.read;
 
+import com.dev6.rejordbe.domain.badge.QBadge;
 import com.dev6.rejordbe.domain.challengeReview.dto.ChallengeReviewResult;
+import com.dev6.rejordbe.domain.footprint.QFootprint;
 import com.dev6.rejordbe.domain.user.dto.UserInfoForMyPage;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -15,7 +17,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static com.dev6.rejordbe.domain.badge.QBadge.*;
 import static com.dev6.rejordbe.domain.challengeReview.QChallengeReview.challengeReview;
+import static com.dev6.rejordbe.domain.footprint.QFootprint.footprint;
 
 /**
  * ReadChallengeReviewRepositoryCustomImpl
@@ -96,14 +100,16 @@ public class ReadChallengeReviewRepositoryCustomImpl implements ReadChallengeRev
     @Override
     public UserInfoForMyPage searchChallengeInfoByUid(String uid) {
         Long badgeAmount = queryFactory
-                .select(challengeReview.badgeCode.countDistinct().coalesce(0L))
-                .from(challengeReview)
+                .select(badge.badgeCode.countDistinct())
+                .from(badge)
+                .join(challengeReview).on(challengeReview.challengeReviewId.eq(badge.parentId)).fetchJoin()
                 .where(challengeReview.user.uid.eq(uid))
                 .fetchOne();
 
         Integer totalFootprintAmount = queryFactory
-                .select(challengeReview.footprintAmount.sum().coalesce(0))
-                .from(challengeReview)
+                .select(footprint.footprintAmount.sum().coalesce(0))
+                .from(footprint)
+                .join(challengeReview).on(challengeReview.challengeReviewId.eq(footprint.parentId)).fetchJoin()
                 .where(challengeReview.user.uid.eq(uid))
                 .fetchOne();
 
