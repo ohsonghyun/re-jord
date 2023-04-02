@@ -7,6 +7,7 @@ import com.dev6.rejordbe.domain.challenge.ChallengeFlagType
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.context.annotation.Import
+import org.springframework.dao.InvalidDataAccessApiUsageException
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 import spock.lang.Specification
 
@@ -92,6 +93,14 @@ class ReadChallengeRepositorySpec extends Specification {
         where:
         challengeId   | title   | contents   | footprintAmount | badgeCode         | imgFront   | imgBack   | textColor   | flag
         "CHDefault"   | "title" | "contents" | 15              | BadgeCode.DEFAULT | "imgFront" | "imgBack" | "textColor" | ChallengeFlagType.TODAY
+    }
+
+    def "챌린지 ID가 null 인 경우 에러"() {
+        when:
+        readChallengeRepository.findById(null)
+
+        then:
+        thrown(InvalidDataAccessApiUsageException)
     }
 
     def "flag == true 인 챌린지 값을 갖고온다"() {

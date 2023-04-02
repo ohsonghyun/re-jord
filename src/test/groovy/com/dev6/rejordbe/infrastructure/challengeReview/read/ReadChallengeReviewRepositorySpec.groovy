@@ -225,8 +225,6 @@ class ReadChallengeReviewRepositorySpec extends Specification {
                     challenge.getChallengeId(),
                     'contents',
                     ChallengeReviewType.HARDSHIP,
-                    challenge.getBadgeCode(),
-                    challenge.getFootprintAmount(),
                     user.getUid())
         }
 

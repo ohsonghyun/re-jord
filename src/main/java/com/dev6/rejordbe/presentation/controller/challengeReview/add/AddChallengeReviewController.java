@@ -47,11 +47,15 @@ public class AddChallengeReviewController {
             @ApiParam(value = "챌린지 리뷰 작성 정보", required = true) @RequestBody final AddChallengeReviewRequest addChallengeReviewRequest,
             @ApiParam(hidden = true) @LoggedIn String uid
     ) {
-        log.info("AddChallengeReviewController.addChallengeReview: reviewType: {}, badgeCode: {}, footpringAmount: {}",
+        log.info("AddChallengeReviewController.addChallengeReview: challengeId: {}, reviewType: {}, badgeCode: {}, footpringAmount: {}",
+                addChallengeReviewRequest.getChallengeId(),
+                addChallengeReviewRequest.getChallengeReviewType());
+
+        ChallengeReviewResult challengeReviewResult = writeChallengeReviewService.writeChallengeReview(
+                addChallengeReviewRequest.getChallengeId(),
+                addChallengeReviewRequest.getContents(),
                 addChallengeReviewRequest.getChallengeReviewType(),
-                addChallengeReviewRequest.getBadgeCode(),
-                addChallengeReviewRequest.getFootprintAmount());
-        ChallengeReviewResult challengeReviewResult = writeChallengeReviewService.writeChallengeReview(addChallengeReviewRequest.toChallengeReview(), uid);
+                uid);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(AddChallengeReviewResponse.builder()

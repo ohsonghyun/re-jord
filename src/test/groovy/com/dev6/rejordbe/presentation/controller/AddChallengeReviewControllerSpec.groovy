@@ -58,7 +58,11 @@ class AddChallengeReviewControllerSpec extends Specification {
 
     def "챌린지 리뷰 등록 성공시 201을 반환한다"() {
         given:
-        when(writeChallengeReviewService.writeChallengeReview(isA(ChallengeReview.class), isA(String.class)))
+        when(writeChallengeReviewService.writeChallengeReview(
+                isA(String.class),
+                isA(String.class),
+                isA(ChallengeReviewType.class),
+                isA(String.class)))
                 .thenReturn(
                         ChallengeReviewResult.builder()
                                 .challengeReviewId(challengeReviewId)
@@ -76,8 +80,7 @@ class AddChallengeReviewControllerSpec extends Specification {
                                         AddChallengeReviewRequest.builder()
                                                 .contents(contents)
                                                 .challengeReviewType(challengeReviewType)
-                                                .badgeCode(badgeCode)
-                                                .footprintAmount(footprintAmount)
+                                                .challengeId(challengeId)
                                                 .build()
                                 )))
                 .andExpect(status().isCreated())
@@ -87,14 +90,19 @@ class AddChallengeReviewControllerSpec extends Specification {
                 .andExpect(jsonPath('\$.uid').value(uid))
 
         where:
-        challengeReviewId   | contents   | challengeReviewType         | badgeCode              | footprintAmount | uid
-        'challengeReviewId' | 'contents' | ChallengeReviewType.FEELING | BadgeCode.PRO_ACTIVATE | 15              | 'uid'
+        challengeReviewId   | contents   | challengeReviewType         | challengeId   | uid
+        'challengeReviewId' | 'contents' | ChallengeReviewType.FEELING | 'challengeId' | 'uid'
     }
 
     @Unroll
     def "실패 케이스: #testCase 반환"() {
         given:
-        when(writeChallengeReviewService.writeChallengeReview(isA(ChallengeReview.class), isA(String.class))).thenThrow(exception)
+        when(writeChallengeReviewService.writeChallengeReview(
+                isA(String.class),
+                isA(String.class),
+                isA(ChallengeReviewType.class),
+                isA(String.class)))
+                .thenThrow(exception)
 
         expect:
         mvc.perform(
@@ -105,8 +113,7 @@ class AddChallengeReviewControllerSpec extends Specification {
                                         AddChallengeReviewRequest.builder()
                                                 .contents('contents')
                                                 .challengeReviewType(ChallengeReviewType.FEELING)
-                                                .badgeCode(BadgeCode.ENVIRONMENTAL_EXPERT)
-                                                .footprintAmount(15)
+                                                .challengeId('challengeId')
                                                 .build()
                                 )))
                 .andExpect(resultStatus)
@@ -122,7 +129,11 @@ class AddChallengeReviewControllerSpec extends Specification {
     @Unroll
     def "존재하지 않는 챌린지 리뷰"() {
         given:
-        when(writeChallengeReviewService.writeChallengeReview(isA(ChallengeReview.class), isA(String.class)))
+        when(writeChallengeReviewService.writeChallengeReview(
+                isA(String.class),
+                isA(String.class),
+                isA(ChallengeReviewType.class),
+                isA(String.class)))
                 .thenThrow(exception)
 
         expect:
@@ -134,8 +145,7 @@ class AddChallengeReviewControllerSpec extends Specification {
                                         AddChallengeReviewRequest.builder()
                                                 .contents('contents')
                                                 .challengeReviewType(ChallengeReviewType.FEELING)
-                                                .badgeCode(BadgeCode.ENVIRONMENTAL_EXPERT)
-                                                .footprintAmount(15)
+                                                .challengeId('challengeId')
                                                 .build()
                                 )))
                 .andExpect(resultStatus)
