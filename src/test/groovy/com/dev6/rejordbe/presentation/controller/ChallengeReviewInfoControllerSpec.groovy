@@ -51,7 +51,7 @@ class ChallengeReviewInfoControllerSpec extends Specification {
                 .thenReturn(new PageImpl<ChallengeReviewResult>(
                         List.of(
                                 new ChallengeReviewResult('challengeReviewId1', '찬 물로 세탁하기', 'content1', ChallengeReviewType.HARDSHIP, 'uid1', 'nickname1', LocalDateTime.now()),
-                                new ChallengeReviewResult('challengeReviewId2', '찬 물로 세탁하기', 'content2', ChallengeReviewType.HARDSHIP, 'uid1', 'nickname1', LocalDateTime.now())
+                                new ChallengeReviewResult('challengeReviewId2', '찬 물로 세탁하기', 'content2', ChallengeReviewType.HARDSHIP, 'uid2', 'nickname2', LocalDateTime.now())
                         ),
                         PageRequest.of(0, 5),
                         1)
