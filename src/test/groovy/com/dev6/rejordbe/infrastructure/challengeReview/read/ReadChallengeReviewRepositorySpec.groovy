@@ -122,6 +122,7 @@ class ReadChallengeReviewRepositorySpec extends Specification {
                 'challengeReviewId1',
                 'challengeReviewId0'
         )
+        it.extractingResultOf('getTitle').containsOnly('찬 물로 세탁하기')
         it.extractingResultOf('getContents').containsOnly('contents')
         it.extractingResultOf('getChallengeReviewType').containsOnly(ChallengeReviewType.HARDSHIP)
         it.extractingResultOf('getUid').containsOnly('uid')

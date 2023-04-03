@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @lombok.Builder
 public class ChallengeReviewResult {
     private final String challengeReviewId;
+    private final String title;
     private final String contents;
     private final ChallengeReviewType challengeReviewType;
     private final String uid;
