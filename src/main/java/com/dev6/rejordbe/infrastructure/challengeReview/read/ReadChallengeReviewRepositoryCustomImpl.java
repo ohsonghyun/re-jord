@@ -5,6 +5,7 @@ import com.dev6.rejordbe.domain.user.dto.UserInfoForMyPage;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -111,7 +112,7 @@ public class ReadChallengeReviewRepositoryCustomImpl implements ReadChallengeRev
                 .fetchOne();
 
         return UserInfoForMyPage.builder()
-                .badgeAmount(Long.valueOf(badgeAmount).intValue())
+                .badgeAmount(ObjectUtils.defaultIfNull(badgeAmount, 0).intValue())
                 .totalFootprintAmount(totalFootprintAmount)
                 .build();
     }
