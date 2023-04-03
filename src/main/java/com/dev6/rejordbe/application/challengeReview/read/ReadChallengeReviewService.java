@@ -2,7 +2,6 @@ package com.dev6.rejordbe.application.challengeReview.read;
 
 import com.dev6.rejordbe.domain.challengeReview.dto.ChallengeReviewResult;
 import com.dev6.rejordbe.exception.IllegalParameterException;
-import com.dev6.rejordbe.exception.UserNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

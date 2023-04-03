@@ -1,8 +1,6 @@
 package com.dev6.rejordbe.infrastructure.challengeReview.read;
 
-import com.dev6.rejordbe.domain.badge.QBadge;
 import com.dev6.rejordbe.domain.challengeReview.dto.ChallengeReviewResult;
-import com.dev6.rejordbe.domain.footprint.QFootprint;
 import com.dev6.rejordbe.domain.user.dto.UserInfoForMyPage;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -15,7 +13,6 @@ import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static com.dev6.rejordbe.domain.badge.QBadge.*;
 import static com.dev6.rejordbe.domain.challengeReview.QChallengeReview.challengeReview;
@@ -120,10 +117,10 @@ public class ReadChallengeReviewRepositoryCustomImpl implements ReadChallengeRev
     }
 
     /**
-     *특정uid조건
+     * 특정 uid 조건
      *
-     *@paramuid{@codeString}
-     *@return{@codeBooleanExpression}
+     * @param uid {@code String}
+     * @return {@code BooleanExpression}
      */
     private BooleanExpression eqUidWith(@Nullable final String uid) {
         return StringUtils.isBlank(uid) ? null :challengeReview.user.uid.eq(uid);

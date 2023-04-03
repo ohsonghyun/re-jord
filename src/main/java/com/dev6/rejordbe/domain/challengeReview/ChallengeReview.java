@@ -1,9 +1,7 @@
 package com.dev6.rejordbe.domain.challengeReview;
 
 import com.dev6.rejordbe.domain.BaseTime;
-import com.dev6.rejordbe.domain.badge.Badge;
 import com.dev6.rejordbe.domain.challenge.Challenge;
-import com.dev6.rejordbe.domain.footprint.Footprint;
 import com.dev6.rejordbe.domain.user.Users;
 
 import javax.persistence.*;

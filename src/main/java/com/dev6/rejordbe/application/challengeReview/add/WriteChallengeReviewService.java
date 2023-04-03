@@ -1,7 +1,5 @@
 package com.dev6.rejordbe.application.challengeReview.add;
 
-import com.dev6.rejordbe.domain.badge.BadgeCode;
-import com.dev6.rejordbe.domain.challengeReview.ChallengeReview;
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReviewType;
 import com.dev6.rejordbe.domain.challengeReview.dto.ChallengeReviewResult;
 import com.dev6.rejordbe.exception.IllegalParameterException;
