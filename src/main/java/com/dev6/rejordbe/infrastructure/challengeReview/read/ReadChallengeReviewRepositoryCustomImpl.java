@@ -13,9 +13,10 @@ import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
+import static com.dev6.rejordbe.domain.badge.QBadge.*;
 import static com.dev6.rejordbe.domain.challengeReview.QChallengeReview.challengeReview;
+import static com.dev6.rejordbe.domain.footprint.QFootprint.footprint;
 
 /**
  * ReadChallengeReviewRepositoryCustomImpl
@@ -96,14 +97,16 @@ public class ReadChallengeReviewRepositoryCustomImpl implements ReadChallengeRev
     @Override
     public UserInfoForMyPage searchChallengeInfoByUid(String uid) {
         Long badgeAmount = queryFactory
-                .select(challengeReview.badgeCode.countDistinct().coalesce(0L))
-                .from(challengeReview)
+                .select(badge.badgeCode.countDistinct())
+                .from(badge)
+                .join(challengeReview).on(challengeReview.challengeReviewId.eq(badge.parentId)).fetchJoin()
                 .where(challengeReview.user.uid.eq(uid))
                 .fetchOne();
 
         Integer totalFootprintAmount = queryFactory
-                .select(challengeReview.footprintAmount.sum().coalesce(0))
-                .from(challengeReview)
+                .select(footprint.footprintAmount.sum().coalesce(0))
+                .from(footprint)
+                .join(challengeReview).on(challengeReview.challengeReviewId.eq(footprint.parentId)).fetchJoin()
                 .where(challengeReview.user.uid.eq(uid))
                 .fetchOne();
 
@@ -114,10 +117,10 @@ public class ReadChallengeReviewRepositoryCustomImpl implements ReadChallengeRev
     }
 
     /**
-     *특정uid조건
+     * 특정 uid 조건
      *
-     *@paramuid{@codeString}
-     *@return{@codeBooleanExpression}
+     * @param uid {@code String}
+     * @return {@code BooleanExpression}
      */
     private BooleanExpression eqUidWith(@Nullable final String uid) {
         return StringUtils.isBlank(uid) ? null :challengeReview.user.uid.eq(uid);
