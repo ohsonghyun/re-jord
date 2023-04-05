@@ -11,6 +11,7 @@ import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +53,7 @@ public class PostInfoController {
             @NonNull @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @ApiParam(value = "취득기준시각", example = "2023-01-23T23:16:59", required = true)
             final LocalDateTime requestTime,
             final SearchPostCond cond,
-            final Pageable pageable
+            @PageableDefault(page = 0, size = 10) final Pageable pageable
     ) {
         log.info("PostInfoController.allPosts: requestTime: {}", requestTime);
         if (Objects.isNull(requestTime)) {
@@ -79,7 +80,7 @@ public class PostInfoController {
     )
     public ResponseEntity<Page<PostResult>> postsWrittenByUid(
             @ApiParam(hidden = true) @LoggedIn final String uid,
-            final Pageable pageable
+            @PageableDefault(page = 0, size = 10) final Pageable pageable
     ) {
         return ResponseEntity.ok(readPostService.postsWrittenByUid(uid, pageable));
     }
