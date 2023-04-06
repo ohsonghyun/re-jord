@@ -6,7 +6,6 @@ import com.dev6.rejordbe.domain.challengeReview.ChallengeReviewType
 import com.dev6.rejordbe.domain.challengeReview.dto.ChallengeReviewResult
 import com.dev6.rejordbe.domain.exception.ExceptionCode
 import com.dev6.rejordbe.exception.IllegalParameterException
-import com.dev6.rejordbe.exception.UserNotFoundException
 import com.dev6.rejordbe.presentation.controller.challengeReview.info.ChallengeReviewInfoController
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
@@ -51,8 +50,8 @@ class ChallengeReviewInfoControllerSpec extends Specification {
         when(readChallengeReviewService.allChallengeReviews(isA(LocalDateTime.class), isA(Pageable.class)))
                 .thenReturn(new PageImpl<ChallengeReviewResult>(
                         List.of(
-                                new ChallengeReviewResult('challengeReviewId1', 'content', ChallengeReviewType.HARDSHIP, 'uid1', 'nickname1', LocalDateTime.now()),
-                                new ChallengeReviewResult('challengeReviewId2', 'content', ChallengeReviewType.HARDSHIP, 'uid2', 'nickname2', LocalDateTime.now())
+                                new ChallengeReviewResult('challengeReviewId1', '찬 물로 세탁하기', 'content1', ChallengeReviewType.HARDSHIP, 'uid1', 'nickname1', LocalDateTime.now()),
+                                new ChallengeReviewResult('challengeReviewId2', '찬 물로 세탁하기', 'content2', ChallengeReviewType.HARDSHIP, 'uid2', 'nickname2', LocalDateTime.now())
                         ),
                         PageRequest.of(0, 5),
                         1)
@@ -65,6 +64,8 @@ class ChallengeReviewInfoControllerSpec extends Specification {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath('\$.content[0].challengeReviewId').value('challengeReviewId1'))
                 .andExpect(jsonPath('\$.content[1].challengeReviewId').value('challengeReviewId2'))
+                .andExpect(jsonPath('\$.content[0].title').value('찬 물로 세탁하기'))
+                .andExpect(jsonPath('\$.content[1].title').value('찬 물로 세탁하기'))
                 .andExpect(jsonPath('\$.content[0].uid').value('uid1'))
                 .andExpect(jsonPath('\$.content[1].uid').value('uid2'))
                 .andExpect(jsonPath('\$.content[0].nickname').value('nickname1'))
@@ -92,8 +93,8 @@ class ChallengeReviewInfoControllerSpec extends Specification {
         when(readChallengeReviewService.challengeReviewsWrittenByUid(isA(String.class), isA(Pageable.class)))
                 .thenReturn(new PageImpl<ChallengeReviewResult>(
                         List.of(
-                                new ChallengeReviewResult('challengeReviewId1', 'content1', ChallengeReviewType.HARDSHIP, 'uid1', 'nickname1', LocalDateTime.now()),
-                                new ChallengeReviewResult('challengeReviewId2', 'content2', ChallengeReviewType.HARDSHIP, 'uid1', 'nickname1', LocalDateTime.now())
+                                new ChallengeReviewResult('challengeReviewId1', '찬 물로 세탁하기', 'content1', ChallengeReviewType.HARDSHIP, 'uid1', 'nickname1', LocalDateTime.now()),
+                                new ChallengeReviewResult('challengeReviewId2', '찬 물로 세탁하기', 'content2', ChallengeReviewType.HARDSHIP, 'uid1', 'nickname1', LocalDateTime.now())
                         ),
                         PageRequest.of(0, 5),
                         1)
@@ -105,6 +106,8 @@ class ChallengeReviewInfoControllerSpec extends Specification {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath('\$.content[0].challengeReviewId').value('challengeReviewId1'))
                 .andExpect(jsonPath('\$.content[1].challengeReviewId').value('challengeReviewId2'))
+                .andExpect(jsonPath('\$.content[0].title').value('찬 물로 세탁하기'))
+                .andExpect(jsonPath('\$.content[1].title').value('찬 물로 세탁하기'))
                 .andExpect(jsonPath('\$.content[0].uid').value('uid1'))
                 .andExpect(jsonPath('\$.content[1].uid').value('uid1'))
                 .andExpect(jsonPath('\$.content[0].nickname').value('nickname1'))

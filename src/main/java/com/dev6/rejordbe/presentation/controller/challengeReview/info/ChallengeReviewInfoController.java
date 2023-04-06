@@ -10,6 +10,7 @@ import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +51,7 @@ public class ChallengeReviewInfoController {
     public ResponseEntity<Page<ChallengeReviewResult>> allChallengeReviews(
             @NonNull @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @ApiParam(value = "취득기준시각", example = "2023-01-23T23:16:59", required = true)
             final LocalDateTime requestTime,
-            final Pageable pageable
+            @PageableDefault(page = 0, size = 10) final Pageable pageable
     ) {
         log.info("ChallengeReviewInfoController.allChallengeReviews: requestTime: {}", requestTime);
         if (Objects.isNull(requestTime)) {
@@ -77,7 +78,7 @@ public class ChallengeReviewInfoController {
     )
     public ResponseEntity<Page<ChallengeReviewResult>> challengeReviewsWrittenByUid(
             @ApiParam(hidden = true) @LoggedIn String uid,
-            final Pageable pageable
+            @PageableDefault(page = 0, size = 10) final Pageable pageable
     ) {
         return ResponseEntity.ok(readChallengeReviewService.challengeReviewsWrittenByUid(uid, pageable));
     }

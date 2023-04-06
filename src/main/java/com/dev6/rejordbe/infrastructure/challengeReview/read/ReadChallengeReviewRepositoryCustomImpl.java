@@ -17,6 +17,7 @@ import java.util.List;
 
 import static com.dev6.rejordbe.domain.badge.QBadge.*;
 import static com.dev6.rejordbe.domain.challengeReview.QChallengeReview.challengeReview;
+import static com.dev6.rejordbe.domain.challenge.QChallenge.challenge;
 import static com.dev6.rejordbe.domain.footprint.QFootprint.footprint;
 
 /**
@@ -36,6 +37,7 @@ public class ReadChallengeReviewRepositoryCustomImpl implements ReadChallengeRev
                         Projections.constructor(
                                 ChallengeReviewResult.class,
                                 challengeReview.challengeReviewId,
+                                challenge.title,
                                 challengeReview.contents,
                                 challengeReview.challengeReviewType,
                                 challengeReview.user.uid,
@@ -44,6 +46,7 @@ public class ReadChallengeReviewRepositoryCustomImpl implements ReadChallengeRev
                         )
                 )
                 .from(challengeReview)
+                .join(challenge).on(challenge.challengeId.eq(challengeReview.challenge.challengeId)).fetchJoin()
                 .where(challengeReview.createdDate.loe(offsetTime))
                 .orderBy(challengeReview.createdDate.desc())
                 .offset(pageable.getOffset())
@@ -68,6 +71,7 @@ public class ReadChallengeReviewRepositoryCustomImpl implements ReadChallengeRev
                         Projections.constructor(
                                 ChallengeReviewResult.class,
                                 challengeReview.challengeReviewId,
+                                challenge.title,
                                 challengeReview.contents,
                                 challengeReview.challengeReviewType,
                                 challengeReview.user.uid,
@@ -76,6 +80,7 @@ public class ReadChallengeReviewRepositoryCustomImpl implements ReadChallengeRev
                         )
                 )
                 .from(challengeReview)
+                .join(challenge).on(challenge.challengeId.eq(challengeReview.challenge.challengeId)).fetchJoin()
                 .where(eqUidWith(uid))
                 .orderBy(challengeReview.createdDate.desc())
                 .offset(pageable.getOffset())

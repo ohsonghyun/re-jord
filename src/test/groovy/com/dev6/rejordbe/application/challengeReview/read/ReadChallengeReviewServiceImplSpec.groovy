@@ -2,11 +2,8 @@ package com.dev6.rejordbe.application.challengeReview.read
 
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReviewType
 import com.dev6.rejordbe.domain.challengeReview.dto.ChallengeReviewResult
-import com.dev6.rejordbe.domain.user.Users
 import com.dev6.rejordbe.exception.IllegalParameterException
-import com.dev6.rejordbe.exception.UserNotFoundException
 import com.dev6.rejordbe.infrastructure.challengeReview.read.ReadChallengeReviewRepository
-import com.dev6.rejordbe.infrastructure.user.UserInfoRepository
 import org.assertj.core.api.Assertions
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
@@ -35,8 +32,8 @@ class ReadChallengeReviewServiceImplSpec extends Specification {
         readChallengeReviewRepository.searchAll(_ as LocalDateTime, _ as Pageable)
                 >> new PageImpl<ChallengeReviewResult>(
                 List.of(
-                        new ChallengeReviewResult('challengeReviewId1', 'content', ChallengeReviewType.HARDSHIP, 'uid1', 'nickname1', LocalDateTime.now()),
-                        new ChallengeReviewResult('challengeReviewId2', 'content', ChallengeReviewType.HARDSHIP, 'uid2', 'nickname2', LocalDateTime.now())
+                        new ChallengeReviewResult('challengeReviewId1', '찬 물로 세탁하기', 'content', ChallengeReviewType.HARDSHIP, 'uid1', 'nickname1', LocalDateTime.now()),
+                        new ChallengeReviewResult('challengeReviewId2', '찬 물로 세탁하기', 'content', ChallengeReviewType.HARDSHIP, 'uid2', 'nickname2', LocalDateTime.now())
                 ),
                 pageRequest,
                 1)
@@ -49,6 +46,7 @@ class ReadChallengeReviewServiceImplSpec extends Specification {
         challengeReviews.getTotalElements() == 2
         def it = Assertions.assertThat(challengeReviews.getContent())
         it.extractingResultOf('getChallengeReviewId').containsExactly('challengeReviewId1', 'challengeReviewId2')
+        it.extractingResultOf('getTitle').containsOnly('찬 물로 세탁하기')
         it.extractingResultOf('getContents').containsOnly('content')
         it.extractingResultOf('getChallengeReviewType').containsOnly(ChallengeReviewType.HARDSHIP)
         it.extractingResultOf('getUid').containsExactly('uid1', 'uid2')
@@ -72,8 +70,8 @@ class ReadChallengeReviewServiceImplSpec extends Specification {
         readChallengeReviewRepository.searchChallengeReviewByUid(_ as String, _ as Pageable)
                 >> new PageImpl<ChallengeReviewResult>(
                 List.of(
-                        new ChallengeReviewResult('challengeReviewId1', 'content1', ChallengeReviewType.HARDSHIP, 'uid1', 'nickname1', LocalDateTime.now()),
-                        new ChallengeReviewResult('challengeReviewId2', 'content2', ChallengeReviewType.HARDSHIP, 'uid1', 'nickname1', LocalDateTime.now())
+                        new ChallengeReviewResult('challengeReviewId1', '찬 물로 세탁하기', 'content1', ChallengeReviewType.HARDSHIP, 'uid1', 'nickname1', LocalDateTime.now()),
+                        new ChallengeReviewResult('challengeReviewId2', '찬 물로 세탁하기', 'content2', ChallengeReviewType.HARDSHIP, 'uid1', 'nickname1', LocalDateTime.now())
                 ),
                 pageRequest,
                 1)
@@ -86,6 +84,7 @@ class ReadChallengeReviewServiceImplSpec extends Specification {
         challengeReviews.getTotalElements() == 2
         def it = Assertions.assertThat(challengeReviews.getContent())
         it.extractingResultOf('getChallengeReviewId').containsExactly('challengeReviewId1', 'challengeReviewId2')
+        it.extractingResultOf('getTitle').containsOnly('찬 물로 세탁하기')
         it.extractingResultOf('getContents').containsExactly('content1', 'content2')
         it.extractingResultOf('getChallengeReviewType').containsOnly(ChallengeReviewType.HARDSHIP)
         it.extractingResultOf('getUid').containsOnly('uid1')
