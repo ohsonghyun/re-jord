@@ -40,7 +40,7 @@ import javax.persistence.PersistenceContext
 @DataJpaTest
 @EnableJpaAuditing
 @Import(TestConfig.class)
-class ReadFootPrintRepositoryTest extends Specification {
+class ReadFootPrintRepositorySpec extends Specification {
 
     @PersistenceContext
     EntityManager entityManager
@@ -115,7 +115,7 @@ class ReadFootPrintRepositoryTest extends Specification {
         resultPage.getTotalElements() == 1
         resultPage.getSize() == 5
         resultPage.getNumberOfElements() == 1
-        def it = Assertions.assertThat(resultPage.content)
+        def it = Assertions.assertThat(resultPage.getContent())
         it.extractingResultOf('getFootprintId').isNotNull()
         it.extractingResultOf('getFootprintAmount').containsExactly(15)
         it.extractingResultOf('getParentId').isNotNull()
