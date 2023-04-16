@@ -1,6 +1,9 @@
 package com.dev6.rejordbe.domain.footprint.dto;
 
+import com.dev6.rejordbe.domain.badge.BadgeCode;
 import com.dev6.rejordbe.domain.footprint.FootprintAcquirementType;
+
+import java.time.LocalDateTime;
 
 /**
  * FootprintResult
@@ -14,4 +17,7 @@ public class FootprintResult {
     private final Integer footprintAmount;
     private final String parentId;
     private final FootprintAcquirementType footprintAcquirementType;
+    private final String title;
+    private final BadgeCode badgeCode;
+    private final LocalDateTime createdDate;
 }
