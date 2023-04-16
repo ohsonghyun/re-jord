@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -19,6 +20,14 @@ public class LoginControllerAdvice {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> exceptionHandler(UserNotFoundException exception) {
+        return new ResponseEntity<>(
+                ErrorResponse.builder().message(exception.getMessage()).build(),
+                headers(),
+                HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> exceptionHandler(BadCredentialsException exception) {
         return new ResponseEntity<>(
                 ErrorResponse.builder().message(exception.getMessage()).build(),
                 headers(),
