@@ -129,6 +129,6 @@ public class ReadChallengeReviewRepositoryCustomImpl implements ReadChallengeRev
      * @return {@code BooleanExpression}
      */
     private BooleanExpression eqUidWith(@Nullable final String uid) {
-        return StringUtils.isBlank(uid) ? null :challengeReview.user.uid.eq(uid);
+        return StringUtils.isBlank(uid) ? null : challengeReview.user.uid.eq(uid);
     }
 }

@@ -1,37 +1,28 @@
-package com.dev6.rejordbe.presentation.controller.user.login;
+package com.dev6.rejordbe.presentation.controller.footprint.info;
 
-import com.dev6.rejordbe.exception.UserNotFoundException;
+import com.dev6.rejordbe.exception.IllegalParameterException;
 import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
- * UserControllerAdvice
+ * FootprintInfoControllerAdvice
  */
-@RestControllerAdvice(basePackageClasses = LoginController.class)
+@RestControllerAdvice(basePackageClasses = FootprintInfoController.class)
 @Slf4j
-public class LoginControllerAdvice {
+public class FootprintInfoControllerAdvice {
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ErrorResponse> exceptionHandler(UserNotFoundException exception) {
+    @ExceptionHandler(IllegalParameterException.class)
+    public ResponseEntity<ErrorResponse> exceptionHandler(IllegalParameterException exception) {
         return new ResponseEntity<>(
                 ErrorResponse.builder().message(exception.getMessage()).build(),
                 headers(),
-                HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ErrorResponse> exceptionHandler(BadCredentialsException exception) {
-        return new ResponseEntity<>(
-                ErrorResponse.builder().message(exception.getMessage()).build(),
-                headers(),
-                HttpStatus.NOT_FOUND);
+                HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
