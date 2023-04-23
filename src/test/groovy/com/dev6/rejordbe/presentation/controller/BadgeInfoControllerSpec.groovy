@@ -35,11 +35,11 @@ class BadgeInfoControllerSpec extends Specification {
 
     def "uid가 일치하는 배지 리스트 획득"() {
         given :
-        when(badgeInfoService.findMyBadge(isA(String.class)))
+        when(badgeInfoService.findBadgeByUid(isA(String.class)))
             .thenReturn(
                     List.of(
-                            new BadgeByUidResult(BadgeCode.WATER_FAIRY, 'imageUrl1'),
-                            new BadgeByUidResult(BadgeCode.PRO_ACTIVATE, 'imageUrl2')
+                            new BadgeByUidResult(BadgeCode.PRO_ACTIVATE, BadgeCode.PRO_ACTIVATE.getBadgeName(), BadgeCode.PRO_ACTIVATE.imageUrl),
+                            new BadgeByUidResult(BadgeCode.WATER_FAIRY, BadgeCode.WATER_FAIRY.getBadgeName(), BadgeCode.WATER_FAIRY.imageUrl)
                     )
             )
 
@@ -47,15 +47,17 @@ class BadgeInfoControllerSpec extends Specification {
         mvc.perform(get(BASE_URL + '/withUid')
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(jsonPath('\$.[0].badgeCode').value(BadgeCode.WATER_FAIRY.name()))
-            .andExpect(jsonPath('\$.[1].badgeCode').value(BadgeCode.PRO_ACTIVATE.name()))
-            .andExpect(jsonPath('\$.[0].imageUrl').value('imageUrl1'))
-            .andExpect(jsonPath('\$.[1].imageUrl').value('imageUrl2'))
+            .andExpect(jsonPath('\$.[0].badgeCode').value(BadgeCode.PRO_ACTIVATE.name()))
+            .andExpect(jsonPath('\$.[1].badgeCode').value(BadgeCode.WATER_FAIRY.name()))
+            .andExpect(jsonPath('\$.[0].badgeName').value(BadgeCode.PRO_ACTIVATE.getBadgeName()))
+            .andExpect(jsonPath('\$.[1].badgeName').value(BadgeCode.WATER_FAIRY.getBadgeName()))
+            .andExpect(jsonPath('\$.[0].imageUrl').value(BadgeCode.PRO_ACTIVATE.getImageUrl()))
+            .andExpect(jsonPath('\$.[1].imageUrl').value(BadgeCode.WATER_FAIRY.getImageUrl()))
     }
 
     def "uid가 지정이 안 된 경우에는 에러: 400"() {
         given:
-        when(badgeInfoService.findMyBadge(isA(String.class))).thenThrow(exception)
+        when(badgeInfoService.findBadgeByUid(isA(String.class))).thenThrow(exception)
 
         expect:
         mvc.perform(get(BASE_URL + '/withUid')

@@ -15,5 +15,5 @@ public interface BadgeInfoService {
      * @return {@code List<BadgeByUidResult>}
      * @throws
      */
-    List<BadgeByUidResult> findMyBadge(final String uid);
+    List<BadgeByUidResult> findBadgeByUid(final String uid);
 }

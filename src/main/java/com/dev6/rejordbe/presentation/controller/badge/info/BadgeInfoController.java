@@ -44,6 +44,6 @@ public class BadgeInfoController {
     )
     public ResponseEntity<List<BadgeByUidResult>> myBadgeByUid(
             @ApiParam(hidden = true) @LoggedIn String uid) {
-        return ResponseEntity.ok(badgeInfoService.findMyBadge(uid));
+        return ResponseEntity.ok(badgeInfoService.findBadgeByUid(uid));
     }
 }

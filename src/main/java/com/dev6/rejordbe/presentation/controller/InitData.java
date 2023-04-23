@@ -3,7 +3,6 @@ package com.dev6.rejordbe.presentation.controller;
 import com.dev6.rejordbe.domain.badge.Badge;
 import com.dev6.rejordbe.domain.badge.BadgeAcquirementType;
 import com.dev6.rejordbe.domain.badge.BadgeCode;
-import com.dev6.rejordbe.domain.badge.BadgeImage;
 import com.dev6.rejordbe.domain.challenge.Challenge;
 import com.dev6.rejordbe.domain.challenge.ChallengeFlagType;
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview;
@@ -40,7 +39,6 @@ public class InitData {
     private final InitChallenge initChallenge;
     private final InitBadges initBadges;
     private final InitFootprints initFootprints;
-    private final InitBadgeImages initBadgeImages;
 
     @PostConstruct
     public void init() {
@@ -51,7 +49,6 @@ public class InitData {
         initChallengeReviews.init();
         initBadges.init();
         initFootprints.init();
-        initBadgeImages.init();
     }
 
     // ROLES ---------------------------------------------------
@@ -385,29 +382,6 @@ public class InitData {
                                     .build()
                     );
                 });
-            }
-        }
-    }
-
-    // BADGE IMAGE ---------------------------------------------------
-    @Component
-    static class InitBadgeImages {
-        @PersistenceContext
-        EntityManager em;
-
-        @Transactional
-        public void init() {
-            {
-                em.persist(new BadgeImage(BadgeCode.WATER_FAIRY, "imageUrl1"));
-                em.persist(new BadgeImage(BadgeCode.VEGETARIAN, "imageUrl2"));
-                em.persist(new BadgeImage(BadgeCode.ENERGY_SAVER, "imageUrl3"));
-                em.persist(new BadgeImage(BadgeCode.MEAL_PLANNER, "imageUrl4"));
-                em.persist(new BadgeImage(BadgeCode.DIGITAL_FAIRY, "imageUrl5"));
-                em.persist(new BadgeImage(BadgeCode.FOREST_LOVER, "imageUrl6"));
-                em.persist(new BadgeImage(BadgeCode.PRO_SHOPPER, "imageUrl7"));
-                em.persist(new BadgeImage(BadgeCode.ENVIRONMENTAL_EXPERT, "imageUrl8"));
-                em.persist(new BadgeImage(BadgeCode.PRO_ACTIVATE, "imageUrl9"));
-                em.persist(new BadgeImage(BadgeCode.DEFAULT, "imageUrl10"));
             }
         }
     }

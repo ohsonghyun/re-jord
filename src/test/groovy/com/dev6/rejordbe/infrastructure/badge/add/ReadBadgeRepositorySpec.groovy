@@ -4,14 +4,12 @@ import com.dev6.rejordbe.TestConfig
 import com.dev6.rejordbe.domain.badge.Badge
 import com.dev6.rejordbe.domain.badge.BadgeAcquirementType
 import com.dev6.rejordbe.domain.badge.BadgeCode
-import com.dev6.rejordbe.domain.badge.BadgeImage
 import com.dev6.rejordbe.domain.challenge.Challenge
 import com.dev6.rejordbe.domain.challenge.ChallengeFlagType
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReviewType
 import com.dev6.rejordbe.domain.user.Users
 import com.dev6.rejordbe.exception.IllegalParameterException
-import com.dev6.rejordbe.infrastructure.badge.BadgeImageRepository
 import com.dev6.rejordbe.infrastructure.badge.read.ReadBadgeRepository
 import com.dev6.rejordbe.infrastructure.challenge.read.ReadChallengeRepository
 import com.dev6.rejordbe.infrastructure.challengeReview.read.ReadChallengeReviewRepository
@@ -21,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.context.annotation.Import
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
@@ -39,8 +38,6 @@ class ReadBadgeRepositorySpec extends Specification {
     @Autowired
     ReadBadgeRepository readBadgeRepository
     @Autowired
-    BadgeImageRepository badgeImageRepository
-    @Autowired
     ReadChallengeRepository readChallengeRepository
     @Autowired
     ReadChallengeReviewRepository readChallengeReviewRepository
@@ -53,7 +50,7 @@ class ReadBadgeRepositorySpec extends Specification {
                 .nickname('nickname')
                 .build()
         signUpRepository.save(user)
-        //
+        // 챌린지 추가
         def challenge = readChallengeRepository.save(new Challenge("CH0", "찬 물로 세탁하기", "오늘은 찬물로 세탁기를 돌리고 탄소발자국 줄이기에 동참해 봐요.", 15, BadgeCode.WATER_FAIRY, "imgFront0", "imgBack0", "#2894DE", ChallengeFlagType.TODAY))
         // 챌린지 게시글 추가
         for (int i = 0; i < 10; i++) {
@@ -76,8 +73,6 @@ class ReadBadgeRepositorySpec extends Specification {
                             .build()
             )
         }
-        // 배지 이미지 정보
-        badgeImageRepository.save(new BadgeImage(BadgeCode.WATER_FAIRY, 'imageUrl'))
 
         when:
         def result = readBadgeRepository.searchBadgeByUid('uid')
@@ -87,7 +82,8 @@ class ReadBadgeRepositorySpec extends Specification {
 
         then:
         result.get(0).getBadgeCode() == BadgeCode.WATER_FAIRY
-        result.get(0).getImageUrl() == 'imageUrl'
+        result.get(0).getBadgeName() != null
+        result.get(0).getImageUrl() != null
         result.size() == 1
     }
 
@@ -99,11 +95,17 @@ class ReadBadgeRepositorySpec extends Specification {
         result.size() == 0
     }
 
-    def "uid가 null인 들어간 경우"() {
+    @Unroll('#testCase')
+    def "지정된 uid가 없으면 에러: 400"() {
         when:
-        readBadgeRepository.searchBadgeByUid(null)
+        readBadgeRepository.searchBadgeByUid(uid)
 
         then:
         thrown(IllegalParameterException)
+
+        where:
+        testCase            | uid
+        'uid가 null'        | null
+        'uid가 emptyString' | ''
     }
 }

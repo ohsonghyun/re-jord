@@ -11,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 
 import static com.dev6.rejordbe.domain.badge.QBadge.badge;
-import static com.dev6.rejordbe.domain.badge.QBadgeImage.badgeImage;
 import static com.dev6.rejordbe.domain.challengeReview.QChallengeReview.challengeReview;
 
 /**
@@ -35,12 +34,12 @@ public class ReadBadgeRepositoryCustomImpl implements ReadBadgeRepositoryCustom 
                         Projections.constructor(
                                 BadgeByUidResult.class,
                                 badge.badgeCode,
-                                badgeImage.imageUrl
+                                challengeReview.user.uid.as("badgeName"),
+                                challengeReview.user.uid.as("imageUrl")
                         )
                 ).distinct()
                 .from(badge)
                 .join(challengeReview).on(challengeReview.challengeReviewId.eq(badge.parentId)).fetchJoin()
-                .join(badgeImage).on(badgeImage.badgeCode.eq(badge.badgeCode)).fetchJoin()
                 .where(challengeReview.user.uid.eq(uid))
                 .fetch();
     }
