@@ -41,10 +41,9 @@ public class BadgeInfoServiceImpl implements BadgeInfoService {
         // 받아온 list는 add가 되지 않아서 다시 addAll로 받아줘야 됨
         List<BadgeByUidResult> badgeList = new ArrayList<>();
         badgeList.addAll(list);
-
         BadgeCode[] code = BadgeCode.values();
         for(BadgeCode badge : code) {
-            if(badgeList.contains((new BadgeByUidResult(badge, null, null)))) {
+            if(badgeList.stream().anyMatch(b -> badge.name().equals(b.getBadgeCode().name()))) {
                 badgeList.set(badgeList.indexOf(new BadgeByUidResult(badge, null, null)), new BadgeByUidResult(badge, badge.getBadgeName(), badge.getImageUrl()));
             } else if(badge.equals(BadgeCode.DEFAULT)) {
                 continue;
@@ -52,7 +51,7 @@ public class BadgeInfoServiceImpl implements BadgeInfoService {
                 badgeList.add(new BadgeByUidResult(badge, badge.getBadgeName(), BadgeCode.DEFAULT.getImageUrl()));
             }
         }
-        // badgeList 안에 객체를 정렬해주기 위해서 Comparator 인터페이스를 람다식을 표현
+        // badgeList 안에 객체를 정렬해주기 위해서 Comparator 인터페이스를 람다식으로 표현
         Collections.sort(badgeList, (badge1, badge2) -> badge1.getBadgeCode().name().compareTo(badge2.getBadgeCode().name()));
         return badgeList;
     }

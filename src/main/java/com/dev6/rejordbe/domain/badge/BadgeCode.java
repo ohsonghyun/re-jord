@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 @lombok.Getter
 public enum BadgeCode {
+    // TODO 이미지 URL 변경 해줘야됨
     WATER_FAIRY("imageUrl1", "워터 요정"), // 워터 요정
     VEGETARIAN("imageUrl2", "나름 채식러"), // 나름 채식러
     ENERGY_SAVER("imageUrl3", "절전 요정"),   // 절전 요정
