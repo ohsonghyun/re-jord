@@ -202,25 +202,23 @@ class ReadPostRepositorySpec extends Specification {
         signUpRepository.save(user)
 
         // 게시글 추가
-        for (int i = 0; i < 10; i++) {
-            readPostRepository.save(
-                    Post.builder()
-                            .postId('postId' + i)
-                            .contents('contents')
-                            .postType(PostType.SHARE)
-                            .user(user)
-                            .build()
-            )
-        }
+        readPostRepository.save(
+                Post.builder()
+                        .postId('postId')
+                        .contents('contents1')
+                        .postType(PostType.SHARE)
+                        .user(user)
+                        .build()
+        )
 
         entityManager.flush()
         entityManager.clear()
 
         when:
-        def anPost = readPostRepository.findById('postId0').orElseThrow()
+        def anPost = readPostRepository.findById('postId').orElseThrow()
         anPost.update(
                 Post.builder()
-                .postId('postId0')
+                .postId('postId')
                 .contents('updateContents')
                 .build()
         )
@@ -228,7 +226,7 @@ class ReadPostRepositorySpec extends Specification {
         entityManager.clear()
 
         then:
-        def resultPostInfo = readPostRepository.findById('postId0').orElseThrow()
+        def resultPostInfo = readPostRepository.findById('postId').orElseThrow()
         resultPostInfo.getContents() == 'updateContents'
         resultPostInfo.getModifiedDate().isAfter(resultPostInfo.getCreatedDate())
 
