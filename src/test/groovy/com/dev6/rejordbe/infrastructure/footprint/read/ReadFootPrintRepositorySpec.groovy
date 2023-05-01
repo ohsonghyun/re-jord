@@ -95,8 +95,8 @@ class ReadFootPrintRepositorySpec extends Specification {
                 "challengeContents",
                 15,
                 BadgeCode.WATER_FAIRY,
-                "imgFront0",
-                "imgBack0",
+                "imgFront0.png",
+                "imgBack0.png",
                 "#2894DE",
                 ChallengeFlagType.TODAY)
         entityManager.persist(challenge);
