@@ -45,14 +45,15 @@ class ChallengeServiceImplSpec extends Specification {
         anChallenge.getContents() == contents
         anChallenge.getFootprintAmount() == footprintAmount
         anChallenge.getBadgeCode() == badgeCode
+        challengeResult.getBadgeName() == badgeName
         anChallenge.getImgFront() == imgFront
         anChallenge.getImgBack() == imgBack
         anChallenge.getTextColor() == textColor
         anChallenge.getFlag() == flag
 
         where:
-        challengeId   | title   | contents   | footprintAmount | badgeCode             | imgFront   | imgBack   | textColor   | flag
-        "challengeId" | "title" | "contents" | 15              | BadgeCode.WATER_FAIRY | "imgFront" | "imgBack" | "textColor" | ChallengeFlagType.TODAY
+        challengeId   | title   | contents   | footprintAmount | badgeCode             | badgeName                | imgFront   | imgBack   | textColor   | flag
+        "challengeId" | "title" | "contents" | 15              | BadgeCode.WATER_FAIRY | badgeCode.getBadgeName() | "imgFront" | "imgBack" | "textColor" | ChallengeFlagType.TODAY
     }
 
     def "flag가 true인 챌린지가 없을 경우 flag가 DEFAULT인 챌린지를 갖고온다"() {
@@ -82,13 +83,14 @@ class ChallengeServiceImplSpec extends Specification {
         anChallenge.getContents() == contents
         anChallenge.getFootprintAmount() == footprintAmount
         anChallenge.getBadgeCode() == badgeCode
+        challengeResult.getBadgeName() == badgeName
         anChallenge.getImgFront() == imgFront
         anChallenge.getImgBack() == imgBack
         anChallenge.getTextColor() == textColor
         anChallenge.getFlag() == flag
 
         where:
-        challengeId   | title   | contents   | footprintAmount | badgeCode         | imgFront   | imgBack   | textColor   | flag
-        "CHDefault"   | "title" | "contents" | 15              | BadgeCode.DEFAULT | "imgFront" | "imgBack" | "textColor" | ChallengeFlagType.DEFAULT
+        challengeId   | title   | contents   | footprintAmount | badgeCode         | badgeName                | imgFront   | imgBack   | textColor   | flag
+        "CHDefault"   | "title" | "contents" | 15              | BadgeCode.DEFAULT | badgeCode.getBadgeName() | "imgFront" | "imgBack" | "textColor" | ChallengeFlagType.DEFAULT
     }
 }

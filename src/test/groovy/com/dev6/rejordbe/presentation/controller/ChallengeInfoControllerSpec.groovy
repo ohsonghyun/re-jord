@@ -41,6 +41,7 @@ class ChallengeInfoControllerSpec extends Specification {
                 .contents(contents)
                 .footprintAmount(footprintAmount)
                 .badgeCode(badgeCode)
+                .badgeName(badgeName)
                 .imgFront(imgFront)
                 .imgBack(imgBack)
                 .textColor(textColor)
@@ -58,14 +59,15 @@ class ChallengeInfoControllerSpec extends Specification {
                     .andExpect(jsonPath('\$.contents').value(contents))
                     .andExpect(jsonPath('\$.footprintAmount').value(footprintAmount))
                     .andExpect(jsonPath('\$.badgeCode').value(badgeCode.name()))
+                    .andExpect(jsonPath('\$.badgeName').value(badgeName))
                     .andExpect(jsonPath('\$.imgFront').value(imgFront))
                     .andExpect(jsonPath('\$.imgBack').value(imgBack))
                     .andExpect(jsonPath('\$.textColor').value(textColor))
 
 
         where:
-        challengeId   | title   | contents   | footprintAmount | badgeCode            | imgFront   | imgBack   | textColor
-        "challengeId" | "title" | "contents" | 15              | BadgeCode.VEGETARIAN | "imgFront" | "imgBack" | "textColor"
+        challengeId   | title   | contents   | footprintAmount | badgeCode            | badgeName                | imgFront   | imgBack   | textColor
+        "challengeId" | "title" | "contents" | 15              | BadgeCode.VEGETARIAN | badgeCode.getBadgeName() |"imgFront" | "imgBack" | "textColor"
     }
 
     def "챌린지가 없으면 404 반환"() {
