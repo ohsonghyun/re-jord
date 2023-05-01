@@ -79,7 +79,7 @@ class ReadChallengeReviewRepositorySpec extends Specification {
                 .build()
         signUpRepository.save(user)
         // 챌린지 추가
-        def challenge = readChallengeRepository.save(new Challenge("CH0", "찬 물로 세탁하기", "오늘은 찬물로 세탁기를 돌리고 탄소발자국 줄이기에 동참해 봐요.", 15, BadgeCode.WATER_FAIRY, "imgFront0", "imgBack0", "#2894DE", ChallengeFlagType.TODAY))
+        def challenge = readChallengeRepository.save(new Challenge("CH0", "찬 물로 세탁하기", "오늘은 찬물로 세탁기를 돌리고 탄소발자국 줄이기에 동참해 봐요.", 15, BadgeCode.WATER_FAIRY, "imgFront0.png", "imgBack0.png", "#2894DE", ChallengeFlagType.TODAY))
 
         // 챌린지 게시글 추가
         for (int i = 0; i < 10; i++) {
@@ -138,7 +138,7 @@ class ReadChallengeReviewRepositorySpec extends Specification {
                 .uid('uid')
                 .build()
         signUpRepository.save(user)
-        def challenge = readChallengeRepository.save(new Challenge("CH0", "찬 물로 세탁하기", "오늘은 찬물로 세탁기를 돌리고 탄소발자국 줄이기에 동참해 봐요.", 15, BadgeCode.WATER_FAIRY, "imgFront0", "imgBack0", "#2894DE", ChallengeFlagType.TODAY))
+        def challenge = readChallengeRepository.save(new Challenge("CH0", "찬 물로 세탁하기", "오늘은 찬물로 세탁기를 돌리고 탄소발자국 줄이기에 동참해 봐요.", 15, BadgeCode.WATER_FAIRY, "imgFront0.png", "imgBack0.png", "#2894DE", ChallengeFlagType.TODAY))
 
         // 게시글 추가
         for (int i = 0; i < 10; i++) {
@@ -175,7 +175,7 @@ class ReadChallengeReviewRepositorySpec extends Specification {
                 .nickname('nickname')
                 .build()
         signUpRepository.save(user)
-        def challenge = readChallengeRepository.save(new Challenge("CH0", "찬 물로 세탁하기", "오늘은 찬물로 세탁기를 돌리고 탄소발자국 줄이기에 동참해 봐요.", 15, BadgeCode.WATER_FAIRY, "imgFront0", "imgBack0", "#2894DE", ChallengeFlagType.TODAY))
+        def challenge = readChallengeRepository.save(new Challenge("CH0", "찬 물로 세탁하기", "오늘은 찬물로 세탁기를 돌리고 탄소발자국 줄이기에 동참해 봐요.", 15, BadgeCode.WATER_FAIRY, "imgFront0.png", "imgBack0.png", "#2894DE", ChallengeFlagType.TODAY))
 
         // 챌린지 게시글 추가
         for (int i = 0; i < 10; i++) {
@@ -218,7 +218,7 @@ class ReadChallengeReviewRepositorySpec extends Specification {
                 .nickname('nickname')
                 .build()
         signUpRepository.save(user)
-        def challenge = readChallengeRepository.save(new Challenge("CH0", "찬 물로 세탁하기", "오늘은 찬물로 세탁기를 돌리고 탄소발자국 줄이기에 동참해 봐요.", 15, BadgeCode.WATER_FAIRY, "imgFront0", "imgBack0", "#2894DE", ChallengeFlagType.TODAY))
+        def challenge = readChallengeRepository.save(new Challenge("CH0", "찬 물로 세탁하기", "오늘은 찬물로 세탁기를 돌리고 탄소발자국 줄이기에 동참해 봐요.", 15, BadgeCode.WATER_FAIRY, "imgFront0.png", "imgBack0.png", "#2894DE", ChallengeFlagType.TODAY))
 
         // 챌린지 리뷰 게시글 생성
         for (int i = 0; i < 10; i++) {

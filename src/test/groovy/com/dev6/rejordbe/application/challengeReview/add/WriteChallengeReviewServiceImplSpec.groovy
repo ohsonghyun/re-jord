@@ -33,7 +33,7 @@ class WriteChallengeReviewServiceImplSpec extends Specification {
     IdGenerator idGenerator
 
     // shared
-    Challenge challenge = new Challenge("CH0", "찬 물로 세탁하기", "오늘은 찬물로 세탁기를 돌리고 탄소발자국 줄이기에 동참해 봐요.", 15, BadgeCode.WATER_FAIRY, "imgFront0", "imgBack0", "#2894DE", ChallengeFlagType.TODAY)
+    Challenge challenge = new Challenge("CH0", "찬 물로 세탁하기", "오늘은 찬물로 세탁기를 돌리고 탄소발자국 줄이기에 동참해 봐요.", 15, BadgeCode.WATER_FAIRY, "imgFront0.png", "imgBack0.png", "#2894DE", ChallengeFlagType.TODAY)
 
     def setup() {
         writeChallengeReviewRepository = Mock(WriteChallengeReviewRepository.class)

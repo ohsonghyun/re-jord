@@ -41,7 +41,7 @@ class WriteChallengeReviewRepositorySpec extends Specification {
         // 유저 생성
         def user = signUpRepository.save(Users.builder().uid('uid').build())
         // 챌린지 생성
-        def challenge = new Challenge("CH0", "찬 물로 세탁하기", "오늘은 찬물로 세탁기를 돌리고 탄소발자국 줄이기에 동참해 봐요.", 15, BadgeCode.WATER_FAIRY, "imgFront0", "imgBack0", "#2894DE", ChallengeFlagType.TODAY)
+        def challenge = new Challenge("CH0", "찬 물로 세탁하기", "오늘은 찬물로 세탁기를 돌리고 탄소발자국 줄이기에 동참해 봐요.", 15, BadgeCode.WATER_FAIRY, "imgFront0.png", "imgBack0.png", "#2894DE", ChallengeFlagType.TODAY)
         entityManager.persist(challenge)
 
         when:
