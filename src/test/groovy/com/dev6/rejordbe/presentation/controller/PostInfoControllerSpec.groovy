@@ -3,10 +3,17 @@ package com.dev6.rejordbe.presentation.controller
 import com.dev6.rejordbe.TestSecurityConfig
 import com.dev6.rejordbe.application.post.read.ReadPostService
 import com.dev6.rejordbe.domain.exception.ExceptionCode
+import com.dev6.rejordbe.domain.post.Post
 import com.dev6.rejordbe.domain.post.PostType
 import com.dev6.rejordbe.domain.post.dto.PostResult
 import com.dev6.rejordbe.domain.post.dto.SearchPostCond
+import com.dev6.rejordbe.domain.user.Users
+import com.dev6.rejordbe.exception.DuplicatedNicknameException
 import com.dev6.rejordbe.exception.IllegalParameterException
+import com.dev6.rejordbe.exception.PostNotFoundException
+import com.dev6.rejordbe.exception.UserNotFoundException
+import com.dev6.rejordbe.presentation.controller.dto.updatePost.UpdatePostRequest
+import com.dev6.rejordbe.presentation.controller.dto.userInfo.UpdateUserInfoRequest
 import com.dev6.rejordbe.presentation.controller.post.info.PostInfoController
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,6 +26,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -26,6 +34,7 @@ import java.time.format.DateTimeFormatter
 import static org.mockito.ArgumentMatchers.isA
 import static org.mockito.Mockito.when
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
@@ -129,4 +138,57 @@ class PostInfoControllerSpec extends Specification {
         "유저 uid가 지정이 안 된 경우: 400" | ExceptionCode.ILLEGAL_UID | new IllegalParameterException(message) | status().isBadRequest()
     }
     // / uid가 일치하는 게시글 페이징 관련
+
+    // 게시글 수정 관련
+    def "게시글 내용 변경에 성공하면 200 반환"() {
+        given:
+        when(readPostService.updatePostInfo(isA(Post.class)))
+                .thenReturn(
+                        PostResult.builder()
+                        .postId(postId)
+                        .contents(contents)
+                        .build()
+                )
+
+        expect:
+        mvc.perform(
+                patch(BASE_URL + '/withPostId')
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(
+                                UpdatePostRequest.builder()
+                                        .postId(postId)
+                                        .contents(contents)
+                                        .build())))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath('\$.postId').value(postId))
+                .andExpect(jsonPath('\$.contents').value(contents))
+
+        where:
+        postId   | contents
+        'postId' | 'contents'
+    }
+
+    @Unroll
+    def "실패 케이스: #testCase 반환"() {
+        given:
+        when(readPostService.updatePostInfo(isA(Post.class))).thenThrow(exception)
+
+        expect:
+        mvc.perform(
+                patch(BASE_URL + '/withPostId')
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(
+                                UpdatePostRequest.builder()
+                                        .postId('postId')
+                                        .contents('contents')
+                                        .build())))
+                .andExpect(resultStatus)
+                .andExpect(jsonPath("\$.message").value(message))
+
+        where:
+        testCase                       | message                        | exception                              | resultStatus
+        '정책에 맞지 않은 게시글 내용: 400' | ExceptionCode.ILLEGAL_CONTENTS | new IllegalParameterException(message) | status().isBadRequest()
+        '존재하지 않는 게시글: 404'        | ExceptionCode.POST_NOT_FOUND   | new PostNotFoundException(message)     | status().isNotFound()
+    }
+    // / 게시글 수정 관련
 }
