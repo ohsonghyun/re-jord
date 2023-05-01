@@ -91,7 +91,7 @@ public class PostInfoController {
             notes = "게시글 수정 API",
             response = PostResult.class,
             authorizations = {@Authorization(value = "JWT")},
-            tags = "내가 쓴 게시글 정보 컨트롤러")
+            tags = "게시글 수정 컨트롤러")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "게시글 변경 성공"),
             @ApiResponse(code = 400, message = "정책 위반 데이터", response = ErrorResponse.class),
