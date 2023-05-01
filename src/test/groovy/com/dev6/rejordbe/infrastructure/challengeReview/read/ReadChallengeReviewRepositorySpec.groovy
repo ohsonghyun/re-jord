@@ -249,4 +249,45 @@ class ReadChallengeReviewRepositorySpec extends Specification {
     }
     // /마이페이지 정보 관련
 
+    // 챌린지 리뷰 게시글 내용 수정 관련
+    def "챌린지 리뷰 게시글 내용을 수정할 수 있다"() {
+        given:
+        // 유저 생성
+        def user = Users.builder()
+                .uid('uid')
+                .nickname('nickname')
+                .build()
+        signUpRepository.save(user)
+
+        // 챌린지 리뷰 게시글 추가
+        readChallengeReviewRepository.save(
+                ChallengeReview.builder()
+                        .challengeReviewId('challengeReviewId')
+                        .contents('contents1')
+                        .challengeReviewType(ChallengeReviewType.FEELING)
+                        .user(user)
+                        .build()
+        )
+
+        entityManager.flush()
+        entityManager.clear()
+
+        when:
+        def anChallengeReview = readChallengeReviewRepository.findById('challengeReviewId').orElseThrow()
+        anChallengeReview.update(
+                ChallengeReview.builder()
+                        .challengeReviewId('challengeReviewId')
+                        .contents('updateContents')
+                        .build()
+        )
+        entityManager.flush()
+        entityManager.clear()
+
+        then:
+        def resultChallengeReviewInfo = readChallengeReviewRepository.findById('challengeReviewId').orElseThrow()
+        resultChallengeReviewInfo.getContents() == 'updateContents'
+        resultChallengeReviewInfo.getModifiedDate().isAfter(resultChallengeReviewInfo.getCreatedDate())
+
+    }
+    // / 챌린지 리뷰 게시글 내용 수정 관련
 }
