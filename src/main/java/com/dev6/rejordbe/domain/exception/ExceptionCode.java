@@ -18,6 +18,7 @@ public interface ExceptionCode {
     String USER_NOT_FOUND = "USER_NOT_FOUND";
     String CHALLENGE_REVIEW_NOT_FOUND = "CHALLENGE_REVIEW_NOT_FOUND";
     String CHALLENGE_NOT_FOUND = "CHALLENGE_NOT_FOUND";
+    String POST_NOT_FOUND = "POST_NOT_FOUND";
 
     // INTERNAL_SERVER_ERROR -------------------------------------
     String INTERNAL_ILLEGAL_PARAM = "INTERNAL_ILLEGAL_PARAM";

@@ -1,6 +1,7 @@
 package com.dev6.rejordbe.presentation.controller.post.info;
 
 import com.dev6.rejordbe.exception.IllegalParameterException;
+import com.dev6.rejordbe.exception.PostNotFoundException;
 import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -25,6 +26,7 @@ public class PostInfoControllerAdvice {
                 headers(),
                 HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(BindException.class)
     public ResponseEntity<ErrorResponse> exceptionHandler(BindException exception) {
         exception.printStackTrace();
@@ -32,6 +34,15 @@ public class PostInfoControllerAdvice {
                 ErrorResponse.builder().message("BAD_REQUEST").build(),
                 headers(),
                 HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PostNotFoundException.class)
+    public ResponseEntity<ErrorResponse> exceptionHandler(PostNotFoundException exception) {
+        exception.printStackTrace();
+        return new ResponseEntity<>(
+                ErrorResponse.builder().message(exception.getMessage()).build(),
+                headers(),
+                HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)

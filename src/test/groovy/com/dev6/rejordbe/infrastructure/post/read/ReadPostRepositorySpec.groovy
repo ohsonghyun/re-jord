@@ -187,4 +187,48 @@ class ReadPostRepositorySpec extends Specification {
         "일치하는 uid가 있는 경우" | 'uid'  | 10
         "일치하는 uid가 없는 경우" | 'uid1' | 0
     }
+
+    // ----------------------------------------------------
+    // 게시글 수정 관련
+    // ----------------------------------------------------
+
+    def "게시글 내용을 수정할 수 있다"() {
+        given:
+        // 유저 생성
+        def user = Users.builder()
+                .uid('uid')
+                .nickname('nickname')
+                .build()
+        signUpRepository.save(user)
+
+        // 게시글 추가
+        readPostRepository.save(
+                Post.builder()
+                        .postId('postId')
+                        .contents('contents1')
+                        .postType(PostType.SHARE)
+                        .user(user)
+                        .build()
+        )
+
+        entityManager.flush()
+        entityManager.clear()
+
+        when:
+        def anPost = readPostRepository.findById('postId').orElseThrow()
+        anPost.update(
+                Post.builder()
+                .postId('postId')
+                .contents('updateContents')
+                .build()
+        )
+        entityManager.flush()
+        entityManager.clear()
+
+        then:
+        def resultPostInfo = readPostRepository.findById('postId').orElseThrow()
+        resultPostInfo.getContents() == 'updateContents'
+        resultPostInfo.getModifiedDate().isAfter(resultPostInfo.getCreatedDate())
+
+    }
 }
