@@ -17,7 +17,7 @@ public interface DeletePostService {
      * @return {@code String} 삭제할 게시글 id
      * @throws PostNotFoundException {@code postId}가 존재하지 않는 게시글일 경우
      * @throws IllegalParameterException {@code postId}가 정책에 어긋나는 경우
-     * @throws UnauthorizedUserException {@code uid}가 일치하지 않는 게시글일 경우
+     * @throws UnauthorizedUserException {@code uid} 권한이 없는 유저가 접근한 경우
      */
     String deletePost(final String postId, final String uid);
 }

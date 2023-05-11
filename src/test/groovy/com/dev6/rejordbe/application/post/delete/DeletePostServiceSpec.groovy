@@ -66,10 +66,10 @@ class DeletePostServiceSpec extends Specification {
         thrown(exception)
 
         where:
-        testCase                       | exception                 | postId    | uid
-        'postId가 정책에 어긋나는 경우'    | IllegalParameterException | ''        | 'uid'
-        'postId가 정책에 어긋나는 경우'    | IllegalParameterException | null      | 'uid'
-        'uid가 일치하지 않는 게시글일 경우' | UnauthorizedUserException | 'postId1' | 'uid1'
+        testCase                    | exception                 | postId    | uid
+        'postId가 정책에 어긋나는 경우' | IllegalParameterException | ''        | 'uid'
+        'postId가 정책에 어긋나는 경우' | IllegalParameterException | null      | 'uid'
+        '권한이 없는 유저가 접근한 경우' | UnauthorizedUserException | 'postId1' | 'uid1'
     }
 
     def "존재하지 않는 게시글일 경우"() {
