@@ -5,10 +5,12 @@ import com.dev6.rejordbe.presentation.controller.argumentResolver.LoggedIn;
 import com.dev6.rejordbe.presentation.controller.dto.deletePost.DeletePostResponse;
 import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
 import io.swagger.annotations.*;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -39,11 +41,10 @@ public class DeletePostController {
     })
     @DeleteMapping(
             value = "/{postId}",
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_PROBLEM_JSON_VALUE},
-            consumes = MediaType.APPLICATION_JSON_VALUE
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_PROBLEM_JSON_VALUE}
     )
     public ResponseEntity<DeletePostResponse> deletePost(
-            @ApiParam(value = "삭제할 게시글 id", required = true) @PathVariable final String postId,
+            @Schema(description = "삭제할 게시글 id", required = true) @NonNull @PathVariable String postId,
             @ApiParam(hidden = true) @LoggedIn final String uid
     ) {
         log.info("DeletePostController.deletePost: postId: {}", postId);
