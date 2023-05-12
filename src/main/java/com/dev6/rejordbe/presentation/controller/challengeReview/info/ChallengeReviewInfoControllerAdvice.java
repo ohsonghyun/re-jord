@@ -1,5 +1,6 @@
 package com.dev6.rejordbe.presentation.controller.challengeReview.info;
 
+import com.dev6.rejordbe.exception.ChallengeReviewNotFoundException;
 import com.dev6.rejordbe.exception.IllegalParameterException;
 import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,15 @@ public class ChallengeReviewInfoControllerAdvice {
                 ErrorResponse.builder().message(exception.getMessage()).build(),
                 headers(),
                 HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ChallengeReviewNotFoundException.class)
+    public ResponseEntity<ErrorResponse> exceptionHandler(ChallengeReviewNotFoundException exception) {
+        exception.printStackTrace();
+        return new ResponseEntity<>(
+                ErrorResponse.builder().message(exception.getMessage()).build(),
+                headers(),
+                HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)

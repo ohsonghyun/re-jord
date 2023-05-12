@@ -2,11 +2,14 @@ package com.dev6.rejordbe.presentation.controller
 
 import com.dev6.rejordbe.TestSecurityConfig
 import com.dev6.rejordbe.application.challengeReview.read.ReadChallengeReviewService
+import com.dev6.rejordbe.domain.challengeReview.ChallengeReview
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReviewType
 import com.dev6.rejordbe.domain.challengeReview.dto.ChallengeReviewResult
 import com.dev6.rejordbe.domain.exception.ExceptionCode
+import com.dev6.rejordbe.exception.ChallengeReviewNotFoundException
 import com.dev6.rejordbe.exception.IllegalParameterException
 import com.dev6.rejordbe.presentation.controller.challengeReview.info.ChallengeReviewInfoController
+import com.dev6.rejordbe.presentation.controller.dto.updateChallengeReview.UpdateChallengeReviewRequest
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -18,6 +21,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -25,6 +29,7 @@ import java.time.format.DateTimeFormatter
 import static org.mockito.ArgumentMatchers.isA
 import static org.mockito.Mockito.when
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
@@ -135,4 +140,58 @@ class ChallengeReviewInfoControllerSpec extends Specification {
         "유저 uid가 지정이 안 된 경우: 400" | ExceptionCode.ILLEGAL_UID | new IllegalParameterException(message) | status().isBadRequest()
     }
     // / 유저 uid와 일치하는 챌린지 게시글
+
+
+    // 챌린지 리뷰 게시글 수정 관련
+    def "챌린지 리뷰 게시글 내용 변경에 성공하면 200 반환"() {
+        given:
+        when(readChallengeReviewService.updateChallengeReviewInfo(isA(ChallengeReview.class)))
+                .thenReturn(
+                        ChallengeReviewResult.builder()
+                                .challengeReviewId(challengeReviewId)
+                                .contents(contents)
+                                .build()
+                )
+
+        expect:
+        mvc.perform(
+                patch(BASE_URL + '/withChallengeReviewId')
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(
+                                UpdateChallengeReviewRequest.builder()
+                                        .challengeReviewId(challengeReviewId)
+                                        .contents(contents)
+                                        .build())))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath('\$.challengeReviewId').value(challengeReviewId))
+                .andExpect(jsonPath('\$.contents').value(contents))
+
+        where:
+        challengeReviewId   | contents
+        'challengeReviewId' | 'contents'
+    }
+
+    @Unroll
+    def "실패 케이스: #testCase 반환"() {
+        given:
+        when(readChallengeReviewService.updateChallengeReviewInfo(isA(ChallengeReview.class))).thenThrow(exception)
+
+        expect:
+        mvc.perform(
+                patch(BASE_URL + '/withChallengeReviewId')
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(
+                                UpdateChallengeReviewRequest.builder()
+                                        .challengeReviewId('challengeReviewId')
+                                        .contents('contents')
+                                        .build())))
+                .andExpect(resultStatus)
+                .andExpect(jsonPath("\$.message").value(message))
+
+        where:
+        testCase                                 | message                                  | exception                                     | resultStatus
+        '정책에 맞지 않은 챌린지 리뷰 게시글 내용: 400' | ExceptionCode.ILLEGAL_CONTENTS           | new IllegalParameterException(message)        | status().isBadRequest()
+        '존재하지 않는 챌린지 리뷰 게시글: 404'        | ExceptionCode.CHALLENGE_REVIEW_NOT_FOUND | new ChallengeReviewNotFoundException(message) | status().isNotFound()
+    }
+    // / 챌린지 리뷰 게시글 수정 관련
 }

@@ -1,7 +1,9 @@
 package com.dev6.rejordbe.application.challengeReview.read;
 
+import com.dev6.rejordbe.domain.challengeReview.ChallengeReview;
 import com.dev6.rejordbe.domain.challengeReview.dto.ChallengeReviewResult;
 import com.dev6.rejordbe.domain.exception.ExceptionCode;
+import com.dev6.rejordbe.exception.ChallengeReviewNotFoundException;
 import com.dev6.rejordbe.exception.IllegalParameterException;
 import com.dev6.rejordbe.infrastructure.challengeReview.read.ReadChallengeReviewRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -54,5 +56,33 @@ public class ReadChallengeReviewServiceImpl implements ReadChallengeReviewServic
             throw new IllegalParameterException(ExceptionCode.ILLEGAL_UID);
         }
         return readChallengeReviewRepository.searchChallengeReviewByUid(uid, pageable);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional
+    @Override
+    public ChallengeReviewResult updateChallengeReviewInfo(ChallengeReview newChallengeReview) {
+        if (!org.springframework.util.StringUtils.hasText(newChallengeReview.getContents())) {
+            log.info("ReadChallengeReviewServiceImpl.updateChallengeReviewInfo: ILLEGAL_CONTENTS: {}", newChallengeReview.getContents());
+            throw new IllegalParameterException(ExceptionCode.ILLEGAL_CONTENTS);
+        }
+
+        ChallengeReview targetChallengeReview = readChallengeReviewRepository.findById(newChallengeReview.getChallengeReviewId())
+                .orElseThrow(() -> {
+                    log.info("ReadPostService.updatePostInfo: POST_NOT_FOUND: {}", newChallengeReview.getChallengeReviewId());
+                    return new ChallengeReviewNotFoundException(ExceptionCode.CHALLENGE_NOT_FOUND);
+                });
+
+        targetChallengeReview.update(ChallengeReview.builder().contents(newChallengeReview.getContents()).build());
+        return ChallengeReviewResult.builder()
+                .challengeReviewId(targetChallengeReview.getChallengeReviewId())
+                .contents(targetChallengeReview.getContents())
+                .challengeReviewType(targetChallengeReview.getChallengeReviewType())
+                .uid(targetChallengeReview.getUser().getUid())
+                .nickname(targetChallengeReview.getUser().getNickname())
+                .createdDate(targetChallengeReview.getCreatedDate())
+                .build();
     }
 }
