@@ -17,6 +17,6 @@ public class JwtConfig {
 
     @lombok.Data
     public static class TokenPeriod {
-        private int period;
+        private Long period;
     }
 }

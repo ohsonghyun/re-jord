@@ -10,4 +10,4 @@ rejord:
     access-token:
       period: 1800000 # ms
     refresh-token:
-      period: 3600000 # ms
+      period: 2592000000 # ms
