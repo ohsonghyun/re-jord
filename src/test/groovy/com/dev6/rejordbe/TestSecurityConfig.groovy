@@ -31,7 +31,7 @@ class TestSecurityConfig {
         config.setAccessToken(accessTokenPeriod)
 
         def refreshTokenPeriod = new JwtConfig.TokenPeriod()
-        refreshTokenPeriod.setPeriod(3600000)
+        refreshTokenPeriod.setPeriod(2592000000)
         config.setAccessToken(refreshTokenPeriod)
 
         return config;

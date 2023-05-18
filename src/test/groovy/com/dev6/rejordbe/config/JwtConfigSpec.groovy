@@ -14,7 +14,7 @@ class JwtConfigSpec extends Specification {
         expect:
         jwtConfig.getSortKey() == 'sort'
         jwtConfig.getAccessToken().getPeriod() == 1800000
-        jwtConfig.getRefreshToken().getPeriod() == 3600000
+        jwtConfig.getRefreshToken().getPeriod() == 2592000000
     }
 
 }
