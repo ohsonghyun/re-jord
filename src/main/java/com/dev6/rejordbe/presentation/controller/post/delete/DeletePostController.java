@@ -52,7 +52,7 @@ public class DeletePostController {
 
         return ResponseEntity.status(HttpStatus.OK).body(
                 DeletePostResponse.builder()
-                        .postId(postId)
+                        .postId(deletedPostId)
                         .build());
     }
 }

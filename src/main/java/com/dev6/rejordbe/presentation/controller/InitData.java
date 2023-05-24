@@ -286,7 +286,7 @@ public class InitData {
         }
     }
 
-    // CHALLENGE ---------------------------------------------------
+    // BADGES ---------------------------------------------------
     @Component
     static class InitBadges {
         @PersistenceContext
