@@ -66,7 +66,7 @@ class DeleteChallengeReviewRepositorySpec  extends Specification {
                 .build())
 
         when:
-        deleteChallengeReviewRepository.delete(challengeReview)
+        deleteChallengeReviewRepository.deleteByChallengeReviewId(challengeReviewId)
 
         entityManager.flush()
         entityManager.clear()
