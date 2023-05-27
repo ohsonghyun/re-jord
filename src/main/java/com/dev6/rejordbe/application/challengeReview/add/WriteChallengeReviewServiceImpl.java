@@ -77,29 +77,33 @@ public class WriteChallengeReviewServiceImpl implements WriteChallengeReviewServ
             return new ChallengeNotFoundException(ExceptionCode.CHALLENGE_NOT_FOUND);
         });
 
+        String challengeReviewId = idGenerator.generate("CR");
+
+        Badge badge = addBadgeRepository.save(Badge.builder()
+                .badgeId(idGenerator.generate("BG"))
+                .badgeCode(challenge.getBadgeCode())
+                .parentId(challengeReviewId)
+                .badgeAcquirementType(BadgeAcquirementType.CHALLENGE_REVIEW)
+                .build());
+
+        Footprint footprint = addFootprintRepository.save(Footprint.builder()
+                .footprintId(idGenerator.generate("FP"))
+                .footprintAmount(challenge.getFootprintAmount())
+                .parentId(challengeReviewId)
+                .footprintAcquirementType(FootprintAcquirementType.CHALLENGE_REVIEW)
+                .build());
+
         ChallengeReview challengeReviewResult = writeChallengeReviewRepository.save(
                 ChallengeReview.builder()
-                        .challengeReviewId(idGenerator.generate("CR"))
+                        .challengeReviewId(challengeReviewId)
                         .contents(contents)
                         .challengeReviewType(challengeReviewType)
                         .challenge(challenge)
                         .user(user)
+                        .footprint(footprint)
+                        .badge(badge)
                         .build()
         );
-
-        addBadgeRepository.save(Badge.builder()
-                .badgeId(idGenerator.generate("BG"))
-                .badgeCode(challenge.getBadgeCode())
-                .parentId(challengeReviewResult.getChallengeReviewId())
-                .badgeAcquirementType(BadgeAcquirementType.CHALLENGE_REVIEW)
-                .build());
-
-        addFootprintRepository.save(Footprint.builder()
-                .footprintId(idGenerator.generate("FP"))
-                .footprintAmount(challenge.getFootprintAmount())
-                .parentId(challengeReviewResult.getChallengeReviewId())
-                .footprintAcquirementType(FootprintAcquirementType.CHALLENGE_REVIEW)
-                .build());
 
         return ChallengeReviewResult.builder()
                 .challengeReviewId(challengeReviewResult.getChallengeReviewId())
