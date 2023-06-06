@@ -35,7 +35,7 @@ class ReadPostServiceImplSpec extends Specification {
         def now = LocalDateTime.now()
         def searchPostCond = new SearchPostCond(null)
         def pageRequest = PageRequest.of(0, 5)
-        readPostRepository.searchAll(_ as LocalDateTime, _ as SearchPostCond, _ as Pageable)
+        readPostRepository.searchPostAll(_ as LocalDateTime, _ as SearchPostCond, _ as Pageable)
                 >> new PageImpl<PostResult>(
                 List.of(
                         new PostResult('postId1', 'content', PostType.OTHERS, 'uid1', 'nickname1', LocalDateTime.now()),

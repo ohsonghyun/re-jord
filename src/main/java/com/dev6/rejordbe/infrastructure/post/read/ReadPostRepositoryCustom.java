@@ -20,7 +20,7 @@ public interface ReadPostRepositoryCustom {
      * @param pageable  {@code Pageable}
      * @return {@code Page<PostResult>}
      */
-    Page<PostResult> searchAll(final LocalDateTime offsetTime, final SearchPostCond cond, final Pageable pageable);
+    Page<PostResult> searchPostAll(final LocalDateTime offsetTime, final SearchPostCond cond, final Pageable pageable);
 
     /**
      * uid가 동일한 모든 일반 피드를 반환 (페이지네이션)

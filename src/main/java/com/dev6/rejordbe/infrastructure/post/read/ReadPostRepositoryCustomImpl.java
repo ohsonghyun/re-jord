@@ -31,7 +31,7 @@ public class ReadPostRepositoryCustomImpl implements ReadPostRepositoryCustom {
      * {@inheritDoc}
      */
     @Override
-    public Page<PostResult> searchAll(
+    public Page<PostResult> searchPostAll(
             @NonNull final LocalDateTime offsetTime,
             @Nullable final SearchPostCond cond,
             @NonNull final Pageable pageable) {
