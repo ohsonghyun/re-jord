@@ -31,7 +31,7 @@ class ReadFootprintServiceImplSpec extends Specification {
         readFootPrintRepository.searchAllByUid(_ as String, _ as Pageable) >>
                 new PageImpl<FootprintResult>(
                         List.of(
-                                new FootprintResult('footprintId', 15, 'parentId', FootprintAcquirementType.CHALLENGE_REVIEW, 'title', BadgeCode.WATER_FAIRY, LocalDateTime.now())
+                                new FootprintResult('footprintId', 15, 'parentId', FootprintAcquirementType.CHALLENGE_REVIEW, 'title', BadgeCode.WATER_FAIRY, "", LocalDateTime.now())
                         ),
                         pageable,
                         2
@@ -51,6 +51,7 @@ class ReadFootprintServiceImplSpec extends Specification {
         it.extractingResultOf('getFootprintAcquirementType').containsExactly(FootprintAcquirementType.CHALLENGE_REVIEW)
         it.extractingResultOf('getTitle').containsExactly('title')
         it.extractingResultOf('getBadgeCode').containsExactly(BadgeCode.WATER_FAIRY)
+        it.extractingResultOf('getBadgeName').containsExactly(BadgeCode.WATER_FAIRY.getBadgeName())
         it.extractingResultOf('getCreatedDate').isNotNull()
 
         where:
