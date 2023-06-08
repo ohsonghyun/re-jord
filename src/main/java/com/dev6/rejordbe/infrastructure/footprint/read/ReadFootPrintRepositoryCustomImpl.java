@@ -49,6 +49,7 @@ public class ReadFootPrintRepositoryCustomImpl implements ReadFootPrintRepositor
                                 footprint.footprintAcquirementType,
                                 challengeReview.challenge.title,
                                 challengeReview.challenge.badgeCode,
+                                footprint.footprintId.as("badgeName"),
                                 footprint.createdDate
                         )
                 ).from(footprint)
