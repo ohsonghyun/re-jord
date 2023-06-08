@@ -43,7 +43,7 @@ public class ReadPostServiceImpl implements ReadPostService {
             log.warn("ReadPostServiceImpl.allPosts: ILLEGAL_DATE_TIME: {}", offsetTime);
             throw new IllegalParameterException(ExceptionCode.ILLEGAL_DATE_TIME);
         }
-        return readPostRepository.searchAll(offsetTime, cond, pageable);
+        return readPostRepository.searchPostAll(offsetTime, cond, pageable);
     }
 
     /**

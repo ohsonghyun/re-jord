@@ -7,15 +7,12 @@ import com.dev6.rejordbe.domain.post.dto.PostResult
 import com.dev6.rejordbe.domain.post.dto.SearchPostCond
 import com.dev6.rejordbe.domain.user.Users
 import com.dev6.rejordbe.infrastructure.user.SignUpRepository
-import org.assertj.core.api.AbstractListAssert
 import org.assertj.core.api.Assertions
-import org.assertj.core.api.ObjectAssert
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.context.annotation.Import
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing
-import spock.lang.Rollup
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -74,7 +71,7 @@ class ReadPostRepositorySpec extends Specification {
         when:
         // 데이터 입력 후 시간
         def now = LocalDateTime.now()
-        def allPosts = readPostRepository.searchAll(now, searchPostCond, PageRequest.of(0, 10))
+        def allPosts = readPostRepository.searchPostAll(now, searchPostCond, PageRequest.of(0, 10))
 
         entityManager.flush()
         entityManager.clear()
@@ -130,7 +127,7 @@ class ReadPostRepositorySpec extends Specification {
         entityManager.clear()
 
         when:
-        def allPosts = readPostRepository.searchAll(now, searchPostCond, PageRequest.of(0, 10))
+        def allPosts = readPostRepository.searchPostAll(now, searchPostCond, PageRequest.of(0, 10))
 
         entityManager.flush()
         entityManager.clear()
