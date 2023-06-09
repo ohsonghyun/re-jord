@@ -7,13 +7,9 @@ import com.dev6.rejordbe.domain.post.Post
 import com.dev6.rejordbe.domain.post.PostType
 import com.dev6.rejordbe.domain.post.dto.PostResult
 import com.dev6.rejordbe.domain.post.dto.SearchPostCond
-import com.dev6.rejordbe.domain.user.Users
-import com.dev6.rejordbe.exception.DuplicatedNicknameException
 import com.dev6.rejordbe.exception.IllegalParameterException
 import com.dev6.rejordbe.exception.PostNotFoundException
-import com.dev6.rejordbe.exception.UserNotFoundException
 import com.dev6.rejordbe.presentation.controller.dto.updatePost.UpdatePostRequest
-import com.dev6.rejordbe.presentation.controller.dto.userInfo.UpdateUserInfoRequest
 import com.dev6.rejordbe.presentation.controller.post.info.PostInfoController
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
@@ -95,7 +91,7 @@ class PostInfoControllerSpec extends Specification {
     // uid가 일치하는 게시글 페이징 관련
     def "유저 uid와 일치하는 리스트 획득"() {
         given:
-        when(readPostService.postsWrittenByUid(isA(String.class), isA(Pageable.class)))
+        when(readPostService.postsWrittenByUid(isA(String.class), isA(SearchPostCond.class), isA(Pageable.class)))
                 .thenReturn(new PageImpl<PostResult>(
                         List.of(
                                 new PostResult('postId1', 'content1', PostType.OTHERS, 'uid1', 'nickname1', LocalDateTime.now()),
@@ -125,7 +121,7 @@ class PostInfoControllerSpec extends Specification {
 
     def "유저 uid가 지정이 안 된 경우는 에러: 400"() {
         given:
-        when(readPostService.postsWrittenByUid(isA(String.class), isA(Pageable.class))).thenThrow(exception)
+        when(readPostService.postsWrittenByUid(isA(String.class), isA(SearchPostCond), isA(Pageable.class))).thenThrow(exception)
 
         expect:
         mvc.perform(get(BASE_URL + '/withUid')
