@@ -49,6 +49,15 @@ public class UserControllerAdvice {
                 HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(AlreadyUsingNicknameException.class)
+    public ResponseEntity<ErrorResponse> exceptionHandler(AlreadyUsingNicknameException exception) {
+        exception.printStackTrace();
+        return new ResponseEntity<>(
+                ErrorResponse.builder().message(exception.getMessage()).build(),
+                headers(),
+                HttpStatus.CONFLICT);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> exceptionHandler(Exception exception) {
         exception.printStackTrace();

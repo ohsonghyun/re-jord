@@ -8,6 +8,7 @@ import com.dev6.rejordbe.domain.role.Role
 import com.dev6.rejordbe.domain.role.RoleType
 import com.dev6.rejordbe.domain.user.Users
 import com.dev6.rejordbe.domain.user.dto.UserInfoForMyPage
+import com.dev6.rejordbe.exception.AlreadyUsingNicknameException
 import com.dev6.rejordbe.exception.DuplicatedNicknameException
 import com.dev6.rejordbe.exception.IllegalParameterException
 
@@ -115,14 +116,28 @@ class UserInfoServiceImplSpec extends Specification {
     def "동일한 닉네임이 존재하면 에러: DuplicatedNicknameException"() {
         given:
         // mock
+        userInfoRepository.findById(_ as String) >> Optional.of(Users.builder().build())
         userInfoRepository.findUserByNickname(_ as String) >> Optional.of(Users.builder().build())
         userInfoValidateService.validateNickname(_ as String, _ as List<RuntimeException>) >> true
 
         when:
-        userInfoService.updateUserInfo(Users.builder().nickname("nickname").build())
+        userInfoService.updateUserInfo(Users.builder().uid("uid").nickname("nickname").build())
 
         then:
         thrown(DuplicatedNicknameException)
+    }
+
+    def "현재 사용하는 닉네임과 동일하면 에러: AlreadyUsingNicknameException"() {
+        given:
+        // mock
+        userInfoRepository.findById(_ as String) >> Optional.of(Users.builder().nickname("nickname").build())
+        userInfoValidateService.validateNickname(_ as String, _ as List<RuntimeException>) >> true
+
+        when:
+        userInfoService.updateUserInfo(Users.builder().uid("uid").nickname("nickname").build())
+
+        then:
+        thrown(AlreadyUsingNicknameException)
     }
 
     // ----------------------------------------------------
