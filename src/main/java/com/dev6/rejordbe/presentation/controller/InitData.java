@@ -46,9 +46,9 @@ public class InitData {
         initUsers.init();
         initPosts.init();
         initChallenge.init();
-        initChallengeReviews.init();
         initBadges.init();
         initFootprints.init();
+        initChallengeReviews.init();
     }
 
     // ROLES ---------------------------------------------------
@@ -182,6 +182,8 @@ public class InitData {
                 Challenge challenge = (Challenge) em.createQuery("select c from Challenge c where c.challengeId='CH0'").getSingleResult();
                 IntStream.range(0, 7).forEach(idx -> {
                     String challengeReviewId = "CR_webclient" + idx;
+                    Badge badge = (Badge) em.createQuery("select b from Badge b where b.parentId='" + challengeReviewId + "'").getSingleResult();
+                    Footprint footprint = (Footprint) em.createQuery("select f from Footprint f where f.parentId='" + challengeReviewId + "'").getSingleResult();
                     em.persist(
                             ChallengeReview.builder()
                                     .challengeReviewId(challengeReviewId)
@@ -189,6 +191,8 @@ public class InitData {
                                     .challengeReviewType(ChallengeReviewType.HARDSHIP)
                                     .challenge(challenge)
                                     .user(user)
+                                    .badge(badge)
+                                    .footprint(footprint)
                                     .build()
                     );
                 });
@@ -199,6 +203,9 @@ public class InitData {
                 Challenge challenge = (Challenge) em.createQuery("select c from Challenge c where c.challengeId='CH1'").getSingleResult();
                 IntStream.range(0, 10).forEach(idx -> {
                     String challengeReviewId = "CR_androidclient" + idx;
+                    String parentId = "CR_androidclient" + (idx + 7);
+                    Badge badge = (Badge) em.createQuery("select b from Badge b where b.parentId='" + parentId + "'").getSingleResult();
+                    Footprint footprint = (Footprint) em.createQuery("select f from Footprint f where f.parentId='" + parentId + "'").getSingleResult();
                     em.persist(
                             ChallengeReview.builder()
                                     .challengeReviewId(challengeReviewId)
@@ -206,6 +213,8 @@ public class InitData {
                                     .challengeReviewType(ChallengeReviewType.HARDSHIP)
                                     .challenge(challenge)
                                     .user(user)
+                                    .badge(badge)
+                                    .footprint(footprint)
                                     .build()
                     );
                 });
@@ -216,6 +225,9 @@ public class InitData {
                 Challenge challenge = (Challenge) em.createQuery("select c from Challenge c where c.challengeId='CH2'").getSingleResult();
                 IntStream.range(0, 9).forEach(idx -> {
                     String challengeReviewId = "CR_iosclient" + idx;
+                    String parentId = "CR_iosclient" + (idx + 17);
+                    Badge badge = (Badge) em.createQuery("select b from Badge b where b.parentId='" + parentId + "'").getSingleResult();
+                    Footprint footprint = (Footprint) em.createQuery("select f from Footprint f where f.parentId='" + parentId + "'").getSingleResult();
                     em.persist(
                             ChallengeReview.builder()
                                     .challengeReviewId(challengeReviewId)
@@ -223,6 +235,8 @@ public class InitData {
                                     .challengeReviewType(ChallengeReviewType.HARDSHIP)
                                     .challenge(challenge)
                                     .user(user)
+                                    .badge(badge)
+                                    .footprint(footprint)
                                     .build()
                     );
                 });
@@ -286,7 +300,7 @@ public class InitData {
         }
     }
 
-    // CHALLENGE ---------------------------------------------------
+    // BADGES ---------------------------------------------------
     @Component
     static class InitBadges {
         @PersistenceContext

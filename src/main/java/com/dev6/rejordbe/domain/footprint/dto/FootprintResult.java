@@ -19,5 +19,6 @@ public class FootprintResult {
     private final FootprintAcquirementType footprintAcquirementType;
     private final String title;
     private final BadgeCode badgeCode;
+    private final String badgeName;
     private final LocalDateTime createdDate;
 }

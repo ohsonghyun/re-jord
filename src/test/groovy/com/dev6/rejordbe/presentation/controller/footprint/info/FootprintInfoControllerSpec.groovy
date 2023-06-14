@@ -53,7 +53,7 @@ class FootprintInfoControllerSpec extends Specification {
                 .thenReturn(
                         new PageImpl<FootprintResult>(
                                 List.of(
-                                        new FootprintResult('footprintId', 15, 'parentId', FootprintAcquirementType.CHALLENGE_REVIEW, 'title', BadgeCode.WATER_FAIRY, LocalDateTime.now())
+                                        new FootprintResult('footprintId', 15, 'parentId', FootprintAcquirementType.CHALLENGE_REVIEW, 'title', BadgeCode.WATER_FAIRY, BadgeCode.WATER_FAIRY.getBadgeName(), LocalDateTime.now())
                                 ),
                                 PageRequest.of(0, 5),
                                 2
@@ -69,6 +69,7 @@ class FootprintInfoControllerSpec extends Specification {
                 .andExpect(jsonPath('\$.content[0].footprintAcquirementType').value('CHALLENGE_REVIEW'))
                 .andExpect(jsonPath('\$.content[0].title').value('title'))
                 .andExpect(jsonPath('\$.content[0].badgeCode').value('WATER_FAIRY'))
+                .andExpect(jsonPath('\$.content[0].badgeName').value('워터 요정'))
                 .andExpect(jsonPath('\$.content[0].createdDate').isNotEmpty())
                 .andExpect(jsonPath('\$.pageable.pageNumber').value(0))
                 .andExpect(jsonPath('\$.pageable.pageSize').value(5))

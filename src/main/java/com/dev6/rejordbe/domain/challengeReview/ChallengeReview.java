@@ -1,8 +1,10 @@
 package com.dev6.rejordbe.domain.challengeReview;
 
 import com.dev6.rejordbe.domain.BaseTime;
+import com.dev6.rejordbe.domain.badge.Badge;
 import com.dev6.rejordbe.domain.challenge.Challenge;
 import com.dev6.rejordbe.domain.exception.ExceptionCode;
+import com.dev6.rejordbe.domain.footprint.Footprint;
 import com.dev6.rejordbe.domain.user.Users;
 import com.dev6.rejordbe.exception.IllegalParameterException;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +41,14 @@ public class ChallengeReview extends BaseTime {
     @ManyToOne
     @JoinColumn(name = "challenge_id")
     private Challenge challenge;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "footprint_id")
+    private Footprint footprint;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "badge_id")
+    private Badge badge;
 
     /**
      * 챌린지 리뷰 게시글 내용 수정
