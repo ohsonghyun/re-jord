@@ -83,7 +83,7 @@ public class UserInfoServiceImpl implements UserInfoService, UserDetailsService 
                     return new UserNotFoundException(ExceptionCode.USER_NOT_FOUND);
                 });
 
-        if (targetUser.getNickname() == newUserInfo.getNickname()) {
+        if (targetUser.getNickname().equals(newUserInfo.getNickname())) {
             log.info("UserInfoServiceImpl.updateUserInfo: ALREADY_USING_NICKNAME: {}", newUserInfo.getNickname());
             throw new AlreadyUsingNicknameException(ExceptionCode.ALREADY_USING_NICKNAME);
         }
