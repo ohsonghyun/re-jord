@@ -130,7 +130,7 @@ public class UserInfoServiceImpl implements UserInfoService, UserDetailsService 
     @Override
     public UserInfoForMyPage findUserInfoByUid(@NonNull final String uid) {
         UserInfoForMyPage user = userInfoRepository.searchUserInfoByUid(uid).orElseThrow(() -> {
-            log.error("MyPageServiceImpl.findUserInfoByUid: USER_NOT_FOUND: {}", uid);
+            log.error("UserInfoServiceImpl.findUserInfoByUid: USER_NOT_FOUND: {}", uid);
             return new UserNotFoundException(ExceptionCode.USER_NOT_FOUND);
         });
 
@@ -144,5 +144,16 @@ public class UserInfoServiceImpl implements UserInfoService, UserDetailsService 
                 .nickname(user.getNickname())
                 .dDay(Long.valueOf(dDay).intValue())
                 .build();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Users deleteAccountByUid(@NonNull final String uid) {
+        return userInfoRepository.findUserByUid(uid).orElseThrow(() -> {
+            log.error("MyPageServiceImpl.deleteAccountUserInfoByUid: USER_NOT_FOUND: {}", uid);
+            return new UserNotFoundException(ExceptionCode.USER_NOT_FOUND);
+        });
     }
 }

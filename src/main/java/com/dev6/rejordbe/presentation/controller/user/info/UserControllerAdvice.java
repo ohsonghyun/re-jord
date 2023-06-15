@@ -25,6 +25,14 @@ public class UserControllerAdvice {
                 HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(WrongPasswordException.class)
+    public ResponseEntity<ErrorResponse> exceptionHandler(WrongPasswordException exception) {
+        return new ResponseEntity<>(
+                ErrorResponse.builder().message(exception.getMessage()).build(),
+                headers(),
+                HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> exceptionHandler(UserNotFoundException exception) {
         return new ResponseEntity<>(

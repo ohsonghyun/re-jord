@@ -165,4 +165,35 @@ class UserInfoServiceImplSpec extends Specification {
         then:
         thrown(UserNotFoundException)
     }
+
+    // ----------------------------------------------------
+    // 마이페이지 관련
+    // ----------------------------------------------------
+
+    def "에러가 없으면 탈퇴할 회원의 정보를 취득할 수 있다."() {
+        def anUser = Users.builder()
+                .password('password')
+                .build()
+        userInfoRepository.findUserByUid(_ as String) >> Optional.of(anUser)
+
+        when:
+        def result = userInfoService.deleteAccountByUid('uid')
+
+        then:
+        result.getPassword() == anUser.getPassword()
+    }
+
+    def "검색할 유저가 존재하지 않으면 에러: UserNotFoundException"() {
+        given:
+        // mock
+        userInfoRepository.findUserByUid(_ as String) >> Optional.empty()
+
+        when:
+        userInfoService.deleteAccountByUid('uid')
+
+        then:
+        thrown(UserNotFoundException)
+    }
+
+
 }

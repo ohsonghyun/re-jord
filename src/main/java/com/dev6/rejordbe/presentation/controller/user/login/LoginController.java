@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.dev6.rejordbe.application.user.login.LoginService;
 import com.dev6.rejordbe.config.JwtConfig;
-import com.dev6.rejordbe.domain.jwt.Jwt;
 import com.dev6.rejordbe.domain.jwt.JwtToken;
 import com.dev6.rejordbe.domain.user.dto.UserResult;
 import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;

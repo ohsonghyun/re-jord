@@ -20,6 +20,7 @@ public interface ExceptionCode {
     String CHALLENGE_NOT_FOUND = "CHALLENGE_NOT_FOUND";
     String POST_NOT_FOUND = "POST_NOT_FOUND";
     String UNAUTHORIZED_USER = "UNAUTHORIZED_USER";
+    String WRONG_PASSWORD = "WRONG_PASSWORD";
 
     // INTERNAL_SERVER_ERROR -------------------------------------
     String INTERNAL_ILLEGAL_PARAM = "INTERNAL_ILLEGAL_PARAM";

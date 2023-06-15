@@ -40,4 +40,13 @@ public interface UserInfoService {
      */
     UserInfoForMyPage findUserInfoByUid(@NonNull final String uid);
 
+    /**
+     * 탈퇴할 유저 정보
+     *
+     * @param uid {@code String} 회원 탈퇴 조회 대상 uid
+     * @return {@code Users} 탈퇴할 유저 정보
+     * @throws UserNotFoundException {@code uid} 가 존재하지 않는 유저일 경우}
+     */
+    Users deleteAccountByUid(@NonNull final String uid);
+
 }
