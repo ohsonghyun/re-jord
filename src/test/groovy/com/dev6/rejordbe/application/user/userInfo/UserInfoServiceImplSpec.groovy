@@ -116,7 +116,7 @@ class UserInfoServiceImplSpec extends Specification {
     def "동일한 닉네임이 존재하면 에러: DuplicatedNicknameException"() {
         given:
         // mock
-        userInfoRepository.findById(_ as String) >> Optional.of(Users.builder().build())
+        userInfoRepository.findById(_ as String) >> Optional.of(Users.builder().nickname('nickname1').build())
         userInfoRepository.findUserByNickname(_ as String) >> Optional.of(Users.builder().build())
         userInfoValidateService.validateNickname(_ as String, _ as List<RuntimeException>) >> true
 
