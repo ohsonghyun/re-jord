@@ -6,6 +6,7 @@ import com.dev6.rejordbe.domain.role.Role;
 import com.dev6.rejordbe.domain.user.Users;
 import com.dev6.rejordbe.domain.user.dto.UserInfoForMyPage;
 import com.dev6.rejordbe.domain.user.dto.UserResult;
+import com.dev6.rejordbe.exception.AlreadyUsingNicknameException;
 import com.dev6.rejordbe.exception.DuplicatedNicknameException;
 import com.dev6.rejordbe.exception.IllegalParameterException;
 import com.dev6.rejordbe.exception.UserNotFoundException;
@@ -78,16 +79,22 @@ public class UserInfoServiceImpl implements UserInfoService, UserDetailsService 
         if (!userInfoValidateService.validateNickname(newUserInfo.getNickname(), new ArrayList<>())) {
             throw new IllegalParameterException(ExceptionCode.ILLEGAL_NICKNAME);
         }
-        userInfoRepository.findUserByNickname(newUserInfo.getNickname())
-                .ifPresent(existingUser -> {
-                    log.info("UserInfoServiceImpl.updateUserInfo: DUPLICATED_NICKNAME: {}", newUserInfo.getNickname());
-                    throw new DuplicatedNicknameException(ExceptionCode.DUPLICATED_NICKNAME);
-                });
 
         Users targetUser = userInfoRepository.findById(newUserInfo.getUid())
                 .orElseThrow(() -> {
                     log.info("UserInfoServiceImpl.updateUserInfo: USER_NOT_FOUND: {}", newUserInfo.getNickname());
                     return new UserNotFoundException(ExceptionCode.USER_NOT_FOUND);
+                });
+
+        if (targetUser.getNickname().equals(newUserInfo.getNickname())) {
+            log.info("UserInfoServiceImpl.updateUserInfo: ALREADY_USING_NICKNAME: {}", newUserInfo.getNickname());
+            throw new AlreadyUsingNicknameException(ExceptionCode.ALREADY_USING_NICKNAME);
+        }
+
+        userInfoRepository.findUserByNickname(newUserInfo.getNickname())
+                .ifPresent(existingUser -> {
+                    log.info("UserInfoServiceImpl.updateUserInfo: DUPLICATED_NICKNAME: {}", newUserInfo.getNickname());
+                    throw new DuplicatedNicknameException(ExceptionCode.DUPLICATED_NICKNAME);
                 });
 
         targetUser.update(Users.builder().nickname(newUserInfo.getNickname()).build());

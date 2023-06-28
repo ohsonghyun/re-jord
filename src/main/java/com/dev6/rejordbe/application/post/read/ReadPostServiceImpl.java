@@ -52,13 +52,14 @@ public class ReadPostServiceImpl implements ReadPostService {
     @Override
     public Page<PostResult> postsWrittenByUid(
             @NonNull final String uid,
+            @Nullable final SearchPostCond cond,
             @NonNull final Pageable pageable
     ) {
         if(StringUtils.isBlank(uid)) {
             log.warn("ReadPostServiceImpl.postsWrittenByUid: ILLEGAL_UID: {}", uid);
             throw new IllegalParameterException(ExceptionCode.ILLEGAL_UID);
         }
-        return readPostRepository.searchPostByUid(uid, pageable);
+        return readPostRepository.searchPostByUid(uid, cond, pageable);
     }
 
 

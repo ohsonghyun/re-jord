@@ -80,9 +80,10 @@ public class PostInfoController {
     )
     public ResponseEntity<Page<PostResult>> postsWrittenByUid(
             @ApiParam(hidden = true) @LoggedIn final String uid,
+            final SearchPostCond cond,
             @PageableDefault(page = 0, size = 10) final Pageable pageable
     ) {
-        return ResponseEntity.ok(readPostService.postsWrittenByUid(uid, pageable));
+        return ResponseEntity.ok(readPostService.postsWrittenByUid(uid, cond, pageable));
     }
 
     @ApiOperation(

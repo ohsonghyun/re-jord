@@ -21,7 +21,7 @@ public interface ExceptionCode {
     String POST_NOT_FOUND = "POST_NOT_FOUND";
     String UNAUTHORIZED_USER = "UNAUTHORIZED_USER";
     String WRONG_PASSWORD = "WRONG_PASSWORD";
-
+    String ALREADY_USING_NICKNAME = "ALREADY_USING_NICKNAME";
     // INTERNAL_SERVER_ERROR -------------------------------------
     String INTERNAL_ILLEGAL_PARAM = "INTERNAL_ILLEGAL_PARAM";
 }

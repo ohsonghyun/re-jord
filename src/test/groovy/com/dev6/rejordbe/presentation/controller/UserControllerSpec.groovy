@@ -8,6 +8,7 @@ import com.dev6.rejordbe.domain.role.RoleType
 import com.dev6.rejordbe.domain.user.Users
 import com.dev6.rejordbe.domain.user.dto.UserInfoForMyPage
 import com.dev6.rejordbe.domain.user.dto.UserResult
+import com.dev6.rejordbe.exception.AlreadyUsingNicknameException
 import com.dev6.rejordbe.exception.DuplicatedNicknameException
 import com.dev6.rejordbe.exception.DuplicatedUserIdException
 import com.dev6.rejordbe.exception.IllegalParameterException
@@ -202,6 +203,7 @@ class UserControllerSpec extends Specification {
         '정책에 맞지 않은 닉네임: 400' | ExceptionCode.ILLEGAL_NICKNAME    | new IllegalParameterException(message)   | status().isBadRequest()
         '이미 존재하는 닉네임: 409'   | ExceptionCode.DUPLICATED_NICKNAME | new DuplicatedNicknameException(message) | status().isConflict()
         '존재하지 않는 유저: 404'    | ExceptionCode.USER_NOT_FOUND      | new UserNotFoundException(message)       | status().isNotFound()
+        '현재와 같은 닉네임: 404'    | ExceptionCode.ALREADY_USING_NICKNAME | new AlreadyUsingNicknameException(message) | status().isConflict()
     }
     // /닉네임 수정
 

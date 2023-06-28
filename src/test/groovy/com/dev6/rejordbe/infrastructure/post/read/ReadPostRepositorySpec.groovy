@@ -161,7 +161,10 @@ class ReadPostRepositorySpec extends Specification {
                     Post.builder()
                             .postId('postId' + i)
                             .contents('contents')
-                            .postType(PostType.SHARE)
+                            .postType(
+                                    i % 2 == 0
+                                            ? PostType.SHARE
+                                            : PostType.OTHERS)
                             .user(user)
                             .build()
             )
@@ -171,7 +174,7 @@ class ReadPostRepositorySpec extends Specification {
         entityManager.clear()
 
         when:
-        def allPosts = readPostRepository.searchPostByUid(uid, PageRequest.of(0, 10))
+        def allPosts = readPostRepository.searchPostByUid(uid, searchPostCond, PageRequest.of(0, 10))
 
         entityManager.flush()
         entityManager.clear()
@@ -180,9 +183,12 @@ class ReadPostRepositorySpec extends Specification {
         allPosts.getContent().size() == expectSize
 
         where:
-        testCase          | uid    | expectSize
-        "일치하는 uid가 있는 경우" | 'uid'  | 10
-        "일치하는 uid가 없는 경우" | 'uid1' | 0
+        testCase               | uid    | searchPostCond                      | expectSize
+        "일치하는 uid가 있는 경우" | 'uid'  | new SearchPostCond(null)            | 10
+        "일치하는 uid가 없는 경우" | 'uid1' | new SearchPostCond(null)            | 0
+        "전체검색"               | 'uid'  | new SearchPostCond(null)            | 10
+        "기타 검색"              | 'uid'  | new SearchPostCond(PostType.OTHERS) | 5
+        "공유 검색"              | 'uid'  | new SearchPostCond(PostType.SHARE)  | 5
     }
 
     // ----------------------------------------------------
