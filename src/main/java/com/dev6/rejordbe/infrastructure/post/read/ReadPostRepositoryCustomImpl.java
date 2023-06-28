@@ -69,7 +69,10 @@ public class ReadPostRepositoryCustomImpl implements ReadPostRepositoryCustom {
     }
 
     @Override
-    public Page<PostResult> searchPostByUid(String uid, Pageable pageable) {
+    public Page<PostResult> searchPostByUid(
+            @NonNull String uid,
+            @Nullable final SearchPostCond cond,
+            @NonNull Pageable pageable) {
         List<PostResult> content = queryFactory.select(
                         Projections.constructor(
                                 PostResult.class,
@@ -82,7 +85,10 @@ public class ReadPostRepositoryCustomImpl implements ReadPostRepositoryCustom {
                         )
                 )
                 .from(post)
-                .where(eqUidWith(uid))
+                .where(
+                        eqUidWith(uid),
+                        eqPostType(cond.getPostType())
+                )
                 .orderBy(post.createdDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -91,7 +97,10 @@ public class ReadPostRepositoryCustomImpl implements ReadPostRepositoryCustom {
         Long total = queryFactory
                 .select(post.postId.count())
                 .from(post)
-                .where(eqUidWith(uid))
+                .where(
+                        eqUidWith(uid),
+                        eqPostType(cond.getPostType())
+                )
                 .fetchOne();
 
         return new PageImpl<>(content, pageable, total);

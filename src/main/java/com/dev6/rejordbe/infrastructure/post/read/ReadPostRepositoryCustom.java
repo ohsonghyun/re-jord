@@ -26,8 +26,9 @@ public interface ReadPostRepositoryCustom {
      * uid가 동일한 모든 일반 피드를 반환 (페이지네이션)
      *
      * @param uid {@code String} 유저 UID
+     * @param cond {@code SearchPostCond} 게시글 조회 조건
      * @param pageable {@code Pageable}
      * @return {@code Page<PostResult>}
      */
-    Page<PostResult> searchPostByUid(final String uid, final Pageable pageable);
+    Page<PostResult> searchPostByUid(final String uid, final SearchPostCond cond, final Pageable pageable);
 }
