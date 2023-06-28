@@ -250,7 +250,7 @@ class UserInfoRepositorySpec extends Specification {
         entityManager.clear()
 
         when:
-        userInfoRepository.deleteByUid(uid)
+        userInfoRepository.deleteById(uid)
 
         entityManager.flush()
         entityManager.clear()

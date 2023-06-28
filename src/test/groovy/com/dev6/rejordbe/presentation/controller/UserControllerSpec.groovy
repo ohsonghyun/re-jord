@@ -13,6 +13,7 @@ import com.dev6.rejordbe.exception.DuplicatedUserIdException
 import com.dev6.rejordbe.exception.IllegalParameterException
 
 import com.dev6.rejordbe.exception.UserNotFoundException
+import com.dev6.rejordbe.exception.WrongPasswordException
 import com.dev6.rejordbe.presentation.controller.dto.deleteAccount.DeleteAccountRequest
 import com.dev6.rejordbe.presentation.controller.dto.signup.SignUpRequest
 import com.dev6.rejordbe.presentation.controller.dto.userInfo.UpdateUserInfoRequest
@@ -23,7 +24,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.web.servlet.MockMvc
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -49,8 +49,6 @@ class UserControllerSpec extends Specification {
     SignUpService signUpService
     @MockBean
     UserInfoService userInfoService
-    @MockBean
-    PasswordEncoder passwordEncoder
 
     private static final String baseUrl = '/v1/users'
 
@@ -282,14 +280,8 @@ class UserControllerSpec extends Specification {
     // 회원 탈퇴
     def "회원 탈퇴시 200을 반환한다"() {
         given:
-        when(userInfoService.deleteAccountByUid(isA(String.class)))
-                .thenReturn(
-                        Users.builder()
-                        .userId('userId')
-                        .password('password')
-                        .build())
-        when(passwordEncoder.matches(isA(String.class), isA(String.class)))
-                .thenReturn(true)
+        when(userInfoService.deleteAccountByUid(isA(String.class), isA(String.class)))
+                .thenReturn('userId')
 
         expect:
         mvc.perform(delete(baseUrl)
@@ -304,7 +296,7 @@ class UserControllerSpec extends Specification {
 
     def "존재하지 않는 uid일 경우: 404"() {
         given:
-        when(userInfoService.deleteAccountByUid(isA(String.class))).thenThrow(exception)
+        when(userInfoService.deleteAccountByUid(isA(String.class), isA(String.class))).thenThrow(exception)
 
         expect:
         mvc.perform(delete(baseUrl)
@@ -313,34 +305,13 @@ class UserControllerSpec extends Specification {
                         DeleteAccountRequest.builder()
                         .password('password')
                         .build())))
-
                 .andExpect(resultStatus)
                 .andExpect(jsonPath("\$.message").value(message))
 
         where:
-        testCase                    | message                  | exception                                | resultStatus
-        '존재하지 않는 유저: 404'      | "USER_NOT_FOUND"         | new UserNotFoundException(message)       | status().isNotFound()
-    }
-
-    def "비밀번호가 일치하지 않을 경우: 400"() {
-        given:
-        when(userInfoService.deleteAccountByUid(isA(String.class)))
-                .thenReturn(Users.builder()
-                        .uid('uid')
-                        .password('password')
-                        .build())
-        when(passwordEncoder.matches(isA(String.class), isA(String.class)))
-                .thenReturn(false)
-
-        expect:
-        mvc.perform(delete(baseUrl)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(
-                        DeleteAccountRequest.builder()
-                                .password('password')
-                                .build())))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("\$.message").value(ExceptionCode.WRONG_PASSWORD))
+        testCase                        | message          | exception                           | resultStatus
+        '존재하지 않는 유저: 404'          | "USER_NOT_FOUND" | new UserNotFoundException(message)  | status().isNotFound()
+        '비밀번호가 일치하지 않을 경우: 400' | "WRONG_PASSWORD" | new WrongPasswordException(message) | status().isBadRequest()
     }
     // / 회원 탈퇴
 }

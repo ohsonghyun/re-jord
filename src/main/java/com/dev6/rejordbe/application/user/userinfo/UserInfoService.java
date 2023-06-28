@@ -4,6 +4,7 @@ import com.dev6.rejordbe.domain.user.Users;
 import com.dev6.rejordbe.domain.user.dto.UserInfoForMyPage;
 import com.dev6.rejordbe.domain.user.dto.UserResult;
 import com.dev6.rejordbe.exception.UserNotFoundException;
+import com.dev6.rejordbe.exception.WrongPasswordException;
 import org.springframework.lang.NonNull;
 
 import java.util.Optional;
@@ -44,9 +45,11 @@ public interface UserInfoService {
      * 탈퇴할 유저 정보
      *
      * @param uid {@code String} 회원 탈퇴 조회 대상 uid
-     * @return {@code Users} 탈퇴할 유저 정보
+     * @param password {@code String} 회원 탈퇴 조회 대상 비밀번호
+     * @return {@code String} 탈퇴할 유저 id
      * @throws UserNotFoundException {@code uid} 가 존재하지 않는 유저일 경우}
+     * @throws WrongPasswordException {@code password} 가 일치하지 않는 경우}
      */
-    Users deleteAccountByUid(@NonNull final String uid);
+    String deleteAccountByUid(@NonNull final String uid, @NonNull final String password);
 
 }

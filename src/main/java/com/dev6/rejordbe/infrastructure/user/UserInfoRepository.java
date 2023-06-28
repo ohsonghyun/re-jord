@@ -36,10 +36,4 @@ public interface UserInfoRepository extends JpaRepository<Users, String>, UserIn
      */
     Optional<Users> findUserByUid(String uid);
 
-    /**
-     * uid가 일치하는 유저 삭제
-     *
-     * @param uid {@code String}
-     */
-    void deleteByUid(final String uid);
 }

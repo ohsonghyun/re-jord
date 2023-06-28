@@ -9,6 +9,7 @@ import com.dev6.rejordbe.domain.user.dto.UserResult;
 import com.dev6.rejordbe.exception.DuplicatedNicknameException;
 import com.dev6.rejordbe.exception.IllegalParameterException;
 import com.dev6.rejordbe.exception.UserNotFoundException;
+import com.dev6.rejordbe.exception.WrongPasswordException;
 import com.dev6.rejordbe.infrastructure.challengeReview.read.ReadChallengeReviewRepository;
 import com.dev6.rejordbe.infrastructure.user.UserInfoRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +44,7 @@ public class UserInfoServiceImpl implements UserInfoService, UserDetailsService 
     private final UserInfoRepository userInfoRepository;
     private final ReadChallengeReviewRepository readChallengeReviewRepository;
     private final UserInfoValidateService userInfoValidateService;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * {@inheritDoc}
@@ -149,11 +152,21 @@ public class UserInfoServiceImpl implements UserInfoService, UserDetailsService 
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
-    public Users deleteAccountByUid(@NonNull final String uid) {
-        return userInfoRepository.findUserByUid(uid).orElseThrow(() -> {
+    public String deleteAccountByUid(@NonNull final String uid, @NonNull final String password) {
+        Users userInfo = userInfoRepository.findUserByUid(uid).orElseThrow(() -> {
             log.error("MyPageServiceImpl.deleteAccountUserInfoByUid: USER_NOT_FOUND: {}", uid);
             return new UserNotFoundException(ExceptionCode.USER_NOT_FOUND);
         });
+
+        if (!passwordEncoder.matches(password, userInfo.getPassword())) {
+            log.error("UserController.deleteAccount: WRONG_PASSWORD: {}", password);
+            throw new WrongPasswordException(ExceptionCode.WRONG_PASSWORD);
+        }
+
+        userInfoRepository.deleteById(uid);
+
+        return userInfo.getUserId();
     }
 }
