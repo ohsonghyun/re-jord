@@ -35,4 +35,5 @@ public interface UserInfoRepository extends JpaRepository<Users, String>, UserIn
      * @return {@code Optional<Users>}
      */
     Optional<Users> findUserByUid(String uid);
+
 }

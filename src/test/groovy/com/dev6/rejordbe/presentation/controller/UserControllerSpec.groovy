@@ -14,6 +14,8 @@ import com.dev6.rejordbe.exception.DuplicatedUserIdException
 import com.dev6.rejordbe.exception.IllegalParameterException
 
 import com.dev6.rejordbe.exception.UserNotFoundException
+import com.dev6.rejordbe.exception.WrongPasswordException
+import com.dev6.rejordbe.presentation.controller.dto.deleteAccount.DeleteAccountRequest
 import com.dev6.rejordbe.presentation.controller.dto.signup.SignUpRequest
 import com.dev6.rejordbe.presentation.controller.dto.userInfo.UpdateUserInfoRequest
 import com.dev6.rejordbe.presentation.controller.user.info.UserController
@@ -31,6 +33,7 @@ import static org.mockito.ArgumentMatchers.isA
 import static org.mockito.Mockito.when
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -274,4 +277,43 @@ class UserControllerSpec extends Specification {
         '존재하지 않는 유저: 404'      | "USER_NOT_FOUND"         | new UserNotFoundException(message)       | status().isNotFound()
     }
     // / 마이페이지
+
+
+    // 회원 탈퇴
+    def "회원 탈퇴시 200을 반환한다"() {
+        given:
+        when(userInfoService.deleteAccountByUid(isA(String.class), isA(String.class)))
+                .thenReturn('userId')
+
+        expect:
+        mvc.perform(delete(baseUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(
+                        DeleteAccountRequest.builder()
+                                .password('password')
+                                .build())))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath('\$.userId').value('userId'))
+    }
+
+    def "존재하지 않는 uid일 경우: 404"() {
+        given:
+        when(userInfoService.deleteAccountByUid(isA(String.class), isA(String.class))).thenThrow(exception)
+
+        expect:
+        mvc.perform(delete(baseUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(
+                        DeleteAccountRequest.builder()
+                        .password('password')
+                        .build())))
+                .andExpect(resultStatus)
+                .andExpect(jsonPath("\$.message").value(message))
+
+        where:
+        testCase                        | message          | exception                           | resultStatus
+        '존재하지 않는 유저: 404'          | "USER_NOT_FOUND" | new UserNotFoundException(message)  | status().isNotFound()
+        '비밀번호가 일치하지 않을 경우: 400' | "WRONG_PASSWORD" | new WrongPasswordException(message) | status().isBadRequest()
+    }
+    // / 회원 탈퇴
 }

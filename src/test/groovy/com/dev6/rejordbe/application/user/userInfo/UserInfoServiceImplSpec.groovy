@@ -13,8 +13,10 @@ import com.dev6.rejordbe.exception.DuplicatedNicknameException
 import com.dev6.rejordbe.exception.IllegalParameterException
 
 import com.dev6.rejordbe.exception.UserNotFoundException
+import com.dev6.rejordbe.exception.WrongPasswordException
 import com.dev6.rejordbe.infrastructure.challengeReview.read.ReadChallengeReviewRepository
 import com.dev6.rejordbe.infrastructure.user.UserInfoRepository
+import org.springframework.security.crypto.password.PasswordEncoder
 import spock.lang.Specification
 
 import java.time.LocalDateTime
@@ -29,12 +31,14 @@ class UserInfoServiceImplSpec extends Specification {
     ReadChallengeReviewRepository readChallengeReviewRepository
     UserInfoValidateService userInfoValidateService
     UserInfoService userInfoService
+    PasswordEncoder passwordEncoder
 
     def setup() {
         userInfoRepository = Mock(UserInfoRepository.class)
         readChallengeReviewRepository = Mock(ReadChallengeReviewRepository.class)
         userInfoValidateService = Mock(UserInfoValidateService.class)
-        userInfoService = new UserInfoServiceImpl(userInfoRepository, readChallengeReviewRepository, userInfoValidateService)
+        passwordEncoder = Mock(PasswordEncoder.class)
+        userInfoService = new UserInfoServiceImpl(userInfoRepository, readChallengeReviewRepository, userInfoValidateService, passwordEncoder)
     }
 
     def "UID로 유저 검색이 가능하다"() {
@@ -180,4 +184,49 @@ class UserInfoServiceImplSpec extends Specification {
         then:
         thrown(UserNotFoundException)
     }
+
+    // ----------------------------------------------------
+    // 회원 탈퇴 관련
+    // ----------------------------------------------------
+
+    def "에러가 없으면 탈퇴할 회원의 정보를 취득할 수 있다."() {
+        def anUser = Users.builder()
+                .password('password')
+                .build()
+        userInfoRepository.findUserByUid(_ as String) >> Optional.of(anUser)
+        passwordEncoder.matches(_ as String, _ as String) >> true
+
+        when:
+        def result = userInfoService.deleteAccountByUid('uid', 'password')
+
+        then:
+        result == anUser.getUserId()
+    }
+
+    def "검색할 유저가 존재하지 않으면 에러: UserNotFoundException"() {
+        given:
+        // mock
+        userInfoRepository.findUserByUid(_ as String) >> Optional.empty()
+        passwordEncoder.matches(_ as String, _ as String) >> true
+
+        when:
+        userInfoService.deleteAccountByUid('uid', 'password')
+
+        then:
+        thrown(UserNotFoundException)
+    }
+
+    def "비밀번호가 일치하지 않으면 에러: WrongPasswordException"() {
+        given:
+        // mock
+        userInfoRepository.findUserByUid(_ as String) >> Optional.of(Users.builder().build())
+        passwordEncoder.matches(_ as String, _ as String) >> false
+
+        when:
+        userInfoService.deleteAccountByUid('uid', 'password')
+
+        then:
+        thrown(WrongPasswordException)
+    }
+
 }

@@ -1,6 +1,8 @@
 package com.dev6.rejordbe.domain.user;
 
 import com.dev6.rejordbe.domain.BaseTime;
+import com.dev6.rejordbe.domain.challengeReview.ChallengeReview;
+import com.dev6.rejordbe.domain.post.Post;
 import com.dev6.rejordbe.domain.role.Role;
 import com.dev6.rejordbe.exception.IllegalParameterException;
 import lombok.extern.slf4j.Slf4j;
@@ -35,8 +37,15 @@ public class Users extends BaseTime {
     @Column(name = "password")
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<Role> roles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<ChallengeReview> challengeReviews = new ArrayList<>();
+
 
     /**
      * 닉네임을 수정

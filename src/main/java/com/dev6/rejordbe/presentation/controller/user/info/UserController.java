@@ -8,6 +8,8 @@ import com.dev6.rejordbe.domain.user.dto.UserResult;
 import com.dev6.rejordbe.exception.IllegalParameterException;
 import com.dev6.rejordbe.presentation.controller.argumentResolver.LoggedIn;
 import com.dev6.rejordbe.presentation.controller.dto.checkDuplicate.CheckDuplicatedUserIdResponse;
+import com.dev6.rejordbe.presentation.controller.dto.deleteAccount.DeleteAccountRequest;
+import com.dev6.rejordbe.presentation.controller.dto.deleteAccount.DeleteAccountResponse;
 import com.dev6.rejordbe.presentation.controller.dto.exception.ErrorResponse;
 import com.dev6.rejordbe.presentation.controller.dto.mypage.MyPageUserInfoResponse;
 import com.dev6.rejordbe.presentation.controller.dto.signup.SignUpRequest;
@@ -22,6 +24,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 /**
  * UserController
@@ -172,6 +176,34 @@ public class UserController {
                         .dDay(userInfo.getDDay())
                         .badgeAmount(userInfo.getBadgeAmount())
                         .totalFootprintAmount(userInfo.getTotalFootprintAmount())
+                        .build()
+        );
+    }
+
+    @ApiOperation(
+            value = "회원 탈퇴",
+            nickname = "deleteAccount",
+            notes = "회원 탈퇴 API.",
+            response = DeleteAccountResponse.class,
+            authorizations = {@Authorization(value = "JWT")},
+            tags = "유저 컨트롤러")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "정상"),
+            @ApiResponse(code = 400, message = "일치하지 않는 비밀번호", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "존재하지 않는 유저", response = ErrorResponse.class)
+    })
+    @DeleteMapping(
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_PROBLEM_JSON_VALUE}
+    )
+    public ResponseEntity<DeleteAccountResponse> deleteAccount(
+            @ApiParam(hidden = true) @LoggedIn final String uid,
+            @ApiParam(value = "탈퇴할 회원 정보", required = true) @RequestBody DeleteAccountRequest request
+    ) {
+        log.info("UserController.deleteAccount: uid: {}", uid);
+        String deletedUserId = userInfoService.deleteAccountByUid(uid, request.getPassword());
+        return ResponseEntity.status(HttpStatus.OK).body(
+                DeleteAccountResponse.builder()
+                        .userId(deletedUserId)
                         .build()
         );
     }
