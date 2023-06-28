@@ -78,6 +78,7 @@ public class ReadChallengeReviewServiceImpl implements ReadChallengeReviewServic
         targetChallengeReview.update(ChallengeReview.builder().contents(newChallengeReview.getContents()).build());
         return ChallengeReviewResult.builder()
                 .challengeReviewId(targetChallengeReview.getChallengeReviewId())
+                .title(targetChallengeReview.getChallenge().getTitle())
                 .contents(targetChallengeReview.getContents())
                 .challengeReviewType(targetChallengeReview.getChallengeReviewType())
                 .uid(targetChallengeReview.getUser().getUid())

@@ -1,5 +1,6 @@
 package com.dev6.rejordbe.application.challengeReview.read
 
+import com.dev6.rejordbe.domain.challenge.Challenge
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReview
 import com.dev6.rejordbe.domain.challengeReview.ChallengeReviewType
 import com.dev6.rejordbe.domain.challengeReview.dto.ChallengeReviewResult
@@ -110,9 +111,14 @@ class ReadChallengeReviewServiceImplSpec extends Specification {
                 .uid('uid')
                 .build()
 
+        def challenge = Challenge.builder()
+                .title('찬 물로 샤워하기')
+                .build()
+
         def anChallengeReview = ChallengeReview.builder()
                 .contents(contents)
                 .user(anUser)
+                .challenge(challenge)
                 .build()
 
         // mock
