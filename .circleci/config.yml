@@ -44,9 +44,9 @@ jobs:
           name: "image-build"
           command: |
             ls -al ./build/libs
-            docker build -t flowertaekk/teamdev6:v0.0.1 --platform linux/amd64 .
+            docker build -t ossongh/rejord-aws:v0.0.1 --platform linux/amd64 .
             docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}
-            docker push flowertaekk/teamdev6:v0.0.1
+            docker push ossongh/rejord-aws:v0.0.1
           requires:
             - build
       - slack/notify:
